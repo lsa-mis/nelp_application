@@ -2,7 +2,7 @@
 lock "~> 3.15.0"
 set :rbenv_type, :user
 set :rbenv_ruby, '2.7.2'
-set :user "deployer"
+set :user, "deployer"
 set :application, "nelp_application"
 set :repo_url, "git@github.com:lsa-mis/nelp_application.git"
 set :puma_threads,    [4, 16]
@@ -129,7 +129,7 @@ namespace :deploy do
     on roles(:app) do
       before 'deploy:restart', 'puma:start'
       invoke 'deploy'
-    end
+    endcap 
   end
 
   desc 'Restart application'
@@ -160,5 +160,5 @@ namespace :deploy do
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
   after  :finishing,    :restart
-  after "deploy:updated", "newrelic:notice_deployment"
+  # after "deploy:updated", "newrelic:notice_deployment"
 end
