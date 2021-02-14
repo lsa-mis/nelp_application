@@ -22,6 +22,7 @@ install_plugin Capistrano::SCM::Git
 require 'capistrano/rails'
 require 'capistrano/rbenv'
 require 'capistrano/puma'
+require 'capistrano/postgresql'
 
 install_plugin Capistrano::Puma
 install_plugin Capistrano::Puma::Nginx # if you want to upload a nginx site template

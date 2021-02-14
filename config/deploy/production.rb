@@ -7,7 +7,7 @@ server "lsa-english-nelp.miserver.it.umich.edu", user: "deployer", roles: %w{app
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
-
+set :pg_without_sudo, false
 
 # role-based syntax
 # ==================
