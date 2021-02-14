@@ -67,15 +67,6 @@ set :keep_assets, 2
 # Default value for :pty is false
 # set :pty, true
 
-# Default value for :linked_files is []
-# append :linked_files, "config/database.yml"
-set :linked_files, %w{config/puma.rb config/nginx.conf config/master.key}
-
-# Default value for linked_dirs is []
-# append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
-set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
-                    #'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
-set :linked_dirs, fetch(:linked_dirs, []).push('public/packs', 'node_modules')
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -162,3 +153,13 @@ namespace :deploy do
   after  :finishing,    :restart
   # after "deploy:updated", "newrelic:notice_deployment"
 end
+
+# Default value for :linked_files is []
+# append :linked_files, "config/database.yml"
+set :linked_files, %w{config/puma.rb config/nginx.conf config/master.key}
+
+# Default value for linked_dirs is []
+# append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
+set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+                    #'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
+set :linked_dirs, fetch(:linked_dirs, []).push('public/packs', 'node_modules')
