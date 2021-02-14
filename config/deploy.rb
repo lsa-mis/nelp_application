@@ -35,6 +35,9 @@ set :rails_assets_groups, :assets
 # set this to the number of versions to keep
 set :keep_assets, 2
 
+
+set :nginx_sites_available_path, "/etc/nginx/sites-available"
+set :nginx_sites_enabled_path, "/etc/nginx/sites-enabled"
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
 
