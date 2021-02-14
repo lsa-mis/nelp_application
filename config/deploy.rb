@@ -129,7 +129,7 @@ namespace :deploy do
     on roles(:app) do
       before 'deploy:restart', 'puma:start'
       invoke 'deploy'
-    endcap 
+    end
   end
 
   desc 'Restart application'
