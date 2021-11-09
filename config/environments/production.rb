@@ -68,11 +68,11 @@ Rails.application.configure do
   #   arguments: '-i -t'
   # }
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.default_options = {from: 'lsa-mis-rails-admins@umich.edu'}
+  config.action_mailer.default_options = {from: 'lsa-was-rails-admins@umich.edu'}
 
 
   # Devise setting - Ensure you have defined default url options
-  config.action_mailer.default_url_options = { host: 'lsa-english-nelp.miserver.it.umich.edu' }
+  config.action_mailer.default_url_options = { host: 'lsa-english-nelp-app.miserver.it.umich.edu' }
 
   config.action_mailer.perform_caching = false
 

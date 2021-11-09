@@ -1,7 +1,7 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.15.0"
 set :rbenv_type, :user
-set :rbenv_ruby, '2.7.2'
+set :rbenv_ruby, '3.0.2'
 set :user, "deployer"
 set :application, "nelp_application"
 set :repo_url, "git@github.com:lsa-mis/nelp_application.git"

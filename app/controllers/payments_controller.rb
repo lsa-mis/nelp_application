@@ -51,7 +51,7 @@ class PaymentsController < ApplicationController
   private
     def generate_hash(current_user, amount=current_program.application_fee.to_i)
       user_account = current_user.email.partition('@').first + '-' + current_user.id.to_s
-      redirect_url = 'https://lsa-english-nelp.miserver.it.umich.edu/payment_receipt'
+      redirect_url = 'https://lsa-english-nelp-app.miserver.it.umich.edu/payment_receipt'
       amount_to_be_payed = amount.to_i
       if Rails.env.development? || Rails.application.credentials.NELNET_SERVICE[:SERVICE_SELECTOR] == "QA"
          key_to_use = 'test_key'
