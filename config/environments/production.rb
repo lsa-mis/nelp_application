@@ -68,7 +68,7 @@ Rails.application.configure do
   #   arguments: '-i -t'
   # }
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.default_options = {from: 'lsa-was-rails-admins@umich.edu'}
+  config.action_mailer.default_options = {from: 'lsa-english-nelp-managers@umich.edu'}
 
 
   # Devise setting - Ensure you have defined default url options
@@ -78,7 +78,7 @@ Rails.application.configure do
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
