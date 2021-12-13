@@ -1,6 +1,5 @@
 require 'digest'
 require 'time'
-
 class PaymentsController < ApplicationController
   devise_group :logged_in, contains: [:user, :admin_user]
   before_action :authenticate_logged_in!
@@ -51,7 +50,6 @@ class PaymentsController < ApplicationController
   private
     def generate_hash(current_user, amount=current_program.application_fee.to_i)
       user_account = current_user.email.partition('@').first + '-' + current_user.id.to_s
-      redirect_url = 'https://lsa-english-nelp-app.miserver.it.umich.edu/payment_receipt'
       amount_to_be_payed = amount.to_i
       if Rails.env.development? || Rails.application.credentials.NELNET_SERVICE[:SERVICE_SELECTOR] == "QA"
          key_to_use = 'test_key'
@@ -67,6 +65,7 @@ class PaymentsController < ApplicationController
        'prod_key' => Rails.application.credentials.NELNET_SERVICE[:PRODUCTION_KEY],
        'prod_URL' => Rails.application.credentials.NELNET_SERVICE[:PRODUCTION_URL]
       }
+      redirect_url = connection_hash[url_to_use]
       current_epoch_time = DateTime.now.strftime("%Q").to_i
       initial_hash = {
         'orderNumber' => user_account,
@@ -86,11 +85,10 @@ class PaymentsController < ApplicationController
 
       # Final URL
       url_for_payment = initial_hash.map{|k,v| "#{k}=#{v}&" unless k == 'key'}.join('')
-      final_url = connection_hash[url_to_use] + url_for_payment + 'hash=' + encoded_hash
+      final_url = connection_hash[url_to_use] + '?' + url_for_payment + 'hash=' + encoded_hash
     end
 
     def url_params
       params.permit(:amount, :transactionType, :transactionStatus, :transactionId, :transactionTotalAmount, :transactionDate, :transactionAcountType, :transactionResultCode, :transactionResultMessage, :orderNumber, :timestamp, :hash, :program_year)
     end
 end
-
