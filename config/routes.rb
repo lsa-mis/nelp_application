@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   get 'payments', to: 'payments#index'
   get 'payment_receipt', to: 'payments#payment_receipt'
+  post 'payment_receipt', to: 'payments#payment_receipt'
   get '/payment_show', to: 'payments#payment_show', as: 'all_payments'
   get 'make_payment', to: 'payments#make_payment'
   post 'make_payment', to: 'payments#make_payment'
