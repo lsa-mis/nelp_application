@@ -29,7 +29,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.4', require: false
 
 gem 'activeadmin'
-gem 'annotate'
+
 gem 'turnout', '~> 2.5'
 
 group :development, :test do
@@ -51,7 +51,8 @@ group :development do
   # gem 'capistrano-postgresql'
   gem 'capistrano-rails', '~> 1.6', '>= 1.6.1', require: false
   # gem 'capistrano-rbenv', '~> 2.2', require: false
-  gem 'letter_opener_web', '~> 1.4'
+  gem 'letter_opener_web', '~> 2.0'
+  gem 'annotate', '~> 2.7', '>= 2.7.1'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -64,6 +65,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'faker'
 end
+
 gem 'devise'
 gem 'simple_form'
 gem "sd_notify"

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :static_pages
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   devise_for :users
@@ -13,4 +14,6 @@ Rails.application.routes.draw do
   get '/payment_show', to: 'payments#payment_show', as: 'all_payments'
   get 'make_payment', to: 'payments#make_payment'
   post 'make_payment', to: 'payments#make_payment'
+
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 end

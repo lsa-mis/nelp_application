@@ -73,9 +73,9 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     airbrussh (1.4.1)
       sshkit (>= 1.6.1, != 1.7.0)
-    annotate (3.2.0)
-      activerecord (>= 3.2, < 8.0)
-      rake (>= 10.4, < 14.0)
+    annotate (2.7.5)
+      activerecord (>= 3.2, < 7.0)
+      rake (>= 10.4, < 13.0)
     arbre (1.5.0)
       activesupport (>= 3.0.0, < 7.1)
       ruby2_keywords (>= 0.0.2, < 1.0)
@@ -161,10 +161,11 @@ GEM
       addressable (~> 2.7)
     letter_opener (1.8.1)
       launchy (>= 2.2, < 3)
-    letter_opener_web (1.4.1)
-      actionmailer (>= 3.2)
-      letter_opener (~> 1.0)
-      railties (>= 3.2)
+    letter_opener_web (2.0.0)
+      actionmailer (>= 5.2)
+      letter_opener (~> 1.7)
+      railties (>= 5.2)
+      rexml
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -177,15 +178,13 @@ GEM
     matrix (0.4.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.0)
     minitest (5.16.3)
     msgpack (1.6.0)
-    net-scp (4.0.0.rc1)
-      net-ssh (>= 2.6.5, < 8.0.0)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
     net-ssh (7.0.1)
     nio4r (2.5.8)
-    nokogiri (1.13.8)
-      mini_portile2 (~> 2.8.0)
+    nokogiri (1.13.8-x86_64-darwin)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     pg (1.4.4)
@@ -228,7 +227,7 @@ GEM
       method_source
       rake (>= 12.2)
       thor (~> 1.0)
-    rake (13.0.6)
+    rake (12.3.3)
     ransack (3.2.1)
       activerecord (>= 6.1.5)
       activesupport (>= 6.1.5)
@@ -324,11 +323,11 @@ GEM
     zeitwerk (2.6.1)
 
 PLATFORMS
-  ruby
+  x86_64-darwin-20
 
 DEPENDENCIES
   activeadmin
-  annotate
+  annotate (~> 2.7, >= 2.7.1)
   bootsnap (>= 1.4.4)
   byebug
   capistrano (~> 3.16)
@@ -338,7 +337,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   jbuilder (~> 2.7)
-  letter_opener_web (~> 1.4)
+  letter_opener_web (~> 2.0)
   listen (~> 3.3)
   pg (~> 1.2, >= 1.2.3)
   puma (~> 5.0)

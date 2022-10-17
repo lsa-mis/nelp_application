@@ -15,3 +15,5 @@ Turbolinks.start()
 ActiveStorage.start()
 
 const images = require.context('../images', true)
+require("trix")
+require("@rails/actiontext")
