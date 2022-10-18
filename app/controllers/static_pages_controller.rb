@@ -1,6 +1,7 @@
 class StaticPagesController < ApplicationController
   def home
     redirect_to all_payments_path if user_signed_in?
+    @home_message = StaticPage.find_by(location: 'home').message if StaticPage.find_by(location: 'home').present?
   end
 
   def about
