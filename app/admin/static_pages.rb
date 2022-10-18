@@ -8,8 +8,6 @@ ActiveAdmin.register StaticPage do
   actions :all, except: [:destroy, :show, :new]
 
   index title: 'Manage messages on static pages'do
-    selectable_column
-    id_column
     column :location
     actions
   end
