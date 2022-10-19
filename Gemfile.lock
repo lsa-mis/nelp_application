@@ -330,7 +330,7 @@ DEPENDENCIES
   annotate (~> 2.7, >= 2.7.1)
   bootsnap (>= 1.4.4)
   byebug
-  capistrano (~> 3.16)
+  capistrano (~> 3.17)
   capistrano-rails (~> 1.6, >= 1.6.1)
   capybara
   devise
