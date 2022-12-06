@@ -1,12 +1,11 @@
 <% provide(:title, 'Payment Receipts') %>
 
-<h2>
-  <%= current_program.payment_instructions unless nil %>
-</h2>
-
 <% if @users_current_payments.count < 1 %>
 
-  <h2> Please pay your <%= number_to_currency(current_program.application_fee) %> application fee.</h2>
+  <h2> Please pay your <%= number_to_currency(current_program.application_fee) %> application fee.
+    <br>
+    <%= current_program.payment_instructions unless nil %> 
+  </h2>
   <h6>Pay by Credit Card (Visa, Mastercard, Discover, AMEX)</h6>
   <p class="my-2">
     You will be redirected to
@@ -96,5 +95,5 @@
 <% end %>
   <p class="my-2">
     You may email any questions to
-    <%= mail_to 'aknuth@umich.edu' %>
+    <%= mail_to 'pinto@umich.edu' %>
   </p>
