@@ -4,7 +4,7 @@
 
   <h2> Please pay your <%= number_to_currency(current_program.application_fee) %> application fee.
     <br>
-    <%= current_program.payment_instructions unless nil %> 
+    <%= simple_format(current_program.payment_instructions) unless nil %> 
   </h2>
   <h6>Pay by Credit Card (Visa, Mastercard, Discover, AMEX)</h6>
   <p class="my-2">

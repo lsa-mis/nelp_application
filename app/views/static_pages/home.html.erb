@@ -3,9 +3,9 @@
   <h2 class="p-2 bg-yellow-50 shadow-md">
     <% if current_program %>
       <% if current_program_open? %>
-        <%= current_program.open_instructions %>
+        <%= simple_format(current_program.open_instructions) %>
       <% else %>
-        <%= current_program.close_instructions %>
+        <%= simple_format(current_program.close_instructions) %>
       <% end %>
     <% else %>
       There are no active programs
