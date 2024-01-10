@@ -61,24 +61,30 @@ Rails.application.configure do
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "testing_app_production"
-  config.action_mailer.delivery_method = :sendmail
-  # Defaults to:
-  # config.action_mailer.sendmail_settings = {
-  #   location: '/usr/sbin/sendmail',
-  #   arguments: '-i -t'
-  # }
-  config.action_mailer.perform_deliveries = true
-  config.action_mailer.default_options = {from: 'lsa-english-nelp-managers@umich.edu'}
 
+  # config.action_mailer.delivery_method = :sendmail
+  # config.action_mailer.perform_deliveries = true
+  # config.action_mailer.default_options = {from: 'lsa-english-nelp-managers@umich.edu'}
+  # # Devise setting - Ensure you have defined default url options
+  # config.action_mailer.default_url_options = { host: 'lsa-english-nelp-app.miserver.it.umich.edu' }
+  # config.action_mailer.perform_caching = false
+  # # Ignore bad email addresses and do not raise email delivery errors.
+  # # Set this to true and configure the email server for immediate delivery to raise delivery errors.
+  # config.action_mailer.raise_delivery_errors = true
 
-  # Devise setting - Ensure you have defined default url options
-  config.action_mailer.default_url_options = { host: 'lsa-english-nelp-app.miserver.it.umich.edu' }
-
-  config.action_mailer.perform_caching = false
-
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+  host = 'https://nelp-application.english.lsa.umich.edu/'
+  config.action_mailer.default_url_options = { host: host }
+  ActionMailer::Base.smtp_settings = {
+    :address        => 'smtp.sendgrid.net',
+    :port           => '587',
+    :authentication => :plain,
+    :user_name      => 'apikey',
+    :password       => <%= Rails.application.credentials.SENDGRID_API_KEY %>
+    :domain         => 'umich.edu',
+    :enable_starttls_auto => true
+  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
