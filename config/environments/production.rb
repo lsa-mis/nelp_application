@@ -81,7 +81,7 @@ Rails.application.configure do
     :port           => '587',
     :authentication => :plain,
     :user_name      => 'apikey',
-    :password       => Rails.application.credentials.SENDGRID_API_KEY
+    :password       => Rails.application.credentials.SENDGRID_API_KEY,
     :domain         => 'umich.edu',
     :enable_starttls_auto => true
   }
