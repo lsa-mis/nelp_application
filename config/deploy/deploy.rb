@@ -1,29 +1,26 @@
-# config valid for current version and patch releases of Capistrano
 lock "~> 3.17"
 
-# set ruby version, '3.0.2'
-set :ruby_version, '/home/deployer/.rbenv/shims/ruby'
+set :default_env, {
+  'NODE_OPTIONS' => '--openssl-legacy-provider',
+  'PATH' => "$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH"
+}
 
-server 'lsa-english-nelp-app.miserver.it.umich.edu', roles: %w{app db web}, primary: true
+SSHKit.config.command_map[:bundle] = "/home/deployer/.asdf/shims/bundle"
+SSHKit.config.command_map[:ruby] = "/home/deployer/.asdf/shims/ruby"
+
+server 'nelpprod2.miserver.it.umich.edu', roles: %w{app db web}, primary: true
 
 set :application, "nelp_application"
 set :repo_url, "git@github.com:lsa-mis/nelp_application.git"
 set :user, "deployer"
-set :puma_threads,    [4, 16]
-set :puma_workers,    0
 set :branch, "master"
 
 # Don't change these unless you know what you're doing
 set :pty,             true
 set :stage,           :production
-set :deploy_via,      :remote_cache     
 set :deploy_to,       "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
-set :shared_path,     "#{fetch(:deploy_to)}/shared"
-set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh/id_rsa.pub) }
-# Avoid permissions issues with using /tmp
+set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh/id_ed25519.pub) }
 set :tmp_dir, '/home/deployer/tmp'
-
-# Default value for keep_releases is 5
 set :keep_releases, 3
 
 # Default value for :linked_files and linked_dirs is []
@@ -35,14 +32,14 @@ namespace :puma do
   desc 'Stop the PUMA service'
   task :stop do
     on roles(:app) do
-      execute "cd #{fetch(:deploy_to)}/current; /home/deployer/.rbenv/shims/bundle exec pumactl -P ~/apps/#{fetch(:application)}/current/tmp/pids/puma.pid stop"
+      execute "cd #{fetch(:deploy_to)}/current; bin/bundle exec pumactl -P ~/apps/#{fetch(:application)}/current/tmp/pids/puma.pid stop"
     end
   end
 
   desc 'Restart the PUMA service'
   task :restart do
     on roles(:app) do
-      execute "cd #{fetch(:deploy_to)}/current; /home/deployer/.rbenv/shims/bundle exec pumactl -P ~/apps/#{fetch(:application)}/current/tmp/pids/puma.pid phased-restart"
+      execute "cd #{fetch(:deploy_to)}/current; bin/bundle exec pumactl -P ~/apps/#{fetch(:application)}/current/tmp/pids/puma.pid phased-restart"
     end
   end
 
@@ -69,21 +66,31 @@ namespace :deploy do
   desc 'Upload to shared/config'
   task :upload do
     on roles (:app) do
-     upload! "config/master.key",  "#{shared_path}/config/master.key"
-     upload! "config/puma_prod.rb",  "#{shared_path}/config/puma.rb"
-     upload! "config/nginx_prod.conf",  "#{shared_path}/config/nginx.conf"
-     upload! "config/puma_prod.service",  "#{fetch(:shared_path)}/config/puma.service"
+     upload! "config/master.key",  "#{fetch(:deploy_to)}/shared/config/master.key"
+     upload! "config/puma_prod.rb",  "#{fetch(:deploy_to)}/shared/config/puma.rb"
+     upload! "config/nginx_prod.conf",  "#{fetch(:deploy_to)}/shared/config/nginx.conf"
+     upload! "config/puma_prod.service",  "#{fetch(:deploy_to)}/shared/config/puma.service"
     end
   end
 
-  desc "reload the database with seed data"
-  task :seed do
-    puts "Seeding db with seed file located at db/seeds.rb"
-    run "cd #{current_path}; bin/rails db:seed RAILS_ENV=production"
-  end
-
+#   desc "reload the database with seed data"
+#   task :seed do
+#     puts "Seeding db with seed file located at db/seeds.rb"
+#     run "cd #{current_path}; bin/rails db:seed RAILS_ENV=production"
+#   end
+  before "bundler:install", "debug:print_ruby_version"
   before :starting,     :check_revision
   after  :finishing,    'puma:restart'
+end
+
+namespace :debug do
+  desc "Print Ruby version and which ruby"
+  task :print_ruby_version do
+    on roles(:app) do
+      execute "ruby -v"
+      execute "which ruby"
+    end
+  end
 end
 
 namespace :maintenance do
