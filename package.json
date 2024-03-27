@@ -1,5 +1,5 @@
 {
-  "name": "testing-app",
+  "name": "nelp_application",
   "private": true,
   "dependencies": {
     "@activeadmin/activeadmin": "^2.9.0",
@@ -7,15 +7,19 @@
     "@rails/actiontext": "^6.1.7",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
-    "@rails/webpacker": "5.2.1",
-    "@tailwindcss/postcss7-compat": "^2.0.2",
-    "postcss": "^7",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "@rails/webpacker": "5.4.4",
     "trix": "^1.2.0",
-    "turbolinks": "^5.2.0"
+    "turbolinks": "^5.2.0",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12"
   },
   "version": "0.1.0",
   "devDependencies": {
+    "@tailwindcss/postcss7-compat": "^2.0.3",
+    "@webpack-cli/serve": "^2.0.5",
+    "autoprefixer": "^9.8.6",
+    "postcss": "^8.4.31",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3",
     "webpack-dev-server": "^3.11.2"
   }
 }

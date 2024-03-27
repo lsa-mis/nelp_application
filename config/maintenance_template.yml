@@ -1,0 +1,8 @@
+---
+reason: We are currently doing maintenance on the NELP application <small>(code 240321)</small>
+allowed_paths:
+allowed_ips:
+# UMVPN - All Traffic or UMVPN - Only U-M Traffic range
+- 35.7.0.0/18
+response_code: 503
+retry_after: 3600
