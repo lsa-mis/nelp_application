@@ -4,7 +4,7 @@ directory "/home/deployer/apps/nelp_application/current"
 rackup "/home/deployer/apps/nelp_application/current/config.ru"
 environment "production"
 
-# tag ""
+tag "nelp_application_production"
 
 pidfile "/home/deployer/apps/nelp_application/shared/tmp/pids/puma.pid"
 state_path "/home/deployer/apps/nelp_application/shared/tmp/pids/puma.state"
