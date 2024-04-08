@@ -45,9 +45,10 @@ namespace :puma do
   end
 
   desc 'Start the PUMA service'
+  # Be sure to follwo the steps to setup the systemctl puma service in the README
   task :start do
     on roles(:app) do
-      puts "You must intially start the puma service using sudo on the server"
+      execute "cd #{fetch(:deploy_to)}/current; /home/deployer/.asdf/shims/bundle exec pumactl -F ~/apps/#{fetch(:application)}/current/config/puma.rb start"
     end
   end
 end
@@ -70,7 +71,13 @@ namespace :deploy do
      upload! "config/master.key",  "#{fetch(:deploy_to)}/shared/config/master.key"
      upload! "config/puma_prod.rb",  "#{fetch(:deploy_to)}/shared/config/puma.rb"
      upload! "config/nginx_prod.conf",  "#{fetch(:deploy_to)}/shared/config/nginx.conf"
-     upload! "config/puma_prod.service",  "#{fetch(:deploy_to)}/shared/config/puma.service"
+    end
+  end
+
+  desc "Make sure your migration is up to date before deploying"
+  task :migrate do
+    on roles(:db) do
+      execute :rake, "db:migrate RAILS_ENV=#{fetch(:stage)}"
     end
   end
 
@@ -81,6 +88,7 @@ namespace :deploy do
 #   end
   before "bundler:install", "debug:print_ruby_version"
   before :starting,     :check_revision
+  after 'deploy:updating', 'deploy:migrate'
   after  :finishing,    'puma:restart'
 end
 
