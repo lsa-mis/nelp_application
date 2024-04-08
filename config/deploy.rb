@@ -74,12 +74,12 @@ namespace :deploy do
     end
   end
 
-  desc "Make sure your migration is up to date before deploying"
-  task :migrate do
-    on roles(:db) do
-      execute :rake, "db:migrate RAILS_ENV=#{fetch(:stage)}"
-    end
-  end
+  # desc "Make sure your migration is up to date before deploying"
+  # task :migrate do
+  #   on roles(:db) do
+  #     execute :rake, "db:migrate RAILS_ENV=#{fetch(:stage)}"
+  #   end
+  # end
 
 #   desc "reload the database with seed data"
 #   task :seed do
