@@ -2,7 +2,7 @@ lock "~> 3.17"
 
 set :default_env, {
   'NODE_OPTIONS' => '--openssl-legacy-provider',
-  'PATH' => "$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH"
+  'PATH' => "/home/deployer/.asdf/shims:/home/deployer/.asdf/bin:$PATH"
 }
 
 SSHKit.config.command_map[:bundle] = "/home/deployer/.asdf/shims/bundle"
