@@ -88,7 +88,7 @@ namespace :deploy do
 #   end
   before "bundler:install", "debug:print_ruby_version"
   before :starting,     :check_revision
-  after 'deploy:updating', 'deploy:migrate'
+  # after 'deploy:updating', 'deploy:migrate'
   after  :finishing,    'puma:restart'
 end
 
