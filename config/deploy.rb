@@ -93,11 +93,24 @@ namespace :deploy do
 end
 
 namespace :debug do
-  desc "Print Ruby version and which ruby"
-  task :print_ruby_version do
+  desc "Print Ruby version, Ruby path, asdf Ruby list, and Rails version"
+  task :print_versions do
     on roles(:app) do
-      execute "ruby -v"
-      execute "which ruby"
+      within current_path do
+        with rails_env: fetch(:rails_env) do
+          # Capture the output of each command
+          ruby_version = capture(:ruby, '-v')
+          which_ruby = capture(:which, 'ruby')
+          asdf_ruby_list = capture(:asdf, 'list ruby')
+          rails_version = capture(:bundle, 'exec rails -v')
+
+          # Log the captured outputs
+          info "Ruby Version: #{ruby_version.strip}"
+          info "Ruby Path: #{which_ruby.strip}"
+          info "asdf Ruby Versions: #{asdf_ruby_list.strip}"
+          info "Rails Version: #{rails_version.strip}"
+        end
+      end
     end
   end
 end
@@ -114,6 +127,19 @@ namespace :maintenance do
   task :stop do
     on roles(:web) do
       execute "rm #{current_path}/tmp/maintenance.yml"
+    end
+  end
+end
+
+namespace :db do
+  desc "Check and verify PostgreSQL sequences for integer primary keys"
+  task check_sequences: :environment do
+    on roles(:db) do
+      within release_path do
+        with rails_env: fetch(:stage) do
+          execute :bundle, :exec, "rails db:check_sequences"
+        end
+      end
     end
   end
 end
