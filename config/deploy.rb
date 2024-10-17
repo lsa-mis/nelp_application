@@ -86,7 +86,7 @@ namespace :deploy do
 #     puts "Seeding db with seed file located at db/seeds.rb"
 #     run "cd #{current_path}; bin/rails db:seed RAILS_ENV=production"
 #   end
-  before "bundler:install", "debug:print_ruby_version"
+  before "bundler:install", "debug:print_versions"
   before :starting,     :check_revision
   # after 'deploy:updating', 'deploy:migrate'
   after  :finishing,    'puma:restart'
