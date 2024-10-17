@@ -133,10 +133,10 @@ end
 
 namespace :db do
   desc "Check and verify PostgreSQL sequences for integer primary keys"
-  task check_sequences: :environment do
+  task :check_sequences do
     on roles(:db) do
-      within release_path do
-        with rails_env: fetch(:stage) do
+      within current_path do
+        with rails_env: fetch(:rails_env) do
           execute :bundle, :exec, "rails db:check_sequences"
         end
       end
