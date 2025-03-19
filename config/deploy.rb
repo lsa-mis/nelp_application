@@ -1,3 +1,5 @@
+require 'stringio'
+
 lock "~> 3.17"
 
 set :default_env, {
