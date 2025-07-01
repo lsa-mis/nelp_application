@@ -36,6 +36,12 @@ group :development, :test do
   gem 'capybara'
   gem "webdrivers"
   gem 'faker'
+  
+  # Additional testing gems for comprehensive coverage
+  gem 'shoulda-matchers', '~> 5.0'
+  gem 'simplecov', require: false
+  gem 'database_cleaner-active_record'
+  gem 'webmock'
 end
 
 group :development, :staging do
