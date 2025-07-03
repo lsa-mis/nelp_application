@@ -3,12 +3,7 @@ require 'time'
 class PaymentsController < ApplicationController
   devise_group :logged_in, contains: [:user, :admin_user]
   before_action :authenticate_logged_in!
-  before_action :authenticate_admin!, only: [:index, :destroy]
-
-  def index
-    redirect_to root_url and return unless admin_user_signed_in?
-    @payments = Payment.current_program_payments
-  end
+  before_action :ensure_current_program
 
   def payment_receipt
     if Payment.pluck(:transaction_id).include?(params['transactionId'])
@@ -36,13 +31,14 @@ class PaymentsController < ApplicationController
   end
 
   def make_payment
-    processed_url = generate_hash(current_user, params['amount'])
+    amount = params['amount'] || current_program.application_fee.to_i
+    processed_url = generate_hash(current_user, amount)
     redirect_to processed_url
   end
 
   def payment_show
-    @total_cost = current_program.program_fee.to_i  + current_program.application_fee.to_i
-    @users_current_payments = Payment.where(program_year: current_program.program_year, user_id: current_user )
+    @total_cost = current_program.program_fee.to_i + current_program.application_fee.to_i
+    @users_current_payments = Payment.where(program_year: current_program.program_year, user_id: current_user)
     @ttl_paid = Payment.where(program_year: current_program.program_year, user_id: current_user, transaction_status: '1').pluck(:total_amount).map(&:to_f).sum / 100
     @balance_due = @total_cost - @ttl_paid
   end
@@ -90,5 +86,11 @@ class PaymentsController < ApplicationController
 
     def url_params
       params.permit(:amount, :transactionType, :transactionStatus, :transactionId, :transactionTotalAmount, :transactionDate, :transactionAcountType, :transactionResultCode, :transactionResultMessage, :orderNumber, :timestamp, :hash, :program_year)
+    end
+
+    def ensure_current_program
+      unless current_program
+        redirect_to root_path, alert: "Program not found. Please contact support."
+      end
     end
 end
