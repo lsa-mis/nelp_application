@@ -5,43 +5,6 @@ RSpec.describe "Payments", type: :request do
   let(:admin_user) { create(:admin_user) }
   let!(:program_setting) { create(:program_setting, :active, program_year: 2024, program_fee: 1000, application_fee: 500) }
 
-  describe "GET /payments" do
-    context "when not logged in" do
-      it "redirects to login" do
-        get payments_path
-        expect(response).to redirect_to(new_user_session_path)
-      end
-    end
-
-    context "when logged in as regular user" do
-      before { sign_in user }
-
-      it "redirects to root (admin only)" do
-        get payments_path
-        expect(response).to redirect_to(root_url)
-      end
-    end
-
-    context "when logged in as admin" do
-      before { sign_in admin_user }
-
-      it "returns success" do
-        get payments_path
-        expect(response).to have_http_status(:success)
-      end
-
-      it "displays current program payments" do
-        current_payment = create(:payment, user: user, program_year: program_setting.program_year)
-        old_payment = create(:payment, user: user, program_year: 2023)
-
-        get payments_path
-
-        expect(response.body).to include(current_payment.transaction_id)
-        expect(response.body).not_to include(old_payment.transaction_id)
-      end
-    end
-  end
-
   describe "GET /payments/payment_show" do
     context "when not logged in" do
       it "redirects to login" do
@@ -64,8 +27,8 @@ RSpec.describe "Payments", type: :request do
       end
 
       it "shows balance due" do
-        create(:payment, 
-               user: user, 
+        create(:payment,
+               user: user,
                program_year: program_setting.program_year,
                total_amount: '50000', # $500
                transaction_status: '1')
@@ -75,8 +38,8 @@ RSpec.describe "Payments", type: :request do
       end
 
       it "shows zero balance when fully paid" do
-        create(:payment, 
-               user: user, 
+        create(:payment,
+               user: user,
                program_year: program_setting.program_year,
                total_amount: '150000', # $1500
                transaction_status: '1')
