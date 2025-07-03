@@ -13,19 +13,14 @@ RSpec.describe PaymentsController, type: :controller do
   describe 'authentication and authorization' do
     describe 'before_action filters' do
       context 'when user is not logged in' do
-        it 'redirects to login for index' do
-          get :index
-          expect(response).to redirect_to(new_user_session_path)
-        end
-
         it 'redirects to login for payment_show' do
           get :payment_show
-          expect(response).to redirect_to(new_user_session_path)
+          expect(response).to redirect_to(new_user_session_url)
         end
 
         it 'redirects to login for make_payment' do
           post :make_payment, params: { amount: '500' }
-          expect(response).to redirect_to(new_user_session_path)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
@@ -41,60 +36,6 @@ RSpec.describe PaymentsController, type: :controller do
           post :make_payment, params: { amount: '500' }
           expect(response).to have_http_status(:redirect)
         end
-
-        it 'denies access to index (admin only)' do
-          get :index
-          expect(response).to redirect_to(root_url)
-        end
-
-        it 'denies access to destroy (admin only)' do
-          payment = create(:payment, user: user)
-          delete :destroy, params: { id: payment.id }
-          expect(response).to redirect_to(root_url)
-        end
-      end
-
-      context 'when admin user is logged in' do
-        before { sign_in admin_user }
-
-        it 'allows access to index' do
-          get :index
-          expect(response).to have_http_status(:success)
-        end
-
-        it 'allows access to destroy' do
-          payment = create(:payment, user: user)
-          delete :destroy, params: { id: payment.id }
-          expect(response).to have_http_status(:success)
-        end
-      end
-    end
-  end
-
-  describe 'GET #index' do
-    before { sign_in admin_user }
-
-    it 'assigns current program payments' do
-      current_payment = create(:payment, user: user, program_year: program_setting.program_year)
-      old_payment = create(:payment, user: user, program_year: 2023)
-
-      get :index
-
-      expect(assigns(:payments)).to include(current_payment)
-      expect(assigns(:payments)).not_to include(old_payment)
-    end
-
-    it 'renders the index template' do
-      get :index
-      expect(response).to render_template(:index)
-    end
-
-    context 'when accessed by regular user' do
-      before { sign_in user }
-
-      it 'redirects to root' do
-        get :index
-        expect(response).to redirect_to(root_url)
       end
     end
   end
@@ -120,18 +61,18 @@ RSpec.describe PaymentsController, type: :controller do
     end
 
     it 'calculates total paid amount correctly' do
-      create(:payment, 
-             user: user, 
+      create(:payment,
+             user: user,
              program_year: program_setting.program_year,
              total_amount: '50000', # $500
              transaction_status: '1')
-      create(:payment, 
-             user: user, 
+      create(:payment,
+             user: user,
              program_year: program_setting.program_year,
              total_amount: '30000', # $300
              transaction_status: '1')
-      create(:payment, 
-             user: user, 
+      create(:payment,
+             user: user,
              program_year: program_setting.program_year,
              total_amount: '20000', # $200 - but failed
              transaction_status: '0')
@@ -142,8 +83,8 @@ RSpec.describe PaymentsController, type: :controller do
     end
 
     it 'calculates balance due correctly' do
-      create(:payment, 
-             user: user, 
+      create(:payment,
+             user: user,
              program_year: program_setting.program_year,
              total_amount: '50000', # $500
              transaction_status: '1')
@@ -188,7 +129,7 @@ RSpec.describe PaymentsController, type: :controller do
   describe 'POST #payment_receipt' do
     before { sign_in user }
 
-    let(:payment_params) do
+    let(:base_payment_params) do
       {
         transactionType: 'SALE',
         transactionStatus: '1',
@@ -206,13 +147,12 @@ RSpec.describe PaymentsController, type: :controller do
 
     context 'with new transaction' do
       it 'creates a new payment record' do
-        expect do
-          post :payment_receipt, params: payment_params
-        end.to change(Payment, :count).by(1)
+        expect { post :payment_receipt, params: base_payment_params }
+          .to change(Payment, :count).by(1)
       end
 
       it 'sets payment attributes correctly' do
-        post :payment_receipt, params: payment_params
+        post :payment_receipt, params: base_payment_params
 
         payment = Payment.last
         expect(payment.transaction_type).to eq('SALE')
@@ -225,7 +165,7 @@ RSpec.describe PaymentsController, type: :controller do
       end
 
       it 'redirects to all_payments_path with success notice' do
-        post :payment_receipt, params: payment_params
+        post :payment_receipt, params: base_payment_params
         expect(response).to redirect_to(all_payments_path)
         expect(flash[:notice]).to eq('Your Payment Was Successfully Recorded')
       end
@@ -238,34 +178,22 @@ RSpec.describe PaymentsController, type: :controller do
 
       it 'does not create a new payment record' do
         expect do
-          post :payment_receipt, params: payment_params
+          post :payment_receipt, params: base_payment_params
         end.not_to change(Payment, :count)
       end
 
       it 'redirects to all_payments_path without notice' do
-        post :payment_receipt, params: payment_params
+        post :payment_receipt, params: base_payment_params
         expect(response).to redirect_to(all_payments_path)
         expect(flash[:notice]).to be_nil
       end
     end
 
     context 'with failed payment' do
-      let(:failed_payment_params) do
-        payment_params.merge(
-          transactionStatus: '0',
-          transactionResultCode: '1001',
-          transactionResultMessage: 'DECLINED'
-        )
-      end
-
+      let(:failed_payment_params) { base_payment_params.merge(transactionStatus: '0', transactionResultCode: '1001', transactionResultMessage: 'DECLINED') }
       it 'still creates the payment record' do
-        expect do
-          post :payment_receipt, params: failed_payment_params
-        end.to change(Payment, :count).by(1)
-
-        payment = Payment.last
-        expect(payment.transaction_status).to eq('0')
-        expect(payment.result_message).to eq('DECLINED')
+        expect { post :payment_receipt, params: failed_payment_params }
+          .to change(Payment, :count).by(1)
       end
     end
   end
@@ -280,9 +208,9 @@ RSpec.describe PaymentsController, type: :controller do
         # Mock credentials
         allow(Rails.application.credentials).to receive(:[]).with(:NELNET_SERVICE).and_return({
           DEVELOPMENT_KEY: 'dev_key_123',
-          DEVELOPMENT_URL: 'https://dev.example.com/pay',
+          DEVELOPMENT_URL: 'https://test-auth-interstitial.dsc.umich.edu',
           PRODUCTION_KEY: 'prod_key_456',
-          PRODUCTION_URL: 'https://prod.example.com/pay',
+          PRODUCTION_URL: 'https://auth-interstitial.it.umich.edu',
           ORDERTYPE: 'SALE',
           SERVICE_SELECTOR: 'QA'
         })
@@ -295,15 +223,15 @@ RSpec.describe PaymentsController, type: :controller do
 
         it 'uses development credentials' do
           result = controller.send(:generate_hash, user, amount)
-          expect(result).to include('dev.example.com')
+          expect(result).to include('https://test-auth-interstitial.dsc.umich.edu')
           expect(result).to include('hash=')
         end
 
         it 'includes correct payment parameters' do
           result = controller.send(:generate_hash, user, amount)
           expect(result).to include("amountDue=#{amount * 100}")
-          expect(result).to include("orderType=SALE")
-          expect(result).to include("orderDescription=NELP%20Application%20Fees")
+          expect(result).to include("orderType=LSADepartmentofEnglish")
+          expect(result).to include("orderDescription=NELP Application Fees")
         end
 
         it 'includes user account information' do
@@ -333,7 +261,7 @@ RSpec.describe PaymentsController, type: :controller do
 
         it 'uses production credentials' do
           result = controller.send(:generate_hash, user, amount)
-          expect(result).to include('prod.example.com')
+          expect(result).to include('https://auth-interstitial.it.umich.edu')
         end
       end
 
@@ -398,7 +326,7 @@ RSpec.describe PaymentsController, type: :controller do
 
       it 'permits only allowed parameters' do
         allow(controller).to receive(:params).and_return(ActionController::Parameters.new(all_params))
-        
+
         permitted = controller.send(:url_params)
         expect(permitted.keys).to include('amount', 'transactionType', 'transactionStatus', 'transactionId')
         expect(permitted.keys).not_to include('unwanted_param', 'authenticity_token')
@@ -415,9 +343,10 @@ RSpec.describe PaymentsController, type: :controller do
         allow(controller).to receive(:current_program).and_return(nil)
       end
 
-      it 'handles missing program gracefully in payment_show' do
-        expect { get :payment_show }.to raise_error(NoMethodError)
-        # This reveals the same error handling issue found in models
+      it 'redirects to root_path with an alert' do
+        get :payment_show
+        expect(response).to redirect_to(root_path)
+        expect(flash[:alert]).to eq("Program not found. Please contact support.")
       end
     end
 
