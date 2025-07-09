@@ -17,8 +17,12 @@ ActiveAdmin.register User do
   # end
 
   scope :all
-  scope :zero_balance
   filter :email, as: :select
+
+  # Custom scope for users with zero balance
+  scope :zero_balance, group: :balance do |users|
+    Payment.users_with_zero_balance.map(&:id)
+  end
 
   index do
     selectable_column
@@ -34,5 +38,5 @@ ActiveAdmin.register User do
     column :created_at
     actions
   end
-  
+
 end
