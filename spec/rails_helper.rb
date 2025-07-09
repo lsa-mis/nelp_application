@@ -10,7 +10,7 @@ SimpleCov.start 'rails' do
   add_group 'Helpers', 'app/helpers'
   add_group 'Mailers', 'app/mailers'
   add_group 'Views', 'app/views'
-  
+
   minimum_coverage 85
 end
 
@@ -21,6 +21,7 @@ require_relative '../config/environment'
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 require 'webmock/rspec'
+require 'rspec/sqlimit'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -101,6 +102,8 @@ RSpec.configure do |config|
       example.run
     end
   end
+
+  config.include ActiveSupport::Testing::TimeHelpers
 end
 
 # Shoulda Matchers configuration
