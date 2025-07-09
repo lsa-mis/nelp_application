@@ -43,7 +43,7 @@ RSpec.describe ProgramSetting, type: :model do
       it 'prevents duplicate program years' do
         existing_program = create(:program_setting, program_year: 2024)
         duplicate_program = build(:program_setting, program_year: 2024)
-        
+
         expect(duplicate_program).not_to be_valid
         expect(duplicate_program.errors[:program_year]).to include('has already been taken')
       end
@@ -130,7 +130,7 @@ RSpec.describe ProgramSetting, type: :model do
         it 'prevents a second active program' do
           create(:program_setting, :active, program_year: 2024)
           second_program = build(:program_setting, :active, program_year: 2025)
-          
+
           expect(second_program).not_to be_valid
           expect(second_program.errors[:active]).to include('cannot have another active program')
         end
@@ -138,7 +138,7 @@ RSpec.describe ProgramSetting, type: :model do
         it 'allows multiple inactive programs' do
           create(:program_setting, active: false, program_year: 2024)
           second_program = build(:program_setting, active: false, program_year: 2025)
-          
+
           expect(second_program).to be_valid
         end
       end
@@ -263,7 +263,7 @@ RSpec.describe ProgramSetting, type: :model do
         # Deactivate and create new program
         program.update!(active: false)
         new_program = create(:program_setting, :active, program_year: 2025)
-        
+
         expect(ProgramSetting.active_program.count).to eq(1)
         expect(ProgramSetting.active_program.first).to eq(new_program)
       end
@@ -340,8 +340,8 @@ RSpec.describe ProgramSetting, type: :model do
 
     describe 'large fee amounts' do
       it 'handles large fee amounts' do
-        program = build(:program_setting, 
-          program_fee: 1_000_000, 
+        program = build(:program_setting,
+          program_fee: 1_000_000,
           application_fee: 500_000
         )
         expect(program).to be_valid
@@ -375,20 +375,21 @@ RSpec.describe ProgramSetting, type: :model do
     let(:user) { create(:user) }
 
     it 'is referenced by Payment.current_program_payments scope' do
-      payment = create(:payment, user: user, program_year: program_setting.program_year)
-      
-      current_payments = Payment.current_program_payments
-      expect(current_payments).to include(payment)
+      travel_to(Date.new(2024, 7, 7)) do
+        payment = create(:payment, program_year: 2024)
+        current_payments = Payment.current_program_payments
+        expect(current_payments).to include(payment)
+      end
     end
 
     it 'is referenced by User balance calculations' do
-      payment = create(:payment, 
-        user: user, 
+      payment = create(:payment,
+        user: user,
         program_year: program_setting.program_year,
         total_amount: '50000',
         transaction_status: '1'
       )
-      
+
       expected_balance = program_setting.total_cost - 500 # payment amount in dollars
       expect(user.current_balance_due).to eq(expected_balance)
     end

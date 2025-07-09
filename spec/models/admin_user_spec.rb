@@ -14,5 +14,30 @@
 require 'rails_helper'
 
 RSpec.describe AdminUser, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject { FactoryBot.build(:admin_user) }
+
+  describe 'validations' do
+    it { should validate_presence_of(:email) }
+    it { should validate_uniqueness_of(:email).case_insensitive }
+  end
+
+  describe 'Devise modules' do
+    it 'is database authenticatable' do
+      expect(subject).to respond_to(:valid_password?)
+    end
+    it 'is recoverable' do
+      expect(subject).to respond_to(:reset_password_token)
+    end
+    it 'is rememberable' do
+      expect(subject).to respond_to(:remember_created_at)
+    end
+  end
+
+  describe 'factory' do
+    it 'is valid' do
+      expect(subject).to be_valid
+    end
+  end
+
+  # Add more tests for custom methods or associations if present
 end
