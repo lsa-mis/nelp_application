@@ -19,7 +19,7 @@
 class ProgramSetting < ApplicationRecord
     validates :program_year, presence: true, uniqueness: true
     validates :program_open, :program_close, presence: true
-    validate :only_one_active_camp
+    validate :only_one_active_program
 
     def self.ransackable_attributes(auth_object = nil)
       ["active", "allow_payments", "application_fee", "close_instructions", "created_at", "id", "open_instructions", "payment_instructions", "program_close", "program_fee", "program_open", "program_year", "updated_at"]
@@ -31,9 +31,9 @@ class ProgramSetting < ApplicationRecord
         self.program_fee + self.application_fee
     end
 
-    def only_one_active_camp
+    def only_one_active_program
         return unless active?
-      
+
         matches = ProgramSetting.active_program
         if persisted?
           matches = matches.where('id != ?', id)
