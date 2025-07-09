@@ -23,7 +23,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :trackable
 
-  has_many :payments
+  has_many :payments, dependent: :restrict_with_exception
 
   def self.ransackable_associations(auth_object = nil)
     ["payments"]
@@ -32,15 +32,16 @@ class User < ApplicationRecord
   def self.ransackable_attributes(auth_object = nil)
     ["created_at", "current_sign_in_at", "current_sign_in_ip", "email", "encrypted_password", "id", "last_sign_in_at", "last_sign_in_ip", "remember_created_at", "reset_password_sent_at", "reset_password_token", "sign_in_count", "updated_at"]
   end
-  
-  scope :zero_balance, -> { where(id: User.all.map { |u| u if u.balance_due_zero? }.compact)}
 
-  def current_balance_due
-    ProgramSetting.active_program.last.total_cost - self.payments.current_program_payments.pluck(:total_amount).sum(&:to_f) / 100
+  # Delegators for payment logic (optional, for convenience)
+  def current_balance_due(program_year = nil)
+    program = ProgramSetting.active_program
+    return 0 unless program
+    Payment.current_balance_due_for_user(self, program_year)
   end
 
-  def balance_due_zero?
-    self.current_balance_due.to_i == 0
+  def balance_due_zero?(program_year = nil)
+    Payment.balance_due_zero_for_user?(self, program_year)
   end
 
   def display_name
