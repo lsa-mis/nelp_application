@@ -22,20 +22,20 @@
 #
 FactoryBot.define do
   factory :payment do
-    transaction_type { 'SALE' }
+    transaction_type { '1' }
     transaction_status { '1' } # Successful by default
     sequence(:transaction_id) { |n| "TXN#{Time.current.strftime('%Y%m%d')}#{n.to_s.rjust(6, '0')}" }
     total_amount { '50000' } # $500 in cents
-    transaction_date { Date.current.strftime('%Y-%m-%d') }
+    transaction_date { Date.current.strftime('%Y%m%d%H%M') }
     account_type { 'VISA' }
-    result_code { '0000' }
+    result_code { '1' }
     result_message { 'APPROVED' }
     user_account { |p| "#{p.user&.email&.split('@')&.first || 'user'}-#{p.user&.id || 1}" }
     payer_identity { |p| p.user&.email || 'user@example.com' }
     timestamp { Time.current.to_i.to_s }
     sequence(:transaction_hash) { |n| Digest::SHA256.hexdigest("payment_hash_#{n}") }
     program_year { Date.current.year }
-    
+
     association :user
 
     # Traits for different payment scenarios
@@ -80,12 +80,12 @@ FactoryBot.define do
     # Historical payment traits
     trait :last_year do
       program_year { Date.current.year - 1 }
-      transaction_date { 1.year.ago.strftime('%Y-%m-%d') }
+      transaction_date { 1.year.ago.strftime('%Y%m%d%H%M') }
     end
 
     trait :two_years_ago do
       program_year { Date.current.year - 2 }
-      transaction_date { 2.years.ago.strftime('%Y-%m-%d') }
+      transaction_date { 2.years.ago.strftime('%Y%m%d%H%M') }
     end
   end
 end
