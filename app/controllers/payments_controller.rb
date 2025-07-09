@@ -40,7 +40,7 @@ class PaymentsController < ApplicationController
     @total_cost = current_program.program_fee.to_i + current_program.application_fee.to_i
     @users_current_payments = Payment.where(program_year: current_program.program_year, user_id: current_user)
     @ttl_paid = Payment.where(program_year: current_program.program_year, user_id: current_user, transaction_status: '1').pluck(:total_amount).map(&:to_f).sum / 100
-    @balance_due = @total_cost - @ttl_paid
+    @balance_due = Payment.current_balance_due_for_user(current_user, current_program.program_year)
   end
 
   private
