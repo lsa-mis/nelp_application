@@ -286,6 +286,10 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     rexml (3.2.6)
+    rspec (3.13.1)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
     rspec-core (3.13.0)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.0)
@@ -302,6 +306,9 @@ GEM
       rspec-expectations (~> 3.13)
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
+    rspec-sqlimit (1.0.0)
+      activerecord (>= 4.2.0)
+      rspec (~> 3.0)
     rspec-support (3.13.1)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
@@ -413,6 +420,7 @@ DEPENDENCIES
   rails (~> 6.1.7)
   rails-controller-testing
   rspec-rails
+  rspec-sqlimit
   sassc-rails
   sd_notify
   shoulda-matchers (~> 5.0)
