@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.3.4'
-gem 'rails', '~> 6.1.7'
+gem 'rails', '~> 7.1.3'
 
 gem 'activeadmin'
 gem 'base64'
@@ -16,20 +16,21 @@ gem 'puma', '~> 5.0'
 gem 'sassc-rails'
 gem "sd_notify"
 gem 'simple_form'
+gem 'sprockets-rails'
 gem 'turbolinks', '~> 5'
 gem 'turnout', '~> 2.5'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-gem 'webpacker', '~> 5.0'
+gem 'webpacker', '~> 5.4'
 
 group :development do
-  gem 'annotate', '~> 2.7', '>= 2.7.1'
+  gem 'annotate'
   gem 'capistrano', '~> 3.17', require: false
   gem 'capistrano-rails', '~> 1.6', '>= 1.6.1', require: false
   gem 'capistrano-asdf',   require: false
   gem 'listen', '~> 3.3'
   gem 'pry-rails'
   gem 'pry-byebug'
-  gem 'spring'
+  gem 'spring', '~> 4.0'
   gem 'web-console', '>= 4.1.0'
 end
 
