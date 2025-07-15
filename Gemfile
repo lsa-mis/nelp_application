@@ -17,10 +17,11 @@ gem 'sassc-rails'
 gem "sd_notify"
 gem 'simple_form'
 gem 'sprockets-rails'
-gem 'turbolinks', '~> 5'
+gem 'stimulus-rails'
+gem 'turbo-rails'
+gem 'importmap-rails'
 gem 'turnout', '~> 2.5'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-gem 'webpacker', '~> 5.4'
 
 group :development do
   gem 'annotate'
