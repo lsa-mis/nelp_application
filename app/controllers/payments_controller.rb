@@ -33,7 +33,7 @@ class PaymentsController < ApplicationController
   def make_payment
     amount = params['amount'] || current_program.application_fee.to_i
     processed_url = generate_hash(current_user, amount)
-    redirect_to processed_url
+    redirect_to processed_url, allow_other_host: true
   end
 
   def payment_show
