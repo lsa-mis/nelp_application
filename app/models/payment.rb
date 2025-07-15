@@ -73,7 +73,7 @@ class Payment < ApplicationRecord
         .having('SUM(payments.total_amount::float / 100) >= ?', program.total_cost)
   end
 
-  def self.current_program_payments(program_year = Date.current.year)
+  def self.current_program_payments(program_year = ProgramSetting.active_program.last&.program_year)
     where(program_year: program_year)
   end
 end
