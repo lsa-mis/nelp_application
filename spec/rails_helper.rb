@@ -8,6 +8,7 @@ require 'simplecov'
 # You can customize the SimpleCov configuration below as needed.
 # For example, you can add filters, groups, and set minimum coverage.
 SimpleCov.start 'rails' do
+  add_filter '/admin/'
   add_filter '/vendor/'
   add_filter '/spec/'
   add_filter '/channels/'
