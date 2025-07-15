@@ -88,7 +88,7 @@ RSpec.describe "Payments", type: :request do
         transactionId: 'TXN123456',
         transactionTotalAmount: '50000',
         transactionDate: '2024-01-15',
-        transactionAcountType: 'VISA',
+        transactionAccountType: 'VISA',
         transactionResultCode: '0000',
         transactionResultMessage: 'APPROVED',
         orderNumber: 'user-123',
