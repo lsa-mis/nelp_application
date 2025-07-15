@@ -60,7 +60,17 @@ class Payment < ApplicationRecord
 
   # Returns users with zero balance for a given program year
   def self.users_with_zero_balance(program_year = nil)
-    User.all.select { |u| balance_due_zero_for_user?(u, program_year) }
+    program = if program_year
+      ProgramSetting.find_by(program_year: program_year)
+    else
+      ProgramSetting.active_program.last
+    end
+    return User.none unless program
+
+    User.joins(:payments)
+        .where(payments: { program_year: program.program_year, transaction_status: '1' })
+        .group('users.id')
+        .having('SUM(payments.total_amount::float / 100) >= ?', program.total_cost)
   end
 
   def self.current_program_payments(program_year = Date.current.year)
