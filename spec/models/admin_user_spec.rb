@@ -39,5 +39,31 @@ RSpec.describe AdminUser, type: :model do
     end
   end
 
+  describe '.ransackable_attributes' do
+    it 'returns only safe attributes for searching' do
+      expected_attributes = ['email']
+      expect(AdminUser.ransackable_attributes).to match_array(expected_attributes)
+    end
+
+    it 'does not include sensitive attributes' do
+      sensitive_attributes = [
+        'encrypted_password',
+        'reset_password_token',
+        'reset_password_sent_at'
+      ]
+      
+      ransackable = AdminUser.ransackable_attributes
+      sensitive_attributes.each do |attr|
+        expect(ransackable).not_to include(attr)
+      end
+    end
+  end
+
+  describe '.ransackable_associations' do
+    it 'returns an empty array' do
+      expect(AdminUser.ransackable_associations).to eq([])
+    end
+  end
+
   # Add more tests for custom methods or associations if present
 end
