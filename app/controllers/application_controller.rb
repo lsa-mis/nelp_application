@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
     def current_program_open?
       if current_program 
         program_range = current_program.program_open..current_program.program_close
-        program_range.include?(Time.now)
+        program_range.cover?(Time.now)
       end
     end
   
