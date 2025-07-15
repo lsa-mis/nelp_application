@@ -8,13 +8,13 @@ This document provides the step-by-step technical implementation guide for upgra
 ### 1. Create Backup and Branch Strategy
 
 ```bash
-# Create a backup branch from current main
-git checkout main
-git pull origin main
+# Create a backup branch from current master
+git checkout master
+git pull origin master
 git checkout -b rails-upgrade-backup
 
 # Create feature branch for upgrade work
-git checkout main
+git checkout master
 git checkout -b feature/rails-7-2-upgrade
 
 # Push backup branch
