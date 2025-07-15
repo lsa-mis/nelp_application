@@ -5,7 +5,10 @@ ruby '3.3.4'
 gem 'rails', '~> 6.1.7'
 
 gem 'activeadmin'
+gem 'base64'
 gem 'bootsnap', '>= 1.4.4', require: false
+gem 'csv'
+gem 'drb'
 gem 'devise'
 gem 'jbuilder', '~> 2.7'
 gem 'pg'
@@ -32,10 +35,18 @@ end
 
 group :development, :test do
   gem 'rspec-rails'
+  gem 'rspec-sqlimit'
+  gem 'rails-controller-testing'
   gem 'factory_bot_rails'
   gem 'capybara'
   gem "webdrivers"
   gem 'faker'
+
+  # Additional testing gems for comprehensive coverage
+  gem 'shoulda-matchers', '~> 5.0'
+  gem 'simplecov', require: false
+  gem 'database_cleaner-active_record'
+  gem 'webmock'
 end
 
 group :development, :staging do

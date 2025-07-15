@@ -50,8 +50,8 @@
       <div>
         <%= form_with url: make_payment_path, local: true do |f| %>
         <div>
-          $
-          <%= f.number_field :amount, within: 1..@balance_due.to_i , required: true %>
+          <span class="text-gray-700">You have a balance of <%= number_to_currency(@balance_due) %></span>
+          <%= f.number_field :amount, in: 1..@balance_due, required: true %>
           <%= f.submit "Pay Now", class: 'btn btn-success ml-2' %>
         </div>
         <% end %>
@@ -80,7 +80,7 @@
               <%= "Amount: #{number_to_currency(payment.total_amount.to_f / 100 )}" %>
             </p>
             <p>
-              <%= "Date: #{Time.parse(payment.transaction_date).strftime("%b %e, %Y at %l:%M %p")}" %>
+              <%= payment.transaction_date.present? ? "Date: #{Time.parse(payment.transaction_date).strftime("%b %e, %Y at %l:%M %p")}" : "Date: Not available" %>
             </p>
           </div>
         </div>

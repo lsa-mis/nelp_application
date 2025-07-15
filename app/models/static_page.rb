@@ -9,6 +9,8 @@
 #
 
 class StaticPage < ApplicationRecord
+  validates :location, presence: true, uniqueness: true
+
   has_rich_text :message
 
   def self.ransackable_associations(auth_object = nil)
