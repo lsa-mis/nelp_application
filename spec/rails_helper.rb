@@ -2,9 +2,17 @@
 
 # Start SimpleCov for test coverage
 require 'simplecov'
+# Ensure SimpleCov is started before any other code is loaded
+# This is important to ensure that all code is covered by SimpleCov
+# and that the coverage report is accurate.
+# You can customize the SimpleCov configuration below as needed.
+# For example, you can add filters, groups, and set minimum coverage.
 SimpleCov.start 'rails' do
   add_filter '/vendor/'
   add_filter '/spec/'
+  add_filter '/channels/'
+  add_filter '/jobs/'
+  add_filter '/mailers/'
   add_group 'Models', 'app/models'
   add_group 'Controllers', 'app/controllers'
   add_group 'Helpers', 'app/helpers'
