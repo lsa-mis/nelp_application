@@ -1,12 +1,18 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+// filepath: app/assets/stylesheets/application.scss
+/*
+ *= require_tree ./components
+ *= require_tree ./layout
+ *= require_tree ./pages
+ *= require_tree ./vendor
+ *= require_self
+ */
 
-@layer components {
-  input {
-    @apply border border-gray-500;
-  }
-}
+// Configuration & Variables
+@import "config/variables";
+
+// Base Styles
+@import "base/reset";
+@import "base/typography";
 
 .flash {
   @apply text-lg;
@@ -51,7 +57,7 @@ header a {
 }
 
 footer {
-  background-image: url('../../javascript/images/nelp-footer.png');
+  background-image: url('nelp-footer.png');
 }
 
 footer a {

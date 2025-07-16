@@ -1,0 +1,25 @@
+// Card Components
+// =============================================================================
+
+.card {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: $spacing-md;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600;
+}
+
+.card-body {
+  padding: $spacing-md;
+}
+
+.card-footer {
+  padding: $spacing-md;
+  border-top: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
