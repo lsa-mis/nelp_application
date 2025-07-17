@@ -1,25 +1,26 @@
-<header class="h-auto bg-green-700">
-  <nav class="text-white border border-green-700 flex items-center w-full">
-    <div class="flex-1">
-      <% if Rails.application.assets&.find_asset("english_logo.jpg") || File.exist?(Rails.root.join("app", "assets", "images", "english_logo.jpg")) %>
-  <%= image_tag "english_logo.jpg", alt:"English Logo", size: "250x36"  %>
-<% else %>
-  <div class="logo-placeholder" style="width: 250px; height: 36px; background: #f0f0f0; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; color: #666;">English Logo</div>
-<% end %>
-    </div>
-    <div class="flex-none">
-        <%= link_to "About", about_path, class: 'px-4' %>
-        <%= link_to "Privacy", privacy_path, class: 'px-4' %>
-        <%= link_to "Terms of Use", terms_path, class: 'px-4' %>
-    </div>
-    <div class="flex-1 text-right mr-4">
-      <% if user_signed_in? %>
-        <%= link_to current_user.email, edit_user_registration_path %>
-        |
-        <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'text-right' %>
-      <% else %>
-        <%= link_to 'Sign In', new_user_session_path %>
-      <% end %>
+<header class="bg-success p-2">
+  <nav class="navbar navbar-expand navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <% if Rails.application.assets&.find_asset("english_logo.jpg") || File.exist?(Rails.root.join("app", "assets", "images", "english_logo.jpg")) %>
+          <%= image_tag "english_logo.jpg", alt:"English Logo", width: "250", height: "36" %>
+        <% else %>
+          <div class="logo-placeholder bg-light d-flex align-items-center justify-content-center" style="width: 250px; height: 36px;">English Logo</div>
+        <% end %>
+      </a>
+      <div class="navbar-nav me-auto">
+        <%= link_to "About", about_path, class: 'nav-link px-2' %>
+        <%= link_to "Privacy", privacy_path, class: 'nav-link px-2' %>
+        <%= link_to "Terms of Use", terms_path, class: 'nav-link px-2' %>
+      </div>
+      <div class="navbar-nav">
+        <% if user_signed_in? %>
+          <%= link_to current_user.email, edit_user_registration_path, class: 'nav-link' %>
+          <%= link_to 'Sign Out', destroy_user_session_path, data: { turbo_method: :delete }, class: 'nav-link' %>
+        <% else %>
+          <%= link_to 'Sign In', new_user_session_path, class: 'nav-link' %>
+        <% end %>
+      </div>
     </div>
   </nav>
 </header>

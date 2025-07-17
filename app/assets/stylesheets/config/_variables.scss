@@ -1,24 +1,23 @@
 // SCSS Variables and Configuration
 // =============================================================================
 
-// Colors
-$primary-color: #3b82f6;
-$secondary-color: #6b7280;
-$success-color: #10b981;
-$warning-color: #f59e0b;
-$error-color: #ef4444;
-
-// Typography
-$font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
-$font-size-base: 1rem;
-$line-height-base: 1.5;
-
-// Spacing
+// Bootstrap spacing variables
 $spacing-xs: 0.25rem;
 $spacing-sm: 0.5rem;
 $spacing-md: 1rem;
 $spacing-lg: 1.5rem;
-$spacing-xl: 2rem;
+$spacing-xl: 3rem;
+
+// Colors
+$primary-color: #0d6efd;
+$secondary-color: #6c757d;
+$success-color: #198754;
+$error-color: #dc3545;
+
+// Typography
+$font-family-base: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-size-base: 1rem;
+$line-height-base: 1.5;
 
 // Breakpoints
 $breakpoint-sm: 640px;

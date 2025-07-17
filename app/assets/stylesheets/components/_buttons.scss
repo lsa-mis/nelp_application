@@ -1,9 +1,11 @@
-// Button Components
+@use "../config/variables" as myvars;
+
+// Button Components - Bootstrap compatible
 // =============================================================================
 
 .btn {
   display: inline-block;
-  padding: $spacing-sm $spacing-md;
+  padding: myvars.$spacing-sm myvars.$spacing-md;
   border: 1px solid transparent;
   border-radius: 0.375rem;
   font-weight: 500;
@@ -12,34 +14,16 @@
   cursor: pointer;
   transition: all 0.15s ease-in-out;
 
-  &:hover {
-    text-decoration: none;
+  // Use Bootstrap variables instead
+  &-primary {
+    @extend .btn-primary;
   }
 
-  &--primary {
-    background-color: $primary-color;
-    color: white;
-
-    &:hover {
-      background-color: darken($primary-color, 10%);
-    }
+  &-secondary {
+    @extend .btn-secondary;
   }
 
-  &--secondary {
-    background-color: $secondary-color;
-    color: white;
-
-    &:hover {
-      background-color: darken($secondary-color, 10%);
-    }
-  }
-
-  &--success {
-    background-color: $success-color;
-    color: white;
-
-    &:hover {
-      background-color: darken($success-color, 10%);
-    }
+  &-success {
+    @extend .btn-success;
   }
 }

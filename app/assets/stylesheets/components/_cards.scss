@@ -1,3 +1,5 @@
+@use "../config/variables" as myvars;
+
 // Card Components
 // =============================================================================
 
@@ -6,20 +8,21 @@
   border-radius: 0.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  padding: myvars.$spacing-md;
 }
 
 .card-header {
-  padding: $spacing-md;
+  padding: myvars.$spacing-md;
   border-bottom: 1px solid #e5e7eb;
   font-weight: 600;
 }
 
 .card-body {
-  padding: $spacing-md;
+  padding: myvars.$spacing-md;
 }
 
 .card-footer {
-  padding: $spacing-md;
+  padding: myvars.$spacing-md;
   border-top: 1px solid #e5e7eb;
   background-color: #f9fafb;
 }

@@ -8,11 +8,11 @@
  */
 
 // Configuration & Variables
-@import "config/variables";
+@use "config/variables";
 
 // Base Styles
-@import "base/reset";
-@import "base/typography";
+@use "base/reset";
+@use "base/typography";
 
 .flash {
   @apply text-lg;

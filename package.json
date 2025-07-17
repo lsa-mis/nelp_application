@@ -1,0 +1,11 @@
+{
+  "name": "nelp_application",
+  "private": true,
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.7"
+  },
+  "scripts": {
+    "build:css": "sass ./app/assets/stylesheets/application.bootstrap.scss:./app/assets/builds/application.bootstrap.css --no-source-map --load-path=node_modules"
+  }
+}

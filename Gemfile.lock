@@ -373,6 +373,8 @@ GEM
       google-protobuf (~> 4.31)
     sass-embedded (1.89.2-x86_64-linux-gnu)
       google-protobuf (~> 4.31)
+    sassc (2.4.0)
+      ffi (~> 1.9)
     sd_notify (0.1.1)
     securerandom (0.4.1)
     selenium-webdriver (4.34.0)
@@ -393,6 +395,14 @@ GEM
     simplecov-html (0.13.1)
     simplecov_json_formatter (0.1.4)
     spring (4.3.0)
+    sprockets (4.2.2)
+      concurrent-ruby (~> 1.0)
+      logger
+      rack (>= 2.2.4, < 4)
+    sprockets-rails (3.5.2)
+      actionpack (>= 6.1)
+      activesupport (>= 6.1)
+      sprockets (>= 3.0.0)
     sshkit (1.24.0)
       base64
       logger
@@ -472,12 +482,14 @@ DEPENDENCIES
   rails-controller-testing
   rspec-rails
   rspec-sqlimit
+  sassc
   sd_notify
   selenium-webdriver (~> 4.11)
   shoulda-matchers (~> 5.0)
   simple_form
   simplecov
   spring (~> 4.0)
+  sprockets-rails
   stimulus-rails
   turbo-rails
   turnout (~> 2.5)
