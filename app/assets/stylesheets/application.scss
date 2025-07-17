@@ -1,19 +1,27 @@
-// filepath: app/assets/stylesheets/application.scss
-/*
- *= require_tree ./components
- *= require_tree ./layout
- *= require_tree ./pages
- *= require_tree ./vendor
- *= require_self
- */
+// Import Bootstrap first
+@import "bootstrap/scss/bootstrap.scss";
 
 // Configuration & Variables
-@use "config/variables";
+@import "config/variables";
 
 // Base Styles
-@use "base/reset";
-@use "base/typography";
+@import "base/reset";
+@import "base/typography";
 
+// Layout
+@import "layout/header";
+@import "layout/footer";
+
+// Components
+@import "components/buttons";
+@import "components/cards";
+@import "components/forms";
+@import "components/navigation";
+
+// Pages
+@import "pages/admin";
+
+// Custom styles (if any)
 .flash {
   @apply text-lg;
   &.alert {

@@ -7,3 +7,4 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 pin "@hotwired/turbo-rails", to: "turbo.min.js"
 pin "@popperjs/core", to: "@popperjs--core.js" # @2.11.8
 pin "bootstrap" # @5.3.7
+pin "bootstrap", to: "bootstrap.bundle.min.js"
