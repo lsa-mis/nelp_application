@@ -1,50 +1,19 @@
-<footer class="w-full h-auto pin-b">
-  <div class="text-gray-200">
-    <div class="flex">
-      <div class="w-1/3 pl-4">
-        <div class="text-xs mt-2">
-          <%= link_to 'LSA NELP Program', "http://www.lsa.umich.edu/nelp" %>
-          <br>   435 S. State Street
-          <br>   Room 3187 East Hall
-          <br>   Ann Arbor, MI 48109-1003
-        </div>
-      </div>
-      <div class="w-1/3 mx-auto flex justify-center">
-        <div class="text-xs mt-2">
-          734.764.6330 - voice
-          <br>
-          734.763.3128 - fax
-          <br>
-          <%= mail_to "pinto@umich.edu" %>
-        </div>
-      </div>
-      <div class="w-1/3 p-4 flex justify-end">
-        <% if admin_user_signed_in? %>
-          <ul>
-            <li>
-              <%= link_to 'Admin Dashboard', admin_root_path, class: "mt-2 pr-4" %>
-            </li>
-            <li>
-              <%= link_to destroy_admin_user_session_path, method: :delete do  %>
-                <%= render :partial => 'svg/open_padlock' %>
-                <span>Admin Sign_out</span>
-              <% end %>
-            </li>
-          </ul>
-        <% else %>
-          <%= link_to new_admin_user_session_path do  %>
-            <%= render :partial => 'svg/closed_padlock' %>
-            <span>Admin Sign_in</span>
-          <% end %>
-        <% end %>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-left">
+      <%= image_tag "LSA_logo_4c_reverse.png", alt: "LSA Logo", class: "lsa-logo block-m-shadow" %>
+      <div class="footer-brand">
+        <div class="footer-title">LSA TECHNOLOGY SERVICES</div>
+        <div class="footer-subtitle">UNIVERSITY OF MICHIGAN</div>
       </div>
     </div>
-    <div class="w-full flex justify-center">
-      <div class="copyright">
-        Copyright <%= Time.now.year %> | <%= link_to 'The Regents of the University of Michigan', 'https://regents.umich.edu' %>
-      </div>
+    <div class="footer-center">
+      <a href="#">Privacy Notice</a> |
+      <a href="#">Report an Issue</a> |
+      734.615.0100
+    </div>
+    <div class="footer-right copyright">
+      &copy; <%= Time.now.year %> | <%= link_to 'The Regents of the University of Michigan', 'https://regents.umich.edu' %>
     </div>
   </div>
 </footer>
-  
-  
