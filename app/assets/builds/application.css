@@ -11908,10 +11908,65 @@ p {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.header-main {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 16px 82px;
+  background: #00274C;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.lsa-logo {
+  height: 48px;
+  width: auto;
+}
+
+.divider {
+  width: 2px;
+  height: 40px;
+  background: #fff;
+  margin: 0 16px;
+}
+
+.lsa-text {
+  color: #fff;
+  font-size: 2rem;
+  font-family: "Oswald", Arial, sans-serif;
+  letter-spacing: 0.1em;
+}
+
 .footer {
-  background: #f9fafb;
-  border-top: 1px solid #e5e7eb;
-  padding: 1.5rem 0;
+  flex-shrink: 0;
+  border-top: 1px solid #00274C;
+}
+
+.footer-text-bold {
+  font-weight: 700;
+  color: #00274C;
+}
+
+.footer-text {
+  color: #212529;
+  font-family: Noto Sans;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: 0em;
+}
+
+.footer-link {
+  text-decoration: none;
+}
+.footer-link:hover {
+  text-decoration: underline;
 }
 
 .btn {

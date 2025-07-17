@@ -1,19 +1,53 @@
-<footer class="footer">
-  <div class="footer-content">
-    <div class="footer-left">
-      <%= image_tag "LSA_logo_4c_reverse.png", alt: "LSA Logo", class: "lsa-logo block-m-shadow" %>
-      <div class="footer-brand">
-        <div class="footer-title">LSA TECHNOLOGY SERVICES</div>
-        <div class="footer-subtitle">UNIVERSITY OF MICHIGAN</div>
-      </div>
+<footer class="footer mx-5 mt-auto py-3 bg-white">
+  <div class="d-flex flex-lg-row justify-content-between flex-column">
+    <div class="center text-center">
+      <p class="d-none d-md-block">
+        <%= image_tag 'Technology_Services_logo_4c.png',
+              alt: 'LSA Technology Logo',
+              width: 300,
+              height: 28.95,
+              style: "opacity: 1; transform: rotate(0deg);",
+              class: "img-fluid" %>
+        <% if user_signed_in? && current_user.axis_mundi? %>
+          <div class="d-flex flex-row justify-content-center">
+            <%= link_to editable_contents_path, class: "edit-icon", data: { bs_toggle: "tooltip", bs_placement: "top" }, title: "Edit the text blocks in the application" do %>
+              <i class="bi bi-pencil-fill" aria-label="Edit Instruction Content"></i>
+            <% end %>
+            <span class="mx-2 align-middle text-secondary">|</span>
+            <%= link_to users_dashboard_index_path, class: "profile-icon", data: { bs_toggle: "tooltip", bs_placement: "top" }, title: "Users Dashboard" do %>
+              <i class="bi bi-people-fill" aria-label="Users Dashboard"></i>
+            <% end %>
+            <span class="mx-2 align-middle text-secondary">|</span>
+            <%= link_to departments_path, class: "profile-icon", data: { bs_toggle: "tooltip", bs_placement: "top" }, title: "Departments" do %>
+              <i class="bi bi-building" aria-label="Departments"></i>
+            <% end %>
+          </div>
+        <% end %>
+      </p>
+      <p class="text-center footer-bold d-md-none">
+        LSA Technology Services
+      </p><!-- Left column content for small viewports -->
     </div>
-    <div class="footer-center">
-      <a href="#">Privacy Notice</a> |
-      <a href="#">Report an Issue</a> |
-      734.615.0100
+    <div>
+      <p class="text-center mb-0 footer-text">
+        <a href="https://umich.edu/about/privacy-statement/" class="footer-text footer-link" >Privacy Notice</a> |
+        <a id="myCustomTrigger" class="footer-text footer-link" href="#" data-email="<%= session[:user_email]%>">Report an Issue</a> |
+        <span class="footer-text">734.615.0100</span>
+      </p>
     </div>
-    <div class="footer-right copyright">
-      &copy; <%= Time.now.year %> | <%= link_to 'The Regents of the University of Michigan', 'https://regents.umich.edu' %>
+    <div>
+      <p class="d-none d-md-block text-center footer-text">
+        ©<%= Time.now.year %> |
+        <a href="https://regents.umich.edu/" class="footer-text footer-link">The Regents of the University of Michigan</a>
+      </p>
+      <p class="d-md-none text-center mb-0 footer-text">
+        <a href="https://regents.umich.edu/" class="footer-text footer-link" >The Regents of the University of Michigan</a>
+        <br>©<%= Time.now.year %>
+      </p><!-- Right column content -->
     </div>
   </div>
+
+  <script type="text/javascript" src="https://umlsait.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/v1yip7/b/7/c95134bc67d3a521bb3f4331beb9b804/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=ee4ecb5f"></script>
+  <%#= javascript_include_tag 'feedback', async: true %>
+
 </footer>

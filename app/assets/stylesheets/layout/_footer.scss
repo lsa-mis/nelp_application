@@ -1,8 +1,27 @@
-// Footer Layout
-// =============================================================================
-
+// Footer
 .footer {
-  background: #f9fafb;
-  border-top: 1px solid #e5e7eb;
-  padding: $spacing-lg 0;
+  flex-shrink: 0;
+  border-top: 1px solid $um_blue;
+}
+
+.footer-text-bold {
+  font-weight: 700;
+  color: $um_blue;
+}
+
+.footer-text {
+  color: #212529;
+  font-family: Noto Sans;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: 0em;
+}
+
+.footer-link {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
