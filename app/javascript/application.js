@@ -1,7 +1,9 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
-import "controllers"
-import "@hotwired/turbo-rails"
-import * as bootstrap from "bootstrap"
+import { Application } from "@hotwired/stimulus"
+import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"
 
-// Make Bootstrap globally available if needed
-window.bootstrap = bootstrap
+// Start Stimulus
+window.Stimulus = Application.start()
+window.Stimulus.debug = false
+
+eagerLoadControllersFrom("controllers", window.Stimulus)
