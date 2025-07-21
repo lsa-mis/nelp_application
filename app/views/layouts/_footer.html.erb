@@ -8,21 +8,6 @@
               height: 28.95,
               style: "opacity: 1; transform: rotate(0deg);",
               class: "img-fluid" %>
-        <% if user_signed_in? && current_user.axis_mundi? %>
-          <div class="d-flex flex-row justify-content-center">
-            <%= link_to editable_contents_path, class: "edit-icon", data: { bs_toggle: "tooltip", bs_placement: "top" }, title: "Edit the text blocks in the application" do %>
-              <i class="bi bi-pencil-fill" aria-label="Edit Instruction Content"></i>
-            <% end %>
-            <span class="mx-2 align-middle text-secondary">|</span>
-            <%= link_to users_dashboard_index_path, class: "profile-icon", data: { bs_toggle: "tooltip", bs_placement: "top" }, title: "Users Dashboard" do %>
-              <i class="bi bi-people-fill" aria-label="Users Dashboard"></i>
-            <% end %>
-            <span class="mx-2 align-middle text-secondary">|</span>
-            <%= link_to departments_path, class: "profile-icon", data: { bs_toggle: "tooltip", bs_placement: "top" }, title: "Departments" do %>
-              <i class="bi bi-building" aria-label="Departments"></i>
-            <% end %>
-          </div>
-        <% end %>
       </p>
       <p class="text-center footer-bold d-md-none">
         LSA Technology Services

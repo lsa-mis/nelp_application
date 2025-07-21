@@ -9,14 +9,24 @@ $spacing-lg: 1.5rem;
 $spacing-xl: 3rem;
 
 // Colors
-$primary-color: #0d6efd;
-$secondary-color: #6c757d;
-$success-color: #198754;
-$error-color: #dc3545;
 $um_blue: #00274C;
+$um_maize: #FFCB05;
+$lsa_cyan: #00AEEF;
+$michigan_summer_blue: #005499;
+$lsa_web_cyan: #007CBA;
+$rigorous_red: #C61A1D;
+$lsa_success: #00664D;
+$primary-color: $um_blue;
+$secondary-color: $michigan_summer_blue;
+$tertiary-color: $lsa_cyan;
+$success-color: $lsa_success;
+$error-color: $rigorous_red;
+$danger-color: $rigorous_red;
+$warning-color: $um_maize;
 
 // Typography
-$font-family-base: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-family-base: "Noto Sans", sans-serif;
+$font-family-heading: "Roboto", sans-serif;
 $font-size-base: 1rem;
 $line-height-base: 1.5;
 
