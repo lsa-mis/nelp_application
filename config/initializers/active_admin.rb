@@ -1,11 +1,10 @@
 ActiveAdmin.setup do |config|
-  # config.use_webpacker = true
   # == Site Title
   #
   # Set the title that is displayed on the main layout
   # for each of the active admin pages.
   #
-  config.site_title = "Nelp Payments"
+  config.site_title = "Nelp Application"
 
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
@@ -18,6 +17,23 @@ ActiveAdmin.setup do |config|
   # Note: Aim for an image that's 21px high so it fits in the header.
   #
   # config.site_title_image = "logo.png"
+
+  # == Load Paths
+  #
+  # By default Active Admin files go inside app/admin/.
+  # You can change this directory.
+  #
+  # eg:
+  #   config.load_paths = [File.join(Rails.root, 'app', 'ui')]
+  #
+  # Or, you can also load more directories.
+  # Useful when setting namespaces with users that are not your main AdminUser entity.
+  #
+  # eg:
+  #   config.load_paths = [
+  #     File.join(Rails.root, 'app', 'admin'),
+  #     File.join(Rails.root, 'app', 'cashier')
+  #   ]
 
   # == Default Namespace
   #
@@ -242,7 +258,7 @@ ActiveAdmin.setup do |config|
   #
   #   config.namespace :admin do |admin|
   #     admin.build_menu :default do |menu|
-  #       menu.add label: "My Great Website", url: "http://www.mygreatwebsite.com", html_options: { target: :blank }
+  #       menu.add label: "My Great Website", url: "http://www.mygreatwebsite.com", html_options: { target: "_blank" }
   #     end
   #   end
 
@@ -304,7 +320,7 @@ ActiveAdmin.setup do |config|
   #    :title,
   #    :email,
   #  ]
-  # config.filter_method_for_large_association = '_starts_with'
+  # config.filter_method_for_large_association = '_start'
 
   # == Head
   #
@@ -333,4 +349,266 @@ ActiveAdmin.setup do |config|
   # You can switch to using Webpacker here.
   #
   # config.use_webpacker = true
+  # Active Admin can be protected by basic authentication in staging environments.
+  #
+  # config.authentication_method = :authenticate_admin_user!
+
+  #
+  # ## Current user
+  #
+  # Active Admin will associate actions with the current user performing them.
+  #
+  # You can configure what named method it calls to find the current user here.
+  #
+  # config.current_user_method = :current_admin_user
+
+
+  #
+  # ## Root an namespace actions
+  #
+  # Action items will be displayed in the header of all root namespace pages.
+  #
+  # The default action items are:
+  #
+  # config.namespace_actions :admin, { 'New Post' => 'new_admin_post_path' }
+  #
+  # You can add your own action items for a particular namespace:
+  #
+  # config.namespace_actions :admin, { 'Report' => 'new_admin_report_path' }
+  #
+  # You can remove the an action item for a particular namespace:
+  #
+  # config.namespace_actions.delete_if do |namespace, action|
+  #   namespace == :admin && action.name == 'New Post'
+  # end
+
+
+  #
+  # ## Viewport meta tag
+  #
+  # Active Admin saw a change in its default viewport meta tag in 3.0.
+  # To keep the old behavior, you can set the `viewport` option to `true`.
+  #
+  # config.viewport = true
+
+
+  #
+  # ## Custom stylesheets
+  #
+  # You can customize the look of Active Admin by adding your own stylesheets.
+  #
+  # To "push" styles onto Active Admin's included assets, use the `register_stylesheet`
+  # method. It accepts a path to a file and optional media and screen defined in the options hash.
+  #
+  #  config.register_stylesheet 'my_stylesheet.css', media: :screen
+  config.register_stylesheet 'active_admin.css'
+
+
+  #
+  # ## Custom javascripts
+  #
+  # You can customize the behavior of Active Admin by adding your own javascripts.
+  #
+  # To "push" javascripts onto Active Admin's included assets, use the `register_javascript`
+  # method. It accepts a path to a file and optional options defined in a hash.
+  #
+  #  config.register_javascript 'my_javascript.js'
+  #
+  #  config.register_javascript 'my_javascript.js',
+  #    type: 'module',
+  #    async: 'async',
+  #    crossorigin: 'anonymous',
+  #    integrity: 'sha256-...'
+
+
+  #
+  # ## CSV options
+  #
+  # Set the CSV builder separator
+  #
+  # config.csv_builder = {
+  #   col_sep: ';',
+  #   byte_order_mark: "\xEF\xBB\xBF",
+  #   force_quotes: true
+  # }
+
+
+  #
+  # ## Localize Date/Time Format
+  #
+  # You can localize the date/time format used in Active Admin.
+  #
+  # config.localize_format = :long
+
+
+  #
+  # ## Comments
+  #
+  # You can disable the comments in Active Admin.
+  #
+  # config.comments = false
+  #
+  # You can change the name under which comments are registered:
+  #
+  # config.comments_registration_name = 'AdminComment'
+  #
+  # You can change the order for the comments and you can change the column
+  # to be used for ordering.
+  #
+  # config.comments_order = 'created_at ASC'
+  #
+  # You can disable the menu item for the comments index page.
+  #
+  # config.comments_menu = false
+  #
+  # You can customize the comment menu:
+  #
+  # config.comments_menu = { parent: 'Admin', priority: 1 }
+
+
+  #
+  # ## Batch Actions
+  #
+  # You can disable batch actions here:
+  #
+  # config.batch_actions = false
+
+
+  #
+  # ## Controller to render authorization failures
+  #
+  # You can change the controller and method name that renders authorization failures
+  #
+  # config.authorization_failure_controller = 'sessions'
+  # config.authorization_failure_action = 'new'
+
+
+  #
+  # ## Breadcrumbs
+  #
+  # You can change the breadcrumb separator
+  #
+  # config.breadcrumb_separator = ' / '
+
+
+  #
+  # ## Create Another Checkbox
+  #
+  # You can show a "Create another" checkbox on a form page so that the user is
+  # redirected to the new page after a successful save.
+  #
+  # config.create_another = true
+
+
+  #
+  # ## Pagination
+  #
+  # You can change the default per page values for models.
+  #
+  # config.default_per_page = 30
+  #
+  # You can change the max per page value.
+  #
+  # config.max_per_page = 10_000
+
+
+  #
+  # ## Footer
+  #
+  # You can customize the footer of Active Admin.
+  #
+  # To override the default footer text, you can change the `footer` config.
+  #
+  # config.footer = 'my custom footer text'
+  #
+  # To provide a logo for the footer, you can change the `footer_logo` config.
+  #
+  # config.footer_logo = 'logo.png'
+
+
+  #
+  # ## Table Builder Class
+  #
+  # You can change the table builder class used to render tables
+  #
+  # config.table_builder = 'ActiveAdmin::Views::TableFor'
+
+
+  #
+  # ## Index default actions
+  #
+  # You can disable default actions in index pages on a per-model basis.
+  # The "View", "Edit" and "Delete" actions are enabled by default..
+  #
+  # config.remove_action_item(:destroy, for: User)
+  # config.remove_action_item(:edit, for: User)
+  # config.remove_action_item(:show, for: User)
+  # config.remove_action_item(:new, for: User)
+
+
+  #
+  # ## Default Scopes
+  #
+  # You can remove the "All" scope from the index page
+  #
+  # config.remove_scope 'all'
+
+
+  #
+  # ## Preserve Filters
+  #
+  # You can preserve filters on a per-model basis. The options available are:
+  #
+  # `true`  (default) - Preserves filters locally (in browser's `localStorage`)
+  # `false` - Does not preserve filters
+  # `:session` - Preserves filters in the session
+  #
+  # config.preserve_filters = true
+
+
+  #
+  # ## Inflections
+  #
+  # Active Admin deeply relies on Active Support's inflector to pluralize and
+  # singularize resource names. If you have any special cases, you can add them
+  # to the inflector's rules.
+  #
+  # ActiveSupport::Inflector.inflections(:en) do |inflect|
+  #   inflect.irregular 'person', 'people'
+  # end
+
+
+  #
+  # ## Includes
+  #
+  # You can specify relationships to be included in an index page query.
+  #
+  # config.includes = [:author]
+
+
+  #
+  # ## Number formatting
+  #
+  # You can customize the formatting of numbers.
+  #
+  # config.number_format = ->(number) { service.number_to_currency(number) }
+
+
+  #
+  # ## Meta tags
+  #
+  # You can set meta tags for the Active Admin pages.
+  #
+  # config.meta_tags = {
+  #   viewport: 'width=device-width, initial-scale=1'
+  # }
+
+
+  #
+  # ## Favicon
+  #
+  # You can set a favicon for the Active Admin pages.
+  #
+  # config.favicon = '/favicon.ico'
+
 end

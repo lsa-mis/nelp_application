@@ -1,3 +1,3 @@
 // filepath: Procfile.dev
 web: bin/rails server -p 3000
-css: bin/rails dartsass:watch
+css: bin/rails css:watch

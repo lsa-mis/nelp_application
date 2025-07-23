@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.4.4'
 gem 'rails', '~> 7.2.2', '>= 7.2.2.1'
 
-# gem 'activeadmin'
+gem 'activeadmin'
 gem 'base64'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'csv'
@@ -17,7 +17,6 @@ gem 'dartsass-rails'
 gem "sd_notify"
 gem 'simple_form'
 gem 'sprockets-rails', '~> 3.4'
-gem 'sass-rails'
 gem 'stimulus-rails'
 gem 'turbo-rails'
 gem 'importmap-rails'
