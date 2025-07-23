@@ -4,10 +4,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.4.4'
 gem 'rails', '~> 7.2.2', '>= 7.2.2.1'
 
-gem 'activeadmin'
+# gem 'activeadmin'
 gem 'base64'
 gem 'bootsnap', '>= 1.4.4', require: false
-gem 'cssbundling-rails'
 gem 'csv'
 gem 'drb'
 gem 'devise'
@@ -15,15 +14,15 @@ gem 'jbuilder', '~> 2.7'
 gem 'pg'
 gem 'puma', '~> 5.0'
 gem 'dartsass-rails'
-gem 'sassc'
 gem "sd_notify"
 gem 'simple_form'
-gem 'sprockets-rails'
+gem 'sprockets-rails', '~> 3.4'
+gem 'sass-rails'
 gem 'stimulus-rails'
 gem 'turbo-rails'
 gem 'importmap-rails'
 gem 'turnout', '~> 2.5'
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: [:windows, :jruby]
 
 group :development do
   gem 'annotate'

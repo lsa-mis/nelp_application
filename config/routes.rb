@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   resources :static_pages
-  devise_for :admin_users, ActiveAdmin::Devise.config
-  ActiveAdmin.routes(self)
+  devise_for :admin_users
   devise_for :users
   root to: 'static_pages#home'
   get '/about', to: 'static_pages#about'

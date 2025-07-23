@@ -13,17 +13,4 @@
   text-decoration: none;
   cursor: pointer;
   transition: all 0.15s ease-in-out;
-
-  // Use Bootstrap variables instead
-  &-primary {
-    @extend .btn-primary;
-  }
-
-  &-secondary {
-    @extend .btn-secondary;
-  }
-
-  &-success {
-    @extend .btn-success;
-  }
 }
