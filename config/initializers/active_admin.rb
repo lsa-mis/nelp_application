@@ -67,10 +67,8 @@ ActiveAdmin.setup do |config|
   #
   # Active Admin will automatically call an authentication
   # method in a before filter of all controller actions to
-  # ensure that there is a currently logged in admin user.
+  # ensure that there is a user logged in.
   #
-  # This setting changes the method which Active Admin calls
-  # within the application controller.
   config.authentication_method = :authenticate_admin_user!
 
   # == User Authorization
@@ -110,51 +108,11 @@ ActiveAdmin.setup do |config|
   # (within the application controller) to return the currently logged in user.
   config.current_user_method = :current_admin_user
 
-  # == Logging Out
+  # == Logging out
   #
-  # Active Admin displays a logout link on each screen. These
-  # settings configure the location and method used for the link.
+  # Active Admin needs to know how to log users out.
   #
-  # This setting changes the path where the link points to. If it's
-  # a string, the strings is used as the path. If it's a Symbol, we
-  # will call the method to return the path.
-  #
-  # Default:
   config.logout_link_path = :destroy_admin_user_session_path
-
-  # This setting changes the http method used when rendering the
-  # link. For example :get, :delete, :put, etc..
-  #
-  # Default:
-  # config.logout_link_method = :get
-
-  # == Root
-  #
-  # Set the action to call for the root path. You can set different
-  # roots for each namespace.
-  #
-  # Default:
-  # config.root_to = 'dashboard#index'
-
-  # == Admin Comments
-  #
-  # This allows your users to comment on any resource registered with Active Admin.
-  #
-  # You can completely disable comments:
-  # config.comments = false
-  #
-  # You can change the name under which comments are registered:
-  # config.comments_registration_name = 'AdminComment'
-  #
-  # You can change the order for the comments and you can change the column
-  # to be used for ordering:
-  # config.comments_order = 'created_at ASC'
-  #
-  # You can disable the menu item for the comments index page:
-  # config.comments_menu = false
-  #
-  # You can customize the comment menu:
-  # config.comments_menu = { parent: 'Admin', priority: 1 }
 
   # == Batch Actions
   #
@@ -165,7 +123,7 @@ ActiveAdmin.setup do |config|
   # == Controller Filters
   #
   # You can add before, after and around filters to all of your
-  # Active Admin resources and pages from here.
+  # resources controller.
   #
   # config.before_action :do_something_awesome
 
@@ -328,6 +286,8 @@ ActiveAdmin.setup do |config|
   # you only pass content you trust.
   #
   # config.head = ''.html_safe
+  config.head = proc { ApplicationController.helpers.javascript_importmap_tags('active_admin') }
+
 
   # == Footer
   #
@@ -413,12 +373,7 @@ ActiveAdmin.setup do |config|
   # method. It accepts a path to a file and optional options defined in a hash.
   #
   #  config.register_javascript 'my_javascript.js'
-  #
-  #  config.register_javascript 'my_javascript.js',
-  #    type: 'module',
-  #    async: 'async',
-  #    crossorigin: 'anonymous',
-  #    integrity: 'sha256-...'
+  # config.register_javascript 'active_admin.js', type: "module"
 
 
   #
@@ -611,4 +566,6 @@ ActiveAdmin.setup do |config|
   #
   # config.favicon = '/favicon.ico'
 
+  # By default, Active Admin uses its own stylesheets and JavaScripts.
+  # To use a custom setup, disable the default assets and register your own.
 end

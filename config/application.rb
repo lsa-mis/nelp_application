@@ -43,5 +43,15 @@ module NelpApplication
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    config.active_storage.variant_processor = :mini_magick
+
+    # Add trix to dartsass load paths
+    if defined?(DartSass)
+      config.dartsass.load_paths << Gem.loaded_specs['trix'].full_gem_path + "/app/assets/stylesheets"
+      config.dartsass.builds = {
+        "active_admin.scss" => "active_admin.css",
+      }
+    end
   end
 end
