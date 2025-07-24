@@ -22,10 +22,9 @@ module NelpApplication
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
-    config.dartsass.builds = {
-      "application.scss" => "application.css",
-      "active_admin.scss" => "active_admin.css"
-    }
+    # config.dartsass.builds = {
+    #   "application.scss" => "application.css",
+    # }
     config.dartsass.build_options << " --load-path=#{Gem.loaded_specs['activeadmin'].full_gem_path}/app/assets/stylesheets"
     config.dartsass.source_dir = "app/scss"
     # Please, add to the `ignore` list any other `lib` subdirectories that do
@@ -38,7 +37,7 @@ module NelpApplication
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    config.time_zone = 'Eastern Time (US & Canada)'
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Don't generate system test files.
@@ -50,6 +49,7 @@ module NelpApplication
     if defined?(DartSass)
       config.dartsass.load_paths << Gem.loaded_specs['trix'].full_gem_path + "/app/assets/stylesheets"
       config.dartsass.builds = {
+        "application.scss" => "application.css",
         "active_admin.scss" => "active_admin.css",
       }
     end
