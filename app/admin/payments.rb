@@ -17,8 +17,8 @@ ActiveAdmin.register Payment do
   # end
   actions :index, :show, :new, :create, :update, :edit
 
-  filter :user_id, as: :select, collection: User.all
-  filter :program_year, as: :select 
+  filter :user_id, as: :select, collection: -> { User.all.map { |u| [u.email, u.id] } }
+  filter :program_year, as: :select
   filter :account_type, as: :select
   filter :created_at
 
@@ -36,7 +36,7 @@ ActiveAdmin.register Payment do
       f.input :result_message
       f.input :transaction_date, input_html: {value: "#{DateTime.now.strftime('%Y%m%d%H%M')}"}
       li "Camp Year #{f.object.program_year}" unless f.object.new_record?
-      f.input :program_year, input_html: {value: current_program.program_year} unless f.object.persisted?
+      f.input :program_year, input_html: {value: (current_program&.program_year || Date.current.year)} unless f.object.persisted?
     end
     f.actions         # adds the 'Submit' and 'Cancel' button
   end
@@ -49,17 +49,17 @@ ActiveAdmin.register Payment do
     column "Status" do |ts|
       ts.transaction_status
     end
-    column :transaction_id  
+    column :transaction_id
     column "Total Amount" do |p|
       number_to_currency(p.total_amount.to_f / 100)
-    end  
+    end
     column :transaction_date
-    column :account_type    
-    column :result_code     
-    column :result_message  
-    column :user_account    
-    column :payer_identity  
-    column :timestamp       
+    column :account_type
+    column :result_code
+    column :result_message
+    column :user_account
+    column :payer_identity
+    column :timestamp
     column :program_year
     actions
   end

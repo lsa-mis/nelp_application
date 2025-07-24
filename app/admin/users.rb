@@ -20,8 +20,8 @@ ActiveAdmin.register User do
   filter :email, as: :select
 
   # Custom scope for users with zero balance
-  scope :zero_balance, group: :balance do |users|
-    Payment.users_with_zero_balance.map(&:id)
+  scope :zero_balance do |users|
+    users.where(id: Payment.users_with_zero_balance.select(:id))
   end
 
   index do
