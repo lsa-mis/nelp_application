@@ -1,22 +1,22 @@
 // Configuration & Variables
-@import "config/variables";
+@import "../../scss/config/variables";
 
 // Base Styles
-@import "base/reset";
-@import "base/typography";
+@import "../../scss/base/reset";
+@import "../../scss/base/typography";
 
 // Layout
-@import "layout/header";
-@import "layout/footer";
+@import "../../scss/layout/header";
+@import "../../scss/layout/footer";
 
 // Components
-@import "components/buttons";
-@import "components/cards";
-@import "components/forms";
-@import "components/navigation";
+@import "../../scss/components/buttons";
+@import "../../scss/components/cards";
+@import "../../scss/components/forms";
+@import "../../scss/components/navigation";
 
 // Pages
-@import "pages/admin";
+@import "../../scss/pages/admin";
 
 // Custom styles (if any)
 .flash {
