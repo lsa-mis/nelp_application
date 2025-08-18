@@ -79,11 +79,69 @@ a {
   }
 }
 
+// Header Layout
+// =============================================================================
+
+.header {
+  // Add your header styles here
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.header-main {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 16px 82px;
+  background: #00274C;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-right {
+  margin-left: auto;
+}
+
+.lsa-logo {
+  height: 48px;
+  width: auto;
+}
+
+.divider {
+  width: 2px;
+  height: 40px;
+  background: #fff;
+  margin: 0 16px;
+}
+
+.lsa-text {
+  color: #fff;
+  font-size: 2rem;
+  font-family: 'Oswald', Arial, sans-serif;
+  letter-spacing: 0.1em;
+}
+
+.title {
+  color: #fff;
+  font-family: Noto Sans;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 48px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-transform: uppercase;
+}
 
 .header-avatar-dropdown {
   position: relative;
   display: inline-block;
-  margin-left: 1rem;
+
 }
 
 .avatar-btn {
@@ -95,9 +153,9 @@ a {
   border-radius: 9999px;
   /* pill */
   border: 1px solid transparent;
-  background: #f3f4f6;
+  background: #FFCB05;
   /* light gray base */
-  color: #111827;
+  color: #00274C;
   font-weight: 600;
   line-height: 1;
   text-decoration: none;
@@ -122,22 +180,22 @@ a {
 
 /* Variant for the Login button */
 .avatar-login {
-  background: #2563eb;
+  background: #FFCB05;
   /* primary */
   border-color: #1d4ed8;
-  color: #ffffff;
+  color: #00274C;
 }
 
 .avatar-login:hover,
 .avatar-login:focus {
-  background: #1e40af;
+  background: #f9d646;
   /* darker on hover */
   border-color: #1e40af;
 }
 
 /* Ensure visited links keep button color */
 .avatar-login:visited {
-  color: #ffffff;
+  color: #00274C;
 }
 
 .dropdown-menu {
@@ -162,4 +220,20 @@ a {
 
 .dropdown-item:hover {
   background-color: #f1f1f1;
+}
+
+.flash {
+  font-size: large;
+  padding: 10px;
+
+
+  &.alert {
+    color: #ac1302;
+    background: #f4bcb5;
+  }
+
+  &.notice {
+    color: #0c5f1e;
+    background: #c6f6d5;
+  }
 }

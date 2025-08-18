@@ -47,7 +47,7 @@
     </div>
 
     <% if current_program.allow_payments && @balance_due.to_i > 0 %>
-      <div>
+      <div class="p-4">
         <%= form_with url: make_payment_path, local: true do |f| %>
         <div>
           <span class="text-gray-700">You have a balance of <%= number_to_currency(@balance_due) %></span>
@@ -62,14 +62,14 @@
   <hr class="w-75 m-4 "/>
 
   <div class="max-w-sm rounded overflow-hidden shadow-lg">
-    <h5 class="max-w-sm rounded-t text-white bg-green-700 px-4">Your transactions:</h5>
-    <div class="card-deck">
+    <h5 class="max-w-sm rounded-t text-green-700 bg-green-700 px-2">Your transactions:</h5>
+    <div class="card-deck px-4 py-2">
       <% @users_current_payments.each do |payment| %>
-        <div class="max-w-sm rounded overflow-hidden shadow-lg">
+        <div class="max-w-sm rounded overflow-hidden shadow">
           <h6 class="text-green-700 px-2 py-2">
             <%= "Transaction ID: #{payment.transaction_id}" %>
           </h6>
-          <div class="ml-4 text-gray-700">
+          <div class="p-4 text-gray-700">
             <p>
               <%= "Credit Card: #{payment.account_type}" %>
             </p>
