@@ -1,7 +1,22 @@
 <header class="header-main">
-  <div class="header-left">
+  <%= link_to root_path, class: "header-left", style: "text-decoration: none;" do %>
     <%= image_tag "LSA_logo_4c_reverse.png", alt: "LSA Logo", class: "lsa-logo" %>
     <span class="title">NELP Payment Portal</span>
+  <% end %>
+
+  <div class="header-right header-avatar-dropdown" data-controller="avatar-dropdown">
+    <% if user_signed_in? %>
+      <button data-action="click->avatar-dropdown#toggle" class="avatar-btn">
+        <span class="avatar-circle">
+          <%= "#{current_user.email}" %>
+        </span>
+      </button>
+      <div data-avatar-dropdown-target="menu" class="dropdown-menu">
+        <%= link_to 'My Payments', all_payments_path, class: "dropdown-item" %>
+        <%= button_to 'Logout', destroy_user_session_path, method: :delete, class: "dropdown-item", form: { class: "logout-form" } %>
+      </div>
+    <% else %>
+      <%= link_to 'Login', new_user_session_path, class: "avatar-btn avatar-login", role: "button" %>
+    <% end %>
   </div>
-  <%= link_to 'Admin Dashboard', admin_dashboard_path, class: "mt-2 pr-4" %>
 </header>

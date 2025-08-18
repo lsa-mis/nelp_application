@@ -15,20 +15,25 @@
     </div>
     <div>
       <p class="text-center mb-0 footer-text">
+        <%= link_to 'About', about_path, class: "footer-text footer-link" %> |
+        <%= link_to 'Terms', terms_path, class: "footer-text footer-link" %> |
         <a href="https://umich.edu/about/privacy-statement/" class="footer-text footer-link" >Privacy Notice</a> |
-        <a id="myCustomTrigger" class="footer-text footer-link" href="#" data-email="<%= session[:user_email]%>">Report an Issue</a> |
-        <span class="footer-text">734.615.0100</span>
+        <a id="myCustomTrigger" class="footer-text footer-link" href="#" data-email="<%= session[:user_email]%>">Report an Issue</a>
+        <br><span class="footer-text">734.615.0100</span>
       </p>
     </div>
     <div>
       <p class="d-none d-md-block text-center footer-text">
         ©<%= Time.now.year %> |
         <a href="https://regents.umich.edu/" class="footer-text footer-link">The Regents of the University of Michigan</a>
+        <br><%= link_to 'Admin Dashboard', admin_dashboard_path %>
       </p>
       <p class="d-md-none text-center mb-0 footer-text">
         <a href="https://regents.umich.edu/" class="footer-text footer-link" >The Regents of the University of Michigan</a>
         <br>©<%= Time.now.year %>
-      </p><!-- Right column content -->
+        <br><%= link_to 'Admin Dashboard', admin_dashboard_path %>
+      </p>
+      <!-- Right column content -->
     </div>
   </div>
 
