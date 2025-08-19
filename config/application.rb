@@ -26,7 +26,7 @@ module NelpApplication
     #   "application.scss" => "application.css",
     # }
     config.dartsass.build_options << " --load-path=#{Gem.loaded_specs['activeadmin'].full_gem_path}/app/assets/stylesheets"
-    config.dartsass.source_dir = "app/scss"
+    config.dartsass.source_dir = "app/assets/stylesheets"
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
@@ -44,6 +44,12 @@ module NelpApplication
     config.generators.system_tests = nil
 
     config.active_storage.variant_processor = :mini_magick
+
+    # Configure Sprockets to NOT process SCSS files (dartsass-rails handles them)
+    config.assets.configure do |env|
+      env.unregister_processor('text/css', Sprockets::SasscProcessor) if defined?(Sprockets::SasscProcessor)
+      env.unregister_processor('text/scss', Sprockets::SasscProcessor) if defined?(Sprockets::SasscProcessor)
+    end
 
     # Add trix to dartsass load paths
     if defined?(DartSass)
