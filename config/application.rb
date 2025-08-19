@@ -45,11 +45,7 @@ module NelpApplication
 
     config.active_storage.variant_processor = :mini_magick
 
-    # Configure Sprockets to NOT process SCSS files (dartsass-rails handles them)
-    config.assets.configure do |env|
-      env.unregister_processor('text/css', Sprockets::SasscProcessor) if defined?(Sprockets::SasscProcessor)
-      env.unregister_processor('text/scss', Sprockets::SasscProcessor) if defined?(Sprockets::SasscProcessor)
-    end
+
 
     # Add trix to dartsass load paths
     if defined?(DartSass)
