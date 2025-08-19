@@ -1,8 +1,22 @@
-# Enhance assets:precompile to build CSS with dartsass first
+# Enhance assets:precompile to build CSS first
 # This ensures compatibility with deployment systems like Hatchbox that call assets:precompile directly
 
-# Ensure dartsass:build runs before assets:precompile
-Rake::Task["assets:precompile"].enhance(["dartsass:build"]) if Rake::Task.task_defined?("dartsass:build")
+# Override dartsass:build to use our css:build task instead
+# This ensures ActiveAdmin styles are properly compiled
+if Rake::Task.task_defined?("dartsass:build")
+  Rake::Task["dartsass:build"].clear
+
+  namespace :dartsass do
+    desc "Build CSS with custom css:build task"
+    task :build => :environment do
+      # Run our custom css:build task that includes ActiveAdmin styles
+      Rake::Task["css:build"].invoke if Rake::Task.task_defined?("css:build")
+    end
+  end
+end
+
+# Also enhance assets:precompile directly with css:build as a fallback
+Rake::Task["assets:precompile"].enhance(["css:build"]) if Rake::Task.task_defined?("css:build")
 
 # Disable SCSS processing in Sprockets to prevent sassc dependency errors
 # This is necessary because we're using dartsass-rails instead of sassc-rails
