@@ -8,10 +8,10 @@
 AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
 
 ProgramSetting.create!(
-                      program_year: 2024, 
-                      active: true, 
-                      program_open: Time.now, 
-                      program_close: 2.days.from_now, 
+                      program_year: 2024,
+                      active: true,
+                      program_open: Time.now,
+                      program_close: 2.days.from_now,
                       open_instructions: "Open Instructions",
                       close_instructions: "Close Instructions",
                       payment_instructions: "Payment Instructions",
@@ -21,5 +21,6 @@ StaticPage.create!([
   { location: "about" },
   { location: "home" },
   { location: "privacy" },
-  { location: "terms" }
+  { location: "terms" },
+  { location: "dashboard" }
 ])
