@@ -31,9 +31,6 @@ Rails.application.configure do
 
   # Configure Sprockets to ignore SCSS files since dartsass handles them
   config.assets.configure do |env|
-    # Exclude SCSS files from Sprockets processing entirely
-    env.ignore = env.ignore + ['**/*.scss', '**/*.sass']
-
     # Unregister any SCSS processors that might interfere
     if defined?(Sprockets::SasscProcessor)
       env.unregister_processor('text/css', Sprockets::SasscProcessor)
