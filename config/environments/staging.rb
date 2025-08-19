@@ -29,18 +29,7 @@ Rails.application.configure do
   # Do not fall back to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
 
-  # Configure Sprockets to ignore SCSS files since dartsass handles them
-  config.assets.configure do |env|
-    # Unregister any SCSS processors that might interfere
-    if defined?(Sprockets::SasscProcessor)
-      env.unregister_processor('text/css', Sprockets::SasscProcessor)
-      env.unregister_processor('text/scss', Sprockets::SasscProcessor)
-    end
 
-    if defined?(Sprockets::ScssProcessor)
-      env.unregister_processor('text/scss', Sprockets::ScssProcessor)
-    end
-  end
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
