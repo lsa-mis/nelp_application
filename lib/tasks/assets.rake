@@ -1,26 +1,31 @@
-# Enhance assets:precompile to build CSS first
-# This ensures compatibility with deployment systems like Hatchbox that call assets:precompile directly
+# Override assets:precompile to build CSS with dartsass first
+# This ensures ActiveAdmin styles are compiled on Hatchbox deployments
 
-# Override dartsass:build to use our css:build task instead
-# This ensures ActiveAdmin styles are properly compiled
-if Rake::Task.task_defined?("dartsass:build")
-  Rake::Task["dartsass:build"].clear
+require 'rake/task'
 
-  namespace :dartsass do
-    desc "Build CSS with custom css:build task"
-    task :build => :environment do
-      # Run our custom css:build task that includes ActiveAdmin styles
-      Rake::Task["css:build"].invoke if Rake::Task.task_defined?("css:build")
-    end
-  end
-end
-
-# Also enhance assets:precompile directly with css:build as a fallback
-Rake::Task["assets:precompile"].enhance(["css:build"]) if Rake::Task.task_defined?("css:build")
-
-# Disable SCSS processing in Sprockets to prevent sassc dependency errors
-# This is necessary because we're using dartsass-rails instead of sassc-rails
+# We need to hook in after all tasks are loaded
+# This is done by creating a new task that depends on the original
 namespace :assets do
+  # Create a new task that runs our CSS build
+  desc "Build CSS including ActiveAdmin styles"
+  task :build_css => :environment do
+    puts "==> Building CSS with dartsass (including ActiveAdmin styles)..."
+    active_admin_path = Gem::Specification.find_by_name("activeadmin").gem_dir + "/app/assets/stylesheets"
+    sass_command = "sass app/assets/stylesheets:app/assets/builds --style=compressed --load-path=#{active_admin_path}"
+    puts "    Command: #{sass_command}"
+
+    unless system(sass_command)
+      raise "CSS build failed!"
+    end
+
+    puts "    ✓ CSS build complete"
+  end
+
+  # Hook into the precompile task
+  # This approach works by making build_css a prerequisite
+  task :precompile => :build_css
+
+  # Disable SCSS processing in Sprockets to prevent sassc dependency errors
   task :environment do
     if defined?(Sprockets) && Rails.application.assets
       # Remove SCSS processors that require sassc
@@ -30,5 +35,14 @@ namespace :assets do
         Rails.application.assets.unregister_processor(content_type, Sprockets::SassProcessor) if defined?(Sprockets::SassProcessor)
       end
     end
+  end
+end
+
+# Also make build_css a dependency of assets:clean to ensure proper cleanup
+namespace :assets do
+  task :clean => :build_css do
+    # Clean built CSS files
+    FileUtils.rm_rf Dir.glob(Rails.root.join('app/assets/builds/*.css'))
+    FileUtils.rm_rf Dir.glob(Rails.root.join('app/assets/builds/*.css.map'))
   end
 end
