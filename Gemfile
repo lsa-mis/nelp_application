@@ -15,6 +15,8 @@ gem 'pg'
 gem 'puma', '~> 5.0'
 gem 'dartsass-rails'
 gem "sd_notify"
+gem "sentry-ruby"
+gem "sentry-rails"
 gem 'simple_form'
 gem 'sprockets-rails', '~> 3.4'
 gem 'stimulus-rails'
