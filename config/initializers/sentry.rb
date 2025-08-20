@@ -3,39 +3,75 @@
 Sentry.init do |config|
   config.dsn = Rails.application.credentials.dig(:sentry, :dsn)
 
+  # Release tracking
+  config.release = ENV['SENTRY_RELEASE'] ||
+                   `git rev-parse --short HEAD 2>/dev/null`.strip.presence ||
+                   'unknown'
+ # Temporary logging to verify (remove after confirmation)
+  Rails.logger.info "Sentry Release: #{config.release}"
+
   config.enabled_environments = %w[production staging]
+  config.environment = Rails.env.to_s
 
   config.breadcrumbs_logger = [:active_support_logger, :http_logger]
 
-  # Add data like request headers and IP for users,
-  # see https://docs.sentry.io/platforms/ruby/data-management/data-collected/ for more info
+  # Add data like request headers and IP for users
   config.send_default_pii = true
 
   # Enable sending logs to Sentry
   config.enable_logs = true
-  # Patch Ruby logger to forward logs
   config.enabled_patches = [:logger]
 
+  # Performance monitoring
+  config.enable_tracing = true
+  config.traces_sample_rate = Rails.env.production? ? 0.1 : 1.0
   config.profiles_sample_rate = Rails.env.production? ? 0.1 : 1.0
+
+  # Error sampling
+  config.sample_rate = Rails.env.production? ? 0.1 : 1.0
+
+  # Traces sampler with better filtering
   config.traces_sampler = lambda do |context|
-    # Don't sample health check endpoints
-    if context[:transaction_context][:name]&.include?('health_check')
+    transaction_name = context[:transaction_context][:name]
+
+    # Don't sample health checks and monitoring endpoints
+    if transaction_name&.include?('health_check') ||
+       transaction_name&.include?('/ping') ||
+       transaction_name&.include?('/monitoring')
       0.0
     else
-      # Sample based on environment
       Rails.env.production? ? 0.1 : 1.0
     end
   end
 
-  # Add additional context to errors
+  # Enhanced before_send with filtering and context
   config.before_send = lambda do |event, hint|
-    # You can add custom data here
+    # Skip health checks and other noise
+    return nil if event.request&.url&.include?('health_check')
+    return nil if event.request&.url&.include?('/ping')
+
+    # Add user context
     if defined?(Current) && Current.user
       event.user = {
         id: Current.user.id,
         email: Current.user.email
       }
     end
+
+    # Add additional context
+    event.tags ||= {}
+    event.tags[:controller] = event.request&.data&.dig(:controller)
+    event.tags[:action] = event.request&.data&.dig(:action)
+    event.tags[:environment] = Rails.env.to_s
+
+    # Remove sensitive headers
+    if event.request&.headers
+      sensitive_headers = %w[Authorization Cookie X-CSRF-Token]
+      sensitive_headers.each do |header|
+        event.request.headers.delete(header)
+      end
+    end
+
     event
   end
 
