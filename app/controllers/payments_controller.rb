@@ -47,7 +47,7 @@ class PaymentsController < ApplicationController
     def generate_hash(current_user, amount=current_program.application_fee.to_i)
       user_account = current_user.email.partition('@').first + '-' + current_user.id.to_s
       amount_to_be_payed = amount.to_i
-      if Rails.env.development? || Rails.application.credentials.NELNET_SERVICE[:SERVICE_SELECTOR] == "QA"
+      if Rails.env.development? || Rails.env.staging? || Rails.application.credentials.NELNET_SERVICE[:SERVICE_SELECTOR] == "QA"
          key_to_use = 'test_key'
          url_to_use = 'test_URL'
        else
