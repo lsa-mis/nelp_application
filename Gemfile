@@ -12,7 +12,7 @@ gem 'drb'
 gem 'devise'
 gem 'jbuilder', '~> 2.7'
 gem 'pg'
-gem 'puma', '~> 5.0'
+gem 'puma', '~> 6.0'
 gem 'dartsass-rails'
 gem "sd_notify"
 gem "sentry-ruby"
@@ -22,7 +22,6 @@ gem 'sprockets-rails', '~> 3.4'
 gem 'stimulus-rails'
 gem 'turbo-rails'
 gem 'importmap-rails'
-gem 'turnout', '~> 2.5'
 gem 'tzinfo-data', platforms: [:windows, :jruby]
 
 group :development do
