@@ -1,0 +1,45 @@
+# Ruby LSP configuration
+# See: https://github.com/Shopify/ruby-lsp
+
+experimental_features:
+  # Enable if you want inline type inference (may be noisy)
+  # semantic_highlighting: true
+
+features:
+  diagnostics: true
+  document_highlight: true
+  document_link: true
+  document_symbol: true
+  formatting: true
+  folding_ranges: true
+  hover: true
+  inlay_hints: false
+  on_type_formatting: true
+  selection_ranges: true
+  semantic_highlighting: true
+  code_actions: true
+  completion: true
+  definition: true
+  references: true
+  rename: true
+  signature_help: true
+  workspace_symbol: true
+
+# Customize formatter (syntax_tree)
+formatter:
+  plugin: syntax_tree
+  options:
+    print_width: 120
+    ruby_version: 3.4
+
+rails:
+  enabled: true
+
+rspec:
+  enabled: true
+
+# Future plugin examples (uncomment to enable if added to Gemfile)
+# brakeman:
+#   enabled: true
+# factory_bot:
+#   enabled: true

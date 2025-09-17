@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Ruby: $(ruby -v 2>/dev/null || echo 'not found')"
+if command -v bundler >/dev/null 2>&1; then
+  echo "Bundler: $(bundler -v)"
+else
+  echo "Bundler: not found"
+fi
+
+echo "Gemfile ruby line: $(grep '^ruby ' Gemfile || echo 'none')"
+
+bundle_exec() {
+  if bundle exec gem list "$1" -i >/dev/null 2>&1; then
+    echo "$1 installed?: yes"
+  else
+    echo "$1 installed?: no"
+  fi
+}
+
+for g in ruby-lsp ruby-lsp-rails ruby-lsp-rspec syntax_tree rubocop; do
+  bundle_exec "$g"
+done
+
+if [ -f .ruby-version ]; then
+  echo ".ruby-version: $(cat .ruby-version)"
+else
+  echo ".ruby-version: (missing)"
+fi
+
+# Show which ruby VS Code likely picks up when launching login shell
+if command -v which >/dev/null; then
+  echo "which ruby: $(which ruby)"
+fi
+
+# Print bundler platform + list for debugging
+bundle platform
+
+exit 0

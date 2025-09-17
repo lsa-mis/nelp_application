@@ -36,6 +36,12 @@ group :development do
   gem 'web-console', '>= 4.1.0'
   # Procfile process manager used by bin/dev
   gem 'foreman'
+  # Ruby LSP and supporting tooling for editor features
+  gem 'ruby-lsp'
+  gem 'ruby-lsp-rails'
+  gem 'ruby-lsp-rspec'
+  gem 'syntax_tree'
+  gem 'rubocop', require: false
 end
 
 group :development, :test do
