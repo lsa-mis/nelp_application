@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# RuboCop runner script with common options
+# Usage: bin/rubocop [options] [files/directories]
+
+require 'bundler/setup'
+require 'rubocop'
+
+# Default options
+options = ARGV.dup
+
+# If no arguments provided, show help
+if options.empty?
+  puts "RuboCop Runner for NELP Application"
+  puts "=================================="
+  puts ""
+  puts "Usage:"
+  puts "  bin/rubocop                    # Run on all files"
+  puts "  bin/rubocop --auto-correct     # Auto-correct issues"
+  puts "  bin/rubocop app/               # Run on specific directory"
+  puts "  bin/rubocop app/models/user.rb # Run on specific file"
+  puts "  bin/rubocop --format simple    # Simple output format"
+  puts "  bin/rubocop --format json      # JSON output format"
+  puts ""
+  puts "Common options:"
+  puts "  --auto-correct                 # Auto-correct safe issues"
+  puts "  --auto-correct-all             # Auto-correct all issues (use with caution)"
+  puts "  --format simple                # Simple output format"
+  puts "  --format json                  # JSON output format"
+  puts "  --display-only-failures        # Show only files with offenses"
+  puts "  --display-only-correctable     # Show only correctable offenses"
+  puts ""
+  exit 0
+end
+
+# Run RuboCop with the provided options
+exit RuboCop::CLI.new.run(options)
