@@ -167,6 +167,8 @@ GEM
     ffi (1.17.2-x86_64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
     ffi (1.17.2-x86_64-linux-musl)
+    foreman (0.90.0)
+      thor (~> 1.4)
     formtastic (5.0.0)
       actionpack (>= 6.0.0)
     formtastic_i18n (0.7.0)
@@ -515,6 +517,7 @@ DEPENDENCIES
   drb
   factory_bot_rails
   faker
+  foreman
   importmap-rails
   jbuilder (~> 2.7)
   letter_opener_web

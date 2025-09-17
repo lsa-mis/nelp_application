@@ -1,11 +1,17 @@
 #!/usr/bin/env sh
 
-if gem list --no-installed --exact --silent foreman; then
+# Install foreman if not already available (outside bundle)
+if ! command -v foreman >/dev/null 2>&1; then
   echo "Installing foreman..."
-  gem install foreman
+  gem install foreman --no-document
 fi
 
 # Default to port 3000 if not specified
 export PORT="${PORT:-3000}"
 
-exec foreman start -f Procfile.dev --env /dev/null "$@"
+# Run via bundle if available so Bundler is aware that foreman is in the Gemfile
+if command -v bundle >/dev/null 2>&1; then
+  exec bundle exec foreman start -f Procfile.dev --env /dev/null "$@"
+else
+  exec foreman start -f Procfile.dev --env /dev/null "$@"
+fi

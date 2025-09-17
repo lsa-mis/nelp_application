@@ -34,6 +34,8 @@ group :development do
   gem 'pry-byebug'
   gem 'spring', '~> 4.0'
   gem 'web-console', '>= 4.1.0'
+  # Procfile process manager used by bin/dev
+  gem 'foreman'
 end
 
 group :development, :test do
