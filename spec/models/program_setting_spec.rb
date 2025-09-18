@@ -41,7 +41,7 @@ RSpec.describe ProgramSetting, type: :model do
 
     describe 'program_year uniqueness' do
       it 'prevents duplicate program years' do
-        existing_program = create(:program_setting, program_year: 2024)
+        create(:program_setting, program_year: 2024)
         duplicate_program = build(:program_setting, program_year: 2024)
 
         expect(duplicate_program).not_to be_valid
@@ -64,26 +64,24 @@ RSpec.describe ProgramSetting, type: :model do
 
       it 'allows program_close to be after program_open' do
         program = build(:program_setting,
-          program_open: 1.month.from_now,
-          program_close: 2.months.from_now
-        )
+                        program_open: 1.month.from_now,
+                        program_close: 2.months.from_now)
         expect(program).to be_valid
       end
 
-      # Note: There's no validation that close must be after open in the model
+      # NOTE: There's no validation that close must be after open in the model
       # This might be a business logic gap to address
       it 'currently allows program_close to be before program_open' do
         program = build(:program_setting,
-          program_open: 2.months.from_now,
-          program_close: 1.month.from_now
-        )
+                        program_open: 2.months.from_now,
+                        program_close: 1.month.from_now)
         expect(program).to be_valid # This reveals a potential business logic issue
       end
     end
 
     describe 'fee validations' do
       it 'has default values for fees' do
-        program = ProgramSetting.new
+        program = described_class.new
         expect(program.application_fee).to eq(0)
         expect(program.program_fee).to eq(0)
       end
@@ -98,7 +96,7 @@ RSpec.describe ProgramSetting, type: :model do
         expect(program).to be_valid
       end
 
-      # Note: No validation prevents negative fees - might be business logic gap
+      # NOTE: No validation prevents negative fees - might be business logic gap
       it 'currently allows negative fees' do
         program = build(:program_setting, application_fee: -100, program_fee: -200)
         expect(program).to be_valid # Potential issue to address
@@ -107,12 +105,12 @@ RSpec.describe ProgramSetting, type: :model do
 
     describe 'boolean field defaults' do
       it 'defaults active to false' do
-        program = ProgramSetting.new
+        program = described_class.new
         expect(program.active).to be false
       end
 
       it 'defaults allow_payments to false' do
-        program = ProgramSetting.new
+        program = described_class.new
         expect(program.allow_payments).to be false
       end
     end
@@ -180,15 +178,15 @@ RSpec.describe ProgramSetting, type: :model do
       let!(:inactive_program2) { create(:program_setting, active: false, program_year: 2025) }
 
       it 'returns only active programs' do
-        active_programs = ProgramSetting.active_program
+        active_programs = described_class.active_program
         expect(active_programs).to include(active_program)
         expect(active_programs).not_to include(inactive_program1)
         expect(active_programs).not_to include(inactive_program2)
       end
 
       it 'returns empty relation when no active programs exist' do
-        ProgramSetting.update_all(active: false)
-        expect(ProgramSetting.active_program).to be_empty
+        described_class.update_all(active: false)
+        expect(described_class.active_program).to be_empty
       end
     end
   end
@@ -197,12 +195,12 @@ RSpec.describe ProgramSetting, type: :model do
   describe 'ransack configuration' do
     describe '.ransackable_attributes' do
       it 'returns the allowed attributes for search' do
-        expected_attributes = [
-          'active', 'allow_payments', 'application_fee', 'close_instructions',
-          'created_at', 'id', 'open_instructions', 'payment_instructions',
-          'program_close', 'program_fee', 'program_open', 'program_year', 'updated_at'
+        expected_attributes = %w[
+          active allow_payments application_fee close_instructions
+          created_at id open_instructions payment_instructions
+          program_close program_fee program_open program_year updated_at
         ]
-        expect(ProgramSetting.ransackable_attributes).to match_array(expected_attributes)
+        expect(described_class.ransackable_attributes).to match_array(expected_attributes)
       end
     end
   end
@@ -237,17 +235,16 @@ RSpec.describe ProgramSetting, type: :model do
     describe 'program lifecycle' do
       it 'can create a complete program setting' do
         program = create(:program_setting,
-          program_year: 2024,
-          program_fee: 1000,
-          application_fee: 500,
-          program_open: 1.month.from_now,
-          program_close: 6.months.from_now,
-          open_instructions: 'Welcome to the program!',
-          close_instructions: 'Program is now closed.',
-          payment_instructions: 'Please pay using the link below.',
-          allow_payments: true,
-          active: true
-        )
+                         program_year: 2024,
+                         program_fee: 1000,
+                         application_fee: 500,
+                         program_open: 1.month.from_now,
+                         program_close: 6.months.from_now,
+                         open_instructions: 'Welcome to the program!',
+                         close_instructions: 'Program is now closed.',
+                         payment_instructions: 'Please pay using the link below.',
+                         allow_payments: true,
+                         active: true)
 
         expect(program).to be_persisted
         expect(program.total_cost).to eq(1500)
@@ -258,14 +255,14 @@ RSpec.describe ProgramSetting, type: :model do
       it 'handles program transitions' do
         # Create and activate a program
         program = create(:program_setting, :active, program_year: 2024)
-        expect(ProgramSetting.active_program.count).to eq(1)
+        expect(described_class.active_program.count).to eq(1)
 
         # Deactivate and create new program
         program.update!(active: false)
         new_program = create(:program_setting, :active, program_year: 2025)
 
-        expect(ProgramSetting.active_program.count).to eq(1)
-        expect(ProgramSetting.active_program.first).to eq(new_program)
+        expect(described_class.active_program.count).to eq(1)
+        expect(described_class.active_program.first).to eq(new_program)
       end
     end
 
@@ -341,9 +338,8 @@ RSpec.describe ProgramSetting, type: :model do
     describe 'large fee amounts' do
       it 'handles large fee amounts' do
         program = build(:program_setting,
-          program_fee: 1_000_000,
-          application_fee: 500_000
-        )
+                        program_fee: 1_000_000,
+                        application_fee: 500_000)
         expect(program).to be_valid
         expect(program.total_cost).to eq(1_500_000)
       end
@@ -353,17 +349,15 @@ RSpec.describe ProgramSetting, type: :model do
       it 'handles same open and close dates' do
         same_date = 1.month.from_now
         program = build(:program_setting,
-          program_open: same_date,
-          program_close: same_date
-        )
+                        program_open: same_date,
+                        program_close: same_date)
         expect(program).to be_valid
       end
 
       it 'handles past dates' do
         program = build(:program_setting,
-          program_open: 1.month.ago,
-          program_close: 1.week.ago
-        )
+                        program_open: 1.month.ago,
+                        program_close: 1.week.ago)
         expect(program).to be_valid
       end
     end
@@ -383,12 +377,11 @@ RSpec.describe ProgramSetting, type: :model do
     end
 
     it 'is referenced by User balance calculations' do
-      payment = create(:payment,
-        user: user,
-        program_year: program_setting.program_year,
-        total_amount: '50000',
-        transaction_status: '1'
-      )
+      create(:payment,
+             user: user,
+             program_year: program_setting.program_year,
+             total_amount: '50000',
+             transaction_status: '1')
 
       expected_balance = program_setting.total_cost - 500 # payment amount in dollars
       expect(user.current_balance_due).to eq(expected_balance)
@@ -411,7 +404,7 @@ RSpec.describe ProgramSetting, type: :model do
       program_id = program.id
 
       program.destroy!
-      expect(ProgramSetting.find_by(id: program_id)).to be_nil
+      expect(described_class.find_by(id: program_id)).to be_nil
     end
   end
 
@@ -424,17 +417,17 @@ RSpec.describe ProgramSetting, type: :model do
     end
 
     it 'can find by year' do
-      program_2024 = ProgramSetting.find_by(program_year: 2024)
+      program_2024 = described_class.find_by(program_year: 2024)
       expect(program_2024.program_fee).to eq(1000)
     end
 
     it 'can filter by active status' do
-      active_programs = ProgramSetting.where(active: true)
+      active_programs = described_class.where(active: true)
       expect(active_programs.count).to eq(1)
     end
 
     it 'can order by year' do
-      programs = ProgramSetting.order(:program_year)
+      programs = described_class.order(:program_year)
       years = programs.pluck(:program_year)
       expect(years).to eq([2023, 2024, 2025])
     end

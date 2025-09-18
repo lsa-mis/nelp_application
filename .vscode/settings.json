@@ -1,0 +1,58 @@
+{
+    // RuboCop Configuration
+    "ruby.rubocop.executePath": "bundle exec",
+    "ruby.rubocop.configFilePath": ".rubocop.yml",
+    "ruby.rubocop.onSave": true,
+    "ruby.rubocop.useBundler": true,
+    "ruby.rubocop.lint": true,
+    "ruby.rubocop.format": true,
+    "ruby.rubocop.autoCorrect": true,
+    "ruby.rubocop.autoCorrectOnSave": true,
+    // Ruby Language Server
+    "ruby.lsp.enabled": true,
+    "ruby.lsp.features": {
+        "diagnostics": true,
+        "formatting": true,
+        "codeActions": true,
+        "hover": true,
+        "completion": true,
+        "definition": true,
+        "signatureHelp": true
+    },
+    // Editor Configuration
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.rubocop": "explicit"
+    },
+    // File Associations
+    "files.associations": {
+        "*.rb": "ruby",
+        "Gemfile": "ruby",
+        "Rakefile": "ruby",
+        "config.ru": "ruby"
+    },
+    // Ruby-specific settings
+    "ruby.intellisense": "rubyLsp",
+    "ruby.useLanguageServer": true,
+    "ruby.format": "rubocop",
+    "ruby.lint": {
+        "rubocop": true
+    },
+    // Exclude files from RuboCop
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/tmp": true,
+        "**/log": true,
+        "**/coverage": true,
+        "**/.git": true
+    },
+    // Search exclude
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/tmp": true,
+        "**/log": true,
+        "**/coverage": true,
+        "**/.git": true,
+        "**/vendor": true
+    }
+}

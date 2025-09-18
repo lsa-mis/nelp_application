@@ -28,7 +28,7 @@ ActiveAdmin.register User do
     selectable_column
     id_column
     column :email
-    column "Balance Due" do |u|
+    column 'Balance Due' do |u|
       number_to_currency(u.current_balance_due)
     end
     column :current_sign_in_at
@@ -38,5 +38,4 @@ ActiveAdmin.register User do
     column :created_at
     actions
   end
-
 end

@@ -24,9 +24,9 @@ FactoryBot.define do
     active { false }
     program_open { 1.month.from_now }
     program_close { 6.months.from_now }
-    open_instructions { "Welcome to the NELP program! Applications are now open." }
-    close_instructions { "The application period has ended. Thank you for your interest." }
-    payment_instructions { "Please use the secure payment link below to submit your fees." }
+    open_instructions { 'Welcome to the NELP program! Applications are now open.' }
+    close_instructions { 'The application period has ended. Thank you for your interest.' }
+    payment_instructions { 'Please use the secure payment link below to submit your fees.' }
     allow_payments { false }
 
     trait :active do

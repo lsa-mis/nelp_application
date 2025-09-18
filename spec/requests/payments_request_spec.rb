@@ -1,32 +1,34 @@
 require 'rails_helper'
 
-RSpec.describe "Payments", type: :request do
+RSpec.describe 'Payments', type: :request do
   let(:user) { create(:user) }
   let(:admin_user) { create(:admin_user) }
-  let!(:program_setting) { create(:program_setting, :active, program_year: 2024, program_fee: 1000, application_fee: 500) }
+  let!(:program_setting) do
+    create(:program_setting, :active, program_year: 2024, program_fee: 1000, application_fee: 500)
+  end
 
-  describe "GET /payments/all_payments" do
-    context "when not logged in" do
-      it "redirects to login" do
+  describe 'GET /payments/all_payments' do
+    context 'when not logged in' do
+      it 'redirects to login' do
         get all_payments_path
         expect(response).to redirect_to(new_user_session_path)
       end
     end
 
-    context "when logged in" do
+    context 'when logged in' do
       before { sign_in user }
 
-      it "returns success" do
+      it 'returns success' do
         get all_payments_path
         expect(response).to have_http_status(:success)
       end
 
-      it "displays payment information" do
+      it 'displays payment information' do
         get all_payments_path
-        expect(response.body).to include("$500") # Application Fee
+        expect(response.body).to include('$500') # Application Fee
       end
 
-      it "shows balance due" do
+      it 'shows balance due' do
         create(:payment,
                user: user,
                program_year: program_setting.program_year,
@@ -34,10 +36,10 @@ RSpec.describe "Payments", type: :request do
                transaction_status: '1')
 
         get all_payments_path
-        expect(response.body).to include("$1,000") # Remaining balance
+        expect(response.body).to include('$1,000') # Remaining balance
       end
 
-      it "shows zero balance when fully paid" do
+      it 'shows zero balance when fully paid' do
         create(:payment,
                user: user,
                program_year: program_setting.program_year,
@@ -45,34 +47,34 @@ RSpec.describe "Payments", type: :request do
                transaction_status: '1')
 
         get all_payments_path
-        expect(response.body).to include("$0") # Zero balance
+        expect(response.body).to include('$0') # Zero balance
       end
     end
   end
 
-  describe "POST /payments/make_payment" do
-    context "when not logged in" do
-      it "redirects to login" do
+  describe 'POST /payments/make_payment' do
+    context 'when not logged in' do
+      it 'redirects to login' do
         post make_payment_path, params: { amount: '500' }
         expect(response).to redirect_to(new_user_session_path)
       end
     end
 
-    context "when logged in" do
+    context 'when logged in' do
       before { sign_in user }
 
-      it "redirects to payment processor" do
+      it 'redirects to payment processor' do
         post make_payment_path, params: { amount: '500' }
         expect(response).to have_http_status(:redirect)
         expect(response.location).to include('hash=')
       end
 
-      it "handles default amount" do
+      it 'handles default amount' do
         post make_payment_path
         expect(response).to have_http_status(:redirect)
       end
 
-      it "handles custom amount" do
+      it 'handles custom amount' do
         post make_payment_path, params: { amount: '1000' }
         expect(response).to have_http_status(:redirect)
         expect(response.location).to include('amountDue=100000') # 1000 * 100
@@ -80,7 +82,7 @@ RSpec.describe "Payments", type: :request do
     end
   end
 
-  describe "POST /payments/payment_receipt" do
+  describe 'POST /payments/payment_receipt' do
     let(:payment_params) do
       {
         transactionType: 'SALE',
@@ -93,22 +95,22 @@ RSpec.describe "Payments", type: :request do
         transactionResultMessage: 'APPROVED',
         orderNumber: 'user-123',
         timestamp: Time.current.to_i.to_s,
-        hash: 'somehash123'
+        hash: 'somehash123',
       }
     end
 
-    context "when not logged in" do
-      it "redirects to login" do
+    context 'when not logged in' do
+      it 'redirects to login' do
         post payment_receipt_path, params: payment_params
         expect(response).to redirect_to(new_user_session_path)
       end
     end
 
-    context "when logged in" do
+    context 'when logged in' do
       before { sign_in user }
 
-      context "with valid payment data" do
-        it "creates payment and redirects" do
+      context 'with valid payment data' do
+        it 'creates payment and redirects' do
           expect do
             post payment_receipt_path, params: payment_params
           end.to change(Payment, :count).by(1)
@@ -117,7 +119,7 @@ RSpec.describe "Payments", type: :request do
           expect(flash[:notice]).to eq('Your Payment Was Successfully Recorded')
         end
 
-        it "stores payment data correctly" do
+        it 'stores payment data correctly' do
           post payment_receipt_path, params: payment_params
 
           payment = Payment.last
@@ -128,12 +130,12 @@ RSpec.describe "Payments", type: :request do
         end
       end
 
-      context "with duplicate transaction" do
+      context 'with duplicate transaction' do
         before do
           create(:payment, transaction_id: 'TXN123456')
         end
 
-        it "does not create duplicate payment" do
+        it 'does not create duplicate payment' do
           expect do
             post payment_receipt_path, params: payment_params
           end.not_to change(Payment, :count)
@@ -143,7 +145,7 @@ RSpec.describe "Payments", type: :request do
         end
       end
 
-      context "with failed payment" do
+      context 'with failed payment' do
         let(:failed_params) do
           payment_params.merge(
             transactionStatus: '0',
@@ -152,7 +154,7 @@ RSpec.describe "Payments", type: :request do
           )
         end
 
-        it "still records the failed payment" do
+        it 'still records the failed payment' do
           expect do
             post payment_receipt_path, params: failed_params
           end.to change(Payment, :count).by(1)
@@ -165,16 +167,15 @@ RSpec.describe "Payments", type: :request do
     end
   end
 
-  describe "Payment workflow integration" do
-    before { sign_in user }
-
-    # Stub time to make tests deterministic
-    let(:fixed_time) { Time.zone.parse('2024-07-08 12:00:00') }
-    
+  describe 'Payment workflow integration' do
     before do
+      sign_in user
       allow(Time).to receive(:current).and_return(fixed_time)
       allow(Date).to receive(:current).and_return(fixed_time.to_date)
     end
+
+    # Stub time to make tests deterministic
+    let(:fixed_time) { Time.zone.parse('2024-07-08 12:00:00') }
 
     # Add helper methods
     def successful_payment_params(transaction_id:, amount:)
@@ -186,7 +187,7 @@ RSpec.describe "Payments", type: :request do
         orderNumber: "#{user.email.split('@').first}-#{user.id}",
         transactionDate: Date.current.strftime('%Y-%m-%d'),
         transactionResultCode: '0000',
-        transactionResultMessage: 'APPROVED'
+        transactionResultMessage: 'APPROVED',
       }
     end
 
@@ -199,16 +200,16 @@ RSpec.describe "Payments", type: :request do
         orderNumber: "#{user.email.split('@').first}-#{user.id}",
         transactionDate: Date.current.strftime('%Y-%m-%d'),
         transactionResultCode: '1001',
-        transactionResultMessage: 'DECLINED'
+        transactionResultMessage: 'DECLINED',
       }
     end
 
-    it "handles complete payment flow" do
+    it 'handles complete payment flow' do
       # Step 1: User views payment page
       get all_payments_path
       expect(response).to have_http_status(:success)
-      expect(response.body).to include("$500")
-      
+      expect(response.body).to include('$500')
+
       # Step 2: User initiates payment
       post make_payment_path, params: { amount: '500' }
       expect(response).to have_http_status(:redirect)
@@ -229,10 +230,10 @@ RSpec.describe "Payments", type: :request do
 
       # Step 4: Verify balance is now zero
       get all_payments_path
-      expect(response.body).to include("$0")
+      expect(response.body).to include('$0')
     end
 
-    it "handles partial payment flow" do
+    it 'handles partial payment flow' do
       # First partial payment using helper
       post payment_receipt_path, params: successful_payment_params(
         transaction_id: 'TXN_PARTIAL_1',
@@ -240,7 +241,7 @@ RSpec.describe "Payments", type: :request do
       )
 
       get all_payments_path
-      expect(response.body).to include("$1,000")
+      expect(response.body).to include('$1,000')
 
       # Second partial payment using helper
       post payment_receipt_path, params: successful_payment_params(
@@ -249,10 +250,10 @@ RSpec.describe "Payments", type: :request do
       )
 
       get all_payments_path
-      expect(response.body).to include("$0")
+      expect(response.body).to include('$0')
     end
 
-    it "handles mixed success and failure payments" do
+    it 'handles mixed success and failure payments' do
       # Failed payment using helper
       post payment_receipt_path, params: failed_payment_params(
         transaction_id: 'TXN_FAILED',
@@ -260,7 +261,7 @@ RSpec.describe "Payments", type: :request do
       )
 
       get all_payments_path
-      expect(response.body).to include("$1,500")
+      expect(response.body).to include('$1,500')
 
       # Successful payment using helper
       post payment_receipt_path, params: successful_payment_params(
@@ -269,14 +270,14 @@ RSpec.describe "Payments", type: :request do
       )
 
       get all_payments_path
-      expect(response.body).to include("$0")
+      expect(response.body).to include('$0')
     end
   end
 
-  describe "Error handling" do
+  describe 'Error handling' do
     before { sign_in user }
 
-    it "handles missing payment parameters gracefully" do
+    it 'handles missing payment parameters gracefully' do
       expect do
         post payment_receipt_path, params: { transactionId: 'TXN123' }
       end.not_to raise_error
@@ -291,11 +292,11 @@ RSpec.describe "Payments", type: :request do
       end
     end
 
-    it "handles malformed parameters" do
+    it 'handles malformed parameters' do
       post payment_receipt_path, params: {
         transactionId: 'TXN_MALFORMED',
         transactionTotalAmount: 'invalid_amount',
-        timestamp: 'invalid_timestamp'
+        timestamp: 'invalid_timestamp',
       }
 
       payment = Payment.last
@@ -304,10 +305,10 @@ RSpec.describe "Payments", type: :request do
     end
   end
 
-  describe "Security and Authorization" do
+  describe 'Security and Authorization' do
     let(:other_user) { create(:user) }
 
-    context "cross-user payment access" do
+    context 'cross-user payment access' do
       before do
         sign_in user
         @user_payment = create(:payment, user: user)
@@ -322,24 +323,24 @@ RSpec.describe "Payments", type: :request do
     end
   end
 
-  describe "Content-Type and Format handling" do
+  describe 'Content-Type and Format handling' do
     before { sign_in user }
 
-    it "handles HTML requests" do
+    it 'handles HTML requests' do
       get all_payments_path
       expect(response.content_type).to include('text/html')
     end
 
-    it "handles form submissions" do
+    it 'handles form submissions' do
       post payment_receipt_path, params: { transactionId: 'TXN123' }
       expect(response).to have_http_status(:redirect)
     end
   end
 
-  describe "Performance considerations" do
+  describe 'Performance considerations' do
     before { sign_in user }
 
-    it "handles payment page with many payments efficiently" do
+    it 'handles payment page with many payments efficiently' do
       # Create multiple payments
       create_list(:payment, 20, user: user, program_year: program_setting.program_year)
 

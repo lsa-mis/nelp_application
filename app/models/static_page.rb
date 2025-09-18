@@ -13,11 +13,11 @@ class StaticPage < ApplicationRecord
 
   has_rich_text :message
 
-  def self.ransackable_associations(auth_object = nil)
-    ["rich_text_message"]
+  def self.ransackable_associations(_auth_object = nil)
+    ['rich_text_message']
   end
 
-  def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "id", "location", "updated_at"]
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[created_at id location updated_at]
   end
 end

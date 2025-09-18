@@ -7,13 +7,13 @@ Sentry.init do |config|
   config.release = ENV['SENTRY_RELEASE'] ||
                    `git rev-parse --short HEAD 2>/dev/null`.strip.presence ||
                    'unknown'
- # Temporary logging to verify (remove after confirmation)
+  # Temporary logging to verify (remove after confirmation)
   Rails.logger.info "Sentry Release: #{config.release}"
 
   config.enabled_environments = %w[production staging]
   config.environment = Rails.env.to_s
 
-  config.breadcrumbs_logger = [:active_support_logger, :http_logger]
+  config.breadcrumbs_logger = %i[active_support_logger http_logger]
 
   # Add data like request headers and IP for users
   config.send_default_pii = true
@@ -45,7 +45,7 @@ Sentry.init do |config|
   end
 
   # Enhanced before_send with filtering and context
-  config.before_send = lambda do |event, hint|
+  config.before_send = lambda do |event, _hint|
     # Skip health checks and other noise
     return nil if event.request&.url&.include?('health_check')
     return nil if event.request&.url&.include?('/ping')
@@ -54,7 +54,7 @@ Sentry.init do |config|
     if defined?(Current) && Current.user
       event.user = {
         id: Current.user.id,
-        email: Current.user.email
+        email: Current.user.email,
       }
     end
 

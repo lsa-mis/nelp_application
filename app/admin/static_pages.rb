@@ -1,13 +1,12 @@
 ActiveAdmin.register StaticPage do
-
   # See permitted parameters documentation:
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 
   permit_params :location, :message
 
-  actions :all, except: [:destroy, :show, :new]
+  actions :all, except: %i[destroy show new]
 
-  index title: 'Manage messages on static pages'do
+  index title: 'Manage messages on static pages' do
     column :location
     actions
   end
@@ -19,5 +18,4 @@ ActiveAdmin.register StaticPage do
     end
     f.actions
   end
-
 end

@@ -24,15 +24,15 @@ class Payment < ApplicationRecord
   belongs_to :user
   validates :transaction_id, presence: true, uniqueness: true
   validates :total_amount, presence: true
-  validates :user_id, presence: true
   validates :program_year, presence: true
 
-  def self.ransackable_associations(auth_object = nil)
-    ["user"]
+  def self.ransackable_associations(_auth_object = nil)
+    ['user']
   end
 
-  def self.ransackable_attributes(auth_object = nil)
-    ["account_type", "created_at", "id", "payer_identity", "program_year", "result_code", "result_message", "timestamp", "total_amount", "transaction_date", "transaction_hash", "transaction_id", "transaction_status", "transaction_type", "updated_at", "user_account", "user_id"]
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[account_type created_at id payer_identity program_year result_code result_message
+       timestamp total_amount transaction_date transaction_hash transaction_id transaction_status transaction_type updated_at user_account user_id]
   end
 
   # New class method for filtering payments by program year
@@ -43,28 +43,29 @@ class Payment < ApplicationRecord
   # Calculates the current balance due for a user for a given program year
   def self.current_balance_due_for_user(user, program_year = nil)
     program = if program_year
-      ProgramSetting.find_by(program_year: program_year)
-    else
-      ProgramSetting.active_program.last
-    end
+                ProgramSetting.find_by(program_year: program_year)
+              else
+                ProgramSetting.active_program.last
+              end
     return nil unless program
+
     paid = user.payments.where(program_year: program.program_year, transaction_status: '1')
-                    .pluck(:total_amount).sum(&:to_f) / 100
+               .pluck(:total_amount).sum(&:to_f) / 100
     program.total_cost - paid
   end
 
   # Checks if the user's balance due is zero for a given program year
   def self.balance_due_zero_for_user?(user, program_year = nil)
-    current_balance_due_for_user(user, program_year).to_i == 0
+    current_balance_due_for_user(user, program_year).to_i.zero?
   end
 
   # Returns users with zero balance for a given program year
   def self.users_with_zero_balance(program_year = nil)
     program = if program_year
-      ProgramSetting.find_by(program_year: program_year)
-    else
-      ProgramSetting.active_program.last
-    end
+                ProgramSetting.find_by(program_year: program_year)
+              else
+                ProgramSetting.active_program.last
+              end
     return User.none unless program
 
     User.joins(:payments)

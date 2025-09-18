@@ -6,7 +6,8 @@ ActiveAdmin.register Payment do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :transaction_type, :transaction_status, :transaction_id, :total_amount, :transaction_date, :account_type, :result_code, :result_message, :user_account, :payer_identity, :timestamp, :transaction_hash, :user_id, :program_year
+  permit_params :transaction_type, :transaction_status, :transaction_id, :total_amount, :transaction_date,
+                :account_type, :result_code, :result_message, :user_account, :payer_identity, :timestamp, :transaction_hash, :user_id, :program_year
   #
   # or
   #
@@ -28,29 +29,28 @@ ActiveAdmin.register Payment do
       f.input :user_id, as: :select, collection: User.all
       f.input :total_amount
       li "Transaction Type #{f.object.transaction_type}" unless f.object.new_record?
-      f.input :transaction_type, input_html: {value: "1"} unless f.object.persisted?
+      f.input :transaction_type, input_html: { value: '1' } unless f.object.persisted?
       li "Transaction Status #{f.object.transaction_status}" unless f.object.new_record?
-      f.input :transaction_status, input_html: {value: "1"} unless f.object.persisted?
+      f.input :transaction_status, input_html: { value: '1' } unless f.object.persisted?
       f.input :transaction_id
       f.input :account_type
       f.input :result_message
-      f.input :transaction_date, input_html: {value: "#{DateTime.now.strftime('%Y%m%d%H%M')}"}
+      f.input :transaction_date, input_html: { value: DateTime.now.strftime('%Y%m%d%H%M').to_s }
       li "Camp Year #{f.object.program_year}" unless f.object.new_record?
-      f.input :program_year, input_html: {value: (current_program&.program_year || Date.current.year)} unless f.object.persisted?
+      unless f.object.persisted?
+        f.input :program_year,
+                input_html: { value: current_program&.program_year || Date.current.year }
+      end
     end
     f.actions         # adds the 'Submit' and 'Cancel' button
   end
 
   index do
     column :user
-    column "Type" do |tt|
-      tt.transaction_type
-    end
-    column "Status" do |ts|
-      ts.transaction_status
-    end
+    column 'Type', &:transaction_type
+    column 'Status', &:transaction_status
     column :transaction_id
-    column "Total Amount" do |p|
+    column 'Total Amount' do |p|
       number_to_currency(p.total_amount.to_f / 100)
     end
     column :transaction_date
@@ -63,5 +63,4 @@ ActiveAdmin.register Payment do
     column :program_year
     actions
   end
-
 end

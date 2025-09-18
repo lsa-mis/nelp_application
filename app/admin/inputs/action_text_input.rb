@@ -1,5 +1,4 @@
 class ActionTextInput < Formtastic::Inputs::StringInput
-
   def to_html
     input_wrapping do
       template.javascript_include_tag('trix', 'data-turbo-track': 'reload') +

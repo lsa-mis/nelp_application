@@ -11,6 +11,6 @@
 FactoryBot.define do
   factory :static_page do
     message { nil }
-    location { "MyString" }
+    location { 'MyString' }
   end
 end

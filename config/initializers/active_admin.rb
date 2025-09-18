@@ -4,12 +4,12 @@ ActiveAdmin.setup do |config|
   # Set the title that is displayed on the main layout
   # for each of the active admin pages.
   #
-  config.site_title = "Nelp Application"
+  config.site_title = 'Nelp Application'
 
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
   #
-  config.site_title_link = "/"
+  config.site_title_link = '/'
 
   # Set an optional image to be displayed for the header
   # instead of a string (overrides :site_title)
@@ -132,7 +132,7 @@ ActiveAdmin.setup do |config|
   # You can exclude possibly sensitive model attributes from being displayed,
   # added to forms, or exported by default by ActiveAdmin
   #
-  config.filter_attributes = [:encrypted_password, :password, :password_confirmation]
+  config.filter_attributes = %i[encrypted_password password password_confirmation]
 
   # == Localize Date/Time Format
   #
@@ -288,7 +288,6 @@ ActiveAdmin.setup do |config|
   # config.head = ''.html_safe
   config.head = proc { ApplicationController.helpers.javascript_importmap_tags('active_admin') }
 
-
   # == Footer
   #
   # By default, the footer shows the current Active Admin version. You can
@@ -322,7 +321,6 @@ ActiveAdmin.setup do |config|
   #
   # config.current_user_method = :current_admin_user
 
-
   #
   # ## Root an namespace actions
   #
@@ -342,7 +340,6 @@ ActiveAdmin.setup do |config|
   #   namespace == :admin && action.name == 'New Post'
   # end
 
-
   #
   # ## Viewport meta tag
   #
@@ -350,7 +347,6 @@ ActiveAdmin.setup do |config|
   # To keep the old behavior, you can set the `viewport` option to `true`.
   #
   # config.viewport = true
-
 
   #
   # ## Custom stylesheets
@@ -363,7 +359,6 @@ ActiveAdmin.setup do |config|
   #  config.register_stylesheet 'my_stylesheet.css', media: :screen
   config.register_stylesheet 'active_admin.css'
 
-
   #
   # ## Custom javascripts
   #
@@ -374,7 +369,6 @@ ActiveAdmin.setup do |config|
   #
   #  config.register_javascript 'my_javascript.js'
   # config.register_javascript 'active_admin.js', type: "module"
-
 
   #
   # ## CSV options
@@ -387,14 +381,12 @@ ActiveAdmin.setup do |config|
   #   force_quotes: true
   # }
 
-
   #
   # ## Localize Date/Time Format
   #
   # You can localize the date/time format used in Active Admin.
   #
   # config.localize_format = :long
-
 
   #
   # ## Comments
@@ -420,14 +412,12 @@ ActiveAdmin.setup do |config|
   #
   # config.comments_menu = { parent: 'Admin', priority: 1 }
 
-
   #
   # ## Batch Actions
   #
   # You can disable batch actions here:
   #
   # config.batch_actions = false
-
 
   #
   # ## Controller to render authorization failures
@@ -437,14 +427,12 @@ ActiveAdmin.setup do |config|
   # config.authorization_failure_controller = 'sessions'
   # config.authorization_failure_action = 'new'
 
-
   #
   # ## Breadcrumbs
   #
   # You can change the breadcrumb separator
   #
   # config.breadcrumb_separator = ' / '
-
 
   #
   # ## Create Another Checkbox
@@ -453,7 +441,6 @@ ActiveAdmin.setup do |config|
   # redirected to the new page after a successful save.
   #
   # config.create_another = true
-
 
   #
   # ## Pagination
@@ -465,7 +452,6 @@ ActiveAdmin.setup do |config|
   # You can change the max per page value.
   #
   # config.max_per_page = 10_000
-
 
   #
   # ## Footer
@@ -480,14 +466,12 @@ ActiveAdmin.setup do |config|
   #
   # config.footer_logo = 'logo.png'
 
-
   #
   # ## Table Builder Class
   #
   # You can change the table builder class used to render tables
   #
   # config.table_builder = 'ActiveAdmin::Views::TableFor'
-
 
   #
   # ## Index default actions
@@ -500,14 +484,12 @@ ActiveAdmin.setup do |config|
   # config.remove_action_item(:show, for: User)
   # config.remove_action_item(:new, for: User)
 
-
   #
   # ## Default Scopes
   #
   # You can remove the "All" scope from the index page
   #
   # config.remove_scope 'all'
-
 
   #
   # ## Preserve Filters
@@ -520,7 +502,6 @@ ActiveAdmin.setup do |config|
   #
   # config.preserve_filters = true
 
-
   #
   # ## Inflections
   #
@@ -532,7 +513,6 @@ ActiveAdmin.setup do |config|
   #   inflect.irregular 'person', 'people'
   # end
 
-
   #
   # ## Includes
   #
@@ -540,14 +520,12 @@ ActiveAdmin.setup do |config|
   #
   # config.includes = [:author]
 
-
   #
   # ## Number formatting
   #
   # You can customize the formatting of numbers.
   #
   # config.number_format = ->(number) { service.number_to_currency(number) }
-
 
   #
   # ## Meta tags
@@ -557,7 +535,6 @@ ActiveAdmin.setup do |config|
   # config.meta_tags = {
   #   viewport: 'width=device-width, initial-scale=1'
   # }
-
 
   #
   # ## Favicon

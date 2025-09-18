@@ -21,5 +21,5 @@ Rails.application.routes.draw do
   post 'make_payment',    to: 'payments#make_payment'
 
   # Development-only routes
-  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+  mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 end

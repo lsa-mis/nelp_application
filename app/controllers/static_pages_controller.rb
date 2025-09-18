@@ -9,7 +9,9 @@ class StaticPagesController < ApplicationController
   end
 
   def privacy
-    @privacy_message = StaticPage.find_by(location: 'privacy').message if StaticPage.find_by(location: 'privacy').present?
+    return if StaticPage.find_by(location: 'privacy').blank?
+
+    @privacy_message = StaticPage.find_by(location: 'privacy').message
   end
 
   def terms

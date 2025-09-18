@@ -25,18 +25,20 @@ class User < ApplicationRecord
 
   has_many :payments, dependent: :restrict_with_exception
 
-  def self.ransackable_associations(auth_object = nil)
-    ["payments"]
+  def self.ransackable_associations(_auth_object = nil)
+    ['payments']
   end
 
-  def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "current_sign_in_at", "current_sign_in_ip", "email", "encrypted_password", "id", "last_sign_in_at", "last_sign_in_ip", "remember_created_at", "reset_password_sent_at", "reset_password_token", "sign_in_count", "updated_at"]
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[created_at current_sign_in_at current_sign_in_ip email encrypted_password id last_sign_in_at
+       last_sign_in_ip remember_created_at reset_password_sent_at reset_password_token sign_in_count updated_at]
   end
 
   # Delegators for payment logic (optional, for convenience)
   def current_balance_due(program_year = nil)
     program = ProgramSetting.active_program
     return 0 unless program
+
     Payment.current_balance_due_for_user(self, program_year)
   end
 
@@ -45,6 +47,6 @@ class User < ApplicationRecord
   end
 
   def display_name
-    self.email
+    email
   end
 end

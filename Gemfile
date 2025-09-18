@@ -8,60 +8,60 @@ gem 'activeadmin'
 gem 'base64'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'csv'
-gem 'drb'
+gem 'dartsass-rails'
 gem 'devise'
+gem 'drb'
+gem 'importmap-rails'
 gem 'jbuilder', '~> 2.7'
 gem 'pg'
 gem 'puma', '~> 6.0'
-gem 'dartsass-rails'
-gem "sd_notify"
-gem "sentry-ruby"
-gem "sentry-rails"
+gem 'sd_notify'
+gem 'sentry-rails'
+gem 'sentry-ruby'
 gem 'simple_form'
 gem 'sprockets-rails', '~> 3.4'
 gem 'stimulus-rails'
 gem 'turbo-rails'
-gem 'importmap-rails'
-gem 'tzinfo-data', platforms: [:windows, :jruby]
+gem 'tzinfo-data', platforms: %i[windows jruby]
 
 group :development do
   gem 'annotate'
   gem 'capistrano', '~> 3.17', require: false
+  gem 'capistrano-asdf', require: false
   gem 'capistrano-rails', '~> 1.6', '>= 1.6.1', require: false
-  gem 'capistrano-asdf',   require: false
   gem 'listen', '~> 3.3'
-  gem 'pry-rails'
   gem 'pry-byebug'
+  gem 'pry-rails'
   gem 'spring', '~> 4.0'
   gem 'web-console', '>= 4.1.0'
   # Procfile process manager used by bin/dev
   gem 'foreman'
   # Ruby LSP and supporting tooling for editor features
+  gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
   gem 'ruby-lsp'
   gem 'ruby-lsp-rails'
   gem 'ruby-lsp-rspec'
   gem 'syntax_tree'
-  gem 'rubocop', require: false
-  gem 'rubocop-rails', require: false
-  gem 'rubocop-rspec', require: false
 end
 
 group :development, :test do
+  gem 'capybara'
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'rails-controller-testing'
   gem 'rspec-rails'
   gem 'rspec-sqlimit'
-  gem 'rails-controller-testing'
-  gem 'factory_bot_rails'
-  gem 'capybara'
   gem 'selenium-webdriver', '~> 4.11'
-  gem 'faker'
 
   # Additional testing gems for comprehensive coverage
+  gem 'database_cleaner-active_record'
   gem 'shoulda-matchers', '~> 5.0'
   gem 'simplecov', require: false
-  gem 'database_cleaner-active_record'
   gem 'webmock'
 end
 
 group :development, :staging do
-  gem "letter_opener_web"
+  gem 'letter_opener_web'
 end

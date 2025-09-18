@@ -1,7 +1,7 @@
 # lib/tasks/check_sequences.rake
 
 namespace :db do
-  desc "Check and verify PostgreSQL sequences for integer primary keys"
+  desc 'Check and verify PostgreSQL sequences for integer primary keys'
 
   task check_sequences: :environment do
     ActiveRecord::Base.connection.tables.each do |table|
@@ -12,13 +12,13 @@ namespace :db do
       column = ActiveRecord::Base.connection.columns(table).find { |c| c.name == primary_key }
 
       # Skip if the primary key is not an integer or bigint
-      next unless column && [:integer, :bigint].include?(column.type)
+      next unless column && %i[integer bigint].include?(column.type)
 
       # Construct the expected sequence name
       sequence = "#{table}_#{primary_key}_seq"
 
       # Check if the sequence exists
-      sequence_exists = ActiveRecord::Base.connection.select_value(<<-SQL)
+      sequence_exists = ActiveRecord::Base.connection.select_value(<<-SQL.squish)
         SELECT EXISTS (
           SELECT 1
           FROM pg_class c

@@ -43,12 +43,12 @@ RSpec.describe Payment, type: :model do
     it { is_expected.to validate_presence_of(:transaction_id) }
     it { is_expected.to validate_uniqueness_of(:transaction_id) }
     it { is_expected.to validate_presence_of(:total_amount) }
-    it { is_expected.to validate_presence_of(:user_id) }
+    it { is_expected.to belong_to(:user).required }
     it { is_expected.to validate_presence_of(:program_year) }
 
     describe 'transaction_id uniqueness' do
       it 'prevents duplicate transaction IDs' do
-        existing_payment = create(:payment, transaction_id: 'TXN123')
+        create(:payment, transaction_id: 'TXN123')
         duplicate_payment = build(:payment, transaction_id: 'TXN123')
 
         expect(duplicate_payment).not_to be_valid
@@ -91,19 +91,19 @@ RSpec.describe Payment, type: :model do
   describe 'ransack configuration' do
     describe '.ransackable_associations' do
       it 'returns the allowed associations for search' do
-        expect(Payment.ransackable_associations).to eq(['user'])
+        expect(described_class.ransackable_associations).to eq(['user'])
       end
     end
 
     describe '.ransackable_attributes' do
       it 'returns the allowed attributes for search' do
-        expected_attributes = [
-          'account_type', 'created_at', 'id', 'payer_identity', 'program_year',
-          'result_code', 'result_message', 'timestamp', 'total_amount',
-          'transaction_date', 'transaction_hash', 'transaction_id',
-          'transaction_status', 'transaction_type', 'updated_at', 'user_account', 'user_id'
+        expected_attributes = %w[
+          account_type created_at id payer_identity program_year
+          result_code result_message timestamp total_amount
+          transaction_date transaction_hash transaction_id
+          transaction_status transaction_type updated_at user_account user_id
         ]
-        expect(Payment.ransackable_attributes).to match_array(expected_attributes)
+        expect(described_class.ransackable_attributes).to match_array(expected_attributes)
       end
     end
   end
@@ -125,7 +125,7 @@ RSpec.describe Payment, type: :model do
 
       it 'returns only payments for the current active program year' do
         travel_to(Date.new(2024, 7, 7)) do
-          current_payments = Payment.current_program_payments
+          current_payments = described_class.current_program_payments
 
           expect(current_payments).to include(current_payment)
           expect(current_payments).not_to include(old_payment)
@@ -134,7 +134,7 @@ RSpec.describe Payment, type: :model do
 
       it 'returns empty collection when no active program exists' do
         ProgramSetting.update_all(active: false)
-        expect(Payment.current_program_payments).to be_empty
+        expect(described_class.current_program_payments).to be_empty
         # This reveals the same issue as in User model - should handle gracefully
       end
     end
@@ -148,20 +148,19 @@ RSpec.describe Payment, type: :model do
     describe 'payment processing simulation' do
       it 'creates a payment with all required Nelnet fields' do
         payment = create(:payment,
-          user: user,
-          transaction_type: 'SALE',
-          transaction_status: '1', # successful
-          transaction_id: 'TXN12345',
-          total_amount: '50000', # $500 in cents
-          transaction_date: '2024-01-15',
-          account_type: 'VISA',
-          result_code: '0000',
-          result_message: 'APPROVED',
-          user_account: 'user-123',
-          payer_identity: user.email,
-          timestamp: Time.current.to_i.to_s,
-          program_year: program_setting.program_year
-        )
+                         user: user,
+                         transaction_type: 'SALE',
+                         transaction_status: '1', # successful
+                         transaction_id: 'TXN12345',
+                         total_amount: '50000', # $500 in cents
+                         transaction_date: '2024-01-15',
+                         account_type: 'VISA',
+                         result_code: '0000',
+                         result_message: 'APPROVED',
+                         user_account: 'user-123',
+                         payer_identity: user.email,
+                         timestamp: Time.current.to_i.to_s,
+                         program_year: program_setting.program_year)
 
         expect(payment).to be_valid
         expect(payment.transaction_status).to eq('1')
@@ -170,12 +169,11 @@ RSpec.describe Payment, type: :model do
 
       it 'handles failed payments' do
         payment = create(:payment,
-          user: user,
-          transaction_status: '0', # failed
-          result_code: '1001',
-          result_message: 'DECLINED',
-          program_year: program_setting.program_year
-        )
+                         user: user,
+                         transaction_status: '0', # failed
+                         result_code: '1001',
+                         result_message: 'DECLINED',
+                         program_year: program_setting.program_year)
 
         expect(payment).to be_valid
         expect(payment.transaction_status).to eq('0')
@@ -192,7 +190,7 @@ RSpec.describe Payment, type: :model do
 
       it 'handles various amount formats' do
         # Test different amount formats that might come from payment processor
-        amounts = ['100', '1000', '50000', '123456', '0']
+        amounts = %w[100 1000 50000 123456 0]
 
         amounts.each do |amount|
           payment = create(:payment, total_amount: amount)
@@ -288,22 +286,22 @@ RSpec.describe Payment, type: :model do
     end
 
     it 'can filter by user' do
-      user1_payments = Payment.where(user: user1)
+      user1_payments = described_class.where(user: user1)
       expect(user1_payments.count).to eq(2)
     end
 
     it 'can filter by transaction status' do
-      successful_payments = Payment.where(transaction_status: '1')
+      successful_payments = described_class.where(transaction_status: '1')
       expect(successful_payments.count).to eq(3)
     end
 
     it 'can filter by program year' do
-      current_year_payments = Payment.where(program_year: 2024)
+      current_year_payments = described_class.where(program_year: 2024)
       expect(current_year_payments.count).to eq(3)
     end
 
     it 'can combine filters' do
-      user1_successful_current = Payment.where(
+      user1_successful_current = described_class.where(
         user: user1,
         transaction_status: '1',
         program_year: 2024
@@ -320,7 +318,7 @@ RSpec.describe Payment, type: :model do
     it 'handles many payments efficiently' do
       travel_to(Date.new(2024, 7, 7)) do
         create_list(:payment, 10, program_year: 2024)
-        expect(Payment.current_program_payments.count).to eq(10)
+        expect(described_class.current_program_payments.count).to eq(10)
       end
     end
 
@@ -328,7 +326,7 @@ RSpec.describe Payment, type: :model do
       create_list(:payment, 5, user: user, program_year: program_setting.program_year)
 
       expect do
-        Payment.where(user: user, program_year: program_setting.program_year).to_a
+        described_class.where(user: user, program_year: program_setting.program_year).to_a
       end.not_to exceed_query_limit(1)
     end
   end
@@ -341,59 +339,72 @@ RSpec.describe Payment, type: :model do
 
     context 'with no payments' do
       it 'returns full program cost as balance due' do
-        expect(Payment.current_balance_due_for_user(user, program_setting.program_year)).to eq(1500)
+        expect(described_class.current_balance_due_for_user(user, program_setting.program_year)).to eq(1500)
       end
     end
 
     context 'with partial payment' do
       before do
-        create(:payment, user: user, program_year: program_setting.program_year, total_amount: '50000', transaction_status: '1')
+        create(:payment, user: user, program_year: program_setting.program_year, total_amount: '50000',
+                         transaction_status: '1')
       end
+
       it 'returns remaining balance' do
-        expect(Payment.current_balance_due_for_user(user, program_setting.program_year)).to eq(1000)
+        expect(described_class.current_balance_due_for_user(user, program_setting.program_year)).to eq(1000)
       end
     end
 
     context 'with full payment' do
       before do
-        create(:payment, user: user, program_year: program_setting.program_year, total_amount: '150000', transaction_status: '1')
+        create(:payment, user: user, program_year: program_setting.program_year, total_amount: '150000',
+                         transaction_status: '1')
       end
+
       it 'returns zero balance' do
-        expect(Payment.current_balance_due_for_user(user, program_setting.program_year)).to eq(0)
+        expect(described_class.current_balance_due_for_user(user, program_setting.program_year)).to eq(0)
       end
+
       it 'returns true for balance_due_zero_for_user?' do
-        expect(Payment.balance_due_zero_for_user?(user, program_setting.program_year)).to be true
+        expect(described_class.balance_due_zero_for_user?(user, program_setting.program_year)).to be true
       end
     end
 
     context 'with failed payment' do
       before do
-        create(:payment, user: user, program_year: program_setting.program_year, total_amount: '150000', transaction_status: '0')
+        create(:payment, user: user, program_year: program_setting.program_year, total_amount: '150000',
+                         transaction_status: '0')
       end
+
       it 'does not count failed payments' do
-        expect(Payment.current_balance_due_for_user(user, program_setting.program_year)).to eq(1500)
+        expect(described_class.current_balance_due_for_user(user, program_setting.program_year)).to eq(1500)
       end
     end
 
     context 'with payments from different program years' do
       let!(:old_program) { create(:program_setting, program_year: 2022, program_fee: 800, application_fee: 400) }
+
       before do
-        create(:payment, user: user, program_year: old_program.program_year, total_amount: '120000', transaction_status: '1')
-        create(:payment, user: user, program_year: program_setting.program_year, total_amount: '50000', transaction_status: '1')
+        create(:payment, user: user, program_year: old_program.program_year, total_amount: '120000',
+                         transaction_status: '1')
+        create(:payment, user: user, program_year: program_setting.program_year, total_amount: '50000',
+                         transaction_status: '1')
       end
+
       it 'only counts current program year payments' do
-        expect(Payment.current_balance_due_for_user(user, program_setting.program_year)).to eq(1000)
+        expect(described_class.current_balance_due_for_user(user, program_setting.program_year)).to eq(1000)
       end
     end
 
     context 'users_with_zero_balance' do
       before do
-        create(:payment, user: user, program_year: program_setting.program_year, total_amount: '150000', transaction_status: '1')
+        create(:payment, user: user, program_year: program_setting.program_year, total_amount: '150000',
+                         transaction_status: '1')
         # other_user has no payments
       end
+
       it 'returns only users with zero balance' do
-        expect(Payment.users_with_zero_balance(program_setting.program_year)).to include(user)
-        expect(Payment.users_with_zero_balance(program_setting.program_year)).not_to include(other_user)
+        expect(described_class.users_with_zero_balance(program_setting.program_year)).to include(user)
+        expect(described_class.users_with_zero_balance(program_setting.program_year)).not_to include(other_user)
       end
     end
   end

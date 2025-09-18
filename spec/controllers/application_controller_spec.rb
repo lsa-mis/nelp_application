@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ApplicationController, type: :controller do
   controller do
-    def index; render plain: 'OK'; end
+    def index = render(plain: 'OK')
   end
 
   describe '#current_program' do
@@ -25,33 +25,30 @@ RSpec.describe ApplicationController, type: :controller do
 
       context 'and the program is open' do
         it 'returns true' do
-          allow(program_setting).to receive(:program_open).and_return(1.hour.ago)
-          allow(program_setting).to receive(:program_close).and_return(1.hour.from_now)
+          allow(program_setting).to receive_messages(program_open: 1.hour.ago, program_close: 1.hour.from_now)
           expect(controller.current_program_open?).to be true
         end
       end
 
       context 'and the program is not open yet' do
         it 'returns false' do
-          allow(program_setting).to receive(:program_open).and_return(1.hour.from_now)
-          allow(program_setting).to receive(:program_close).and_return(2.hours.from_now)
+          allow(program_setting).to receive_messages(program_open: 1.hour.from_now, program_close: 2.hours.from_now)
           expect(controller.current_program_open?).to be false
         end
       end
 
       context 'and the program has already closed' do
         it 'returns false' do
-          allow(program_setting).to receive(:program_open).and_return(2.hours.ago)
-          allow(program_setting).to receive(:program_close).and_return(1.hour.ago)
+          allow(program_setting).to receive_messages(program_open: 2.hours.ago, program_close: 1.hour.ago)
           expect(controller.current_program_open?).to be false
         end
       end
     end
 
     context 'when no current program exists' do
-      it 'returns nil' do
+      it 'returns false' do
         allow(controller).to receive(:current_program).and_return(nil)
-        expect(controller.current_program_open?).to be_nil
+        expect(controller.current_program_open?).to be false
       end
     end
   end

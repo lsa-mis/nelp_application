@@ -1,18 +1,18 @@
-require_relative "boot"
+require_relative 'boot'
 
-require "rails"
+require 'rails'
 # Pick the frameworks you want:
-require "active_model/railtie"
-require "active_job/railtie"
-require "active_record/railtie"
-require "active_storage/engine"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "action_mailbox/engine"
-require "action_text/engine"
-require "action_view/railtie"
-require "action_cable/engine"
-require "sprockets/railtie"
+require 'active_model/railtie'
+require 'active_job/railtie'
+require 'active_record/railtie'
+require 'active_storage/engine'
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
+require 'action_mailbox/engine'
+require 'action_text/engine'
+require 'action_view/railtie'
+require 'action_cable/engine'
+require 'sprockets/railtie'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -26,7 +26,7 @@ module NelpApplication
     #   "application.scss" => "application.css",
     # }
     config.dartsass.build_options << " --load-path=#{Gem.loaded_specs['activeadmin'].full_gem_path}/app/assets/stylesheets"
-    config.dartsass.source_dir = "app/assets/stylesheets"
+    config.dartsass.source_dir = 'app/assets/stylesheets'
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
@@ -45,14 +45,12 @@ module NelpApplication
 
     config.active_storage.variant_processor = :mini_magick
 
-
-
     # Add trix to dartsass load paths
     if defined?(DartSass)
-      config.dartsass.load_paths << Gem.loaded_specs['trix'].full_gem_path + "/app/assets/stylesheets"
+      config.dartsass.load_paths << "#{Gem.loaded_specs['trix'].full_gem_path}/app/assets/stylesheets"
       config.dartsass.builds = {
-        "application.scss" => "application.css",
-        "active_admin.scss" => "active_admin.css",
+        'application.scss' => 'application.css',
+        'active_admin.scss' => 'active_admin.css',
       }
     end
   end

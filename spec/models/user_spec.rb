@@ -50,27 +50,27 @@ RSpec.describe User, type: :model do
   # Test Devise modules
   describe 'devise modules' do
     it 'includes database_authenticatable' do
-      expect(User.devise_modules).to include(:database_authenticatable)
+      expect(described_class.devise_modules).to include(:database_authenticatable)
     end
 
     it 'includes registerable' do
-      expect(User.devise_modules).to include(:registerable)
+      expect(described_class.devise_modules).to include(:registerable)
     end
 
     it 'includes recoverable' do
-      expect(User.devise_modules).to include(:recoverable)
+      expect(described_class.devise_modules).to include(:recoverable)
     end
 
     it 'includes rememberable' do
-      expect(User.devise_modules).to include(:rememberable)
+      expect(described_class.devise_modules).to include(:rememberable)
     end
 
     it 'includes validatable' do
-      expect(User.devise_modules).to include(:validatable)
+      expect(described_class.devise_modules).to include(:validatable)
     end
 
     it 'includes trackable' do
-      expect(User.devise_modules).to include(:trackable)
+      expect(described_class.devise_modules).to include(:trackable)
     end
   end
 
@@ -78,19 +78,19 @@ RSpec.describe User, type: :model do
   describe 'ransack configuration' do
     describe '.ransackable_associations' do
       it 'returns the allowed associations for search' do
-        expect(User.ransackable_associations).to eq(['payments'])
+        expect(described_class.ransackable_associations).to eq(['payments'])
       end
     end
 
     describe '.ransackable_attributes' do
       it 'returns the allowed attributes for search' do
-        expected_attributes = [
-          'created_at', 'current_sign_in_at', 'current_sign_in_ip', 'email',
-          'encrypted_password', 'id', 'last_sign_in_at', 'last_sign_in_ip',
-          'remember_created_at', 'reset_password_sent_at', 'reset_password_token',
-          'sign_in_count', 'updated_at'
+        expected_attributes = %w[
+          created_at current_sign_in_at current_sign_in_ip email
+          encrypted_password id last_sign_in_at last_sign_in_ip
+          remember_created_at reset_password_sent_at reset_password_token
+          sign_in_count updated_at
         ]
-        expect(User.ransackable_attributes).to match_array(expected_attributes)
+        expect(described_class.ransackable_attributes).to match_array(expected_attributes)
       end
     end
   end
@@ -109,8 +109,7 @@ RSpec.describe User, type: :model do
                user: user_with_zero_balance,
                total_amount: '150000', # $1500 in cents
                program_year: program_setting.program_year,
-               transaction_status: '1'
-              )
+               transaction_status: '1')
         # User with balance - has no payments
       end
 
@@ -139,8 +138,7 @@ RSpec.describe User, type: :model do
                  user: user,
                  total_amount: '50000', # $500 in cents
                  program_year: program_setting.program_year,
-                 transaction_status: '1'
-                )
+                 transaction_status: '1')
         end
 
         it 'returns the remaining balance' do
@@ -154,8 +152,7 @@ RSpec.describe User, type: :model do
                  user: user,
                  total_amount: '102500', # $1025 in cents
                  program_year: program_setting.program_year,
-                 transaction_status: '1'
-                )
+                 transaction_status: '1')
         end
 
         it 'returns zero balance' do
@@ -169,8 +166,7 @@ RSpec.describe User, type: :model do
                  user: user,
                  total_amount: '102500',
                  program_year: program_setting.program_year,
-                 transaction_status: '0' # failed payment
-                )
+                 transaction_status: '0') # failed payment
         end
 
         it 'does not count failed payments' do
@@ -187,16 +183,14 @@ RSpec.describe User, type: :model do
                  user: user,
                  total_amount: '120000',
                  program_year: old_program.program_year,
-                 transaction_status: '1'
-                )
+                 transaction_status: '1')
 
           # Payment from current year
           create(:payment,
                  user: user,
                  total_amount: '50000',
                  program_year: program_setting.program_year,
-                 transaction_status: '1'
-                )
+                 transaction_status: '1')
         end
 
         it 'only counts current program year payments' do
@@ -212,8 +206,7 @@ RSpec.describe User, type: :model do
                  user: user,
                  total_amount: '102500',
                  program_year: program_setting.program_year,
-                 transaction_status: '1'
-                )
+                 transaction_status: '1')
         end
 
         it 'returns true' do
@@ -227,8 +220,7 @@ RSpec.describe User, type: :model do
                  user: user,
                  total_amount: '50000',
                  program_year: program_setting.program_year,
-                 transaction_status: '1'
-                )
+                 transaction_status: '1')
         end
 
         it 'returns false' do
@@ -242,8 +234,7 @@ RSpec.describe User, type: :model do
                  user: user,
                  total_amount: '102499', # $1024.99 in cents
                  program_year: program_setting.program_year,
-                 transaction_status: '1'
-                )
+                 transaction_status: '1')
         end
 
         it 'returns true for small balances' do
@@ -267,7 +258,7 @@ RSpec.describe User, type: :model do
       let(:user) { create(:user) }
 
       it 'handles missing active program gracefully' do
-        expect(user.current_balance_due).to eq(nil)
+        expect(user.current_balance_due).to be_nil
         # This reveals a potential bug in the application - should handle gracefully
       end
     end

@@ -5,22 +5,27 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+if Rails.env.development?
+  AdminUser.create!(email: 'admin@example.com', password: 'password',
+                    password_confirmation: 'password')
+end
 
-ProgramSetting.create!(
-                      program_year: 2024,
-                      active: true,
-                      program_open: Time.now,
-                      program_close: 2.days.from_now,
-                      open_instructions: "Open Instructions",
-                      close_instructions: "Close Instructions",
-                      payment_instructions: "Payment Instructions",
-                       ) if Rails.env.development?
+if Rails.env.development?
+  ProgramSetting.create!(
+    program_year: 2024,
+    active: true,
+    program_open: Time.zone.now,
+    program_close: 2.days.from_now,
+    open_instructions: 'Open Instructions',
+    close_instructions: 'Close Instructions',
+    payment_instructions: 'Payment Instructions'
+  )
+end
 
 StaticPage.create!([
-  { location: "about" },
-  { location: "home" },
-  { location: "privacy" },
-  { location: "terms" },
-  { location: "dashboard" }
-])
+                     { location: 'about' },
+                     { location: 'home' },
+                     { location: 'privacy' },
+                     { location: 'terms' },
+                     { location: 'dashboard' },
+                   ])

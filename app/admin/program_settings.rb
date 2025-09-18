@@ -6,7 +6,8 @@ ActiveAdmin.register ProgramSetting do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :program_year, :application_fee, :program_fee, :active, :program_open, :program_close, :open_instructions, :close_instructions, :payment_instructions, :allow_payments
+  permit_params :program_year, :application_fee, :program_fee, :active, :program_open, :program_close,
+                :open_instructions, :close_instructions, :payment_instructions, :allow_payments
   #
   # or
   #
@@ -15,5 +16,4 @@ ActiveAdmin.register ProgramSetting do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
-  
 end

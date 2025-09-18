@@ -3,7 +3,9 @@ require 'rails_helper'
 RSpec.describe PaymentsController, type: :controller do
   let(:user) { create(:user) }
   let(:admin_user) { create(:admin_user) }
-  let!(:program_setting) { create(:program_setting, :active, program_year: 2024, program_fee: 1000, application_fee: 500) }
+  let!(:program_setting) do
+    create(:program_setting, :active, program_year: 2024, program_fee: 1000, application_fee: 500)
+  end
 
   # Helper method to mock current_program
   before do
@@ -141,7 +143,7 @@ RSpec.describe PaymentsController, type: :controller do
         transactionResultMessage: 'APPROVED',
         orderNumber: 'user-test@example.com',
         timestamp: Time.current.to_i.to_s,
-        hash: 'somehash123'
+        hash: 'somehash123',
       }
     end
 
@@ -190,7 +192,11 @@ RSpec.describe PaymentsController, type: :controller do
     end
 
     context 'with failed payment' do
-      let(:failed_payment_params) { base_payment_params.merge(transactionStatus: '0', transactionResultCode: '1001', transactionResultMessage: 'DECLINED') }
+      let(:failed_payment_params) do
+        base_payment_params.merge(transactionStatus: '0', transactionResultCode: '1001',
+                                  transactionResultMessage: 'DECLINED')
+      end
+
       it 'still creates the payment record' do
         expect { post :payment_receipt, params: failed_payment_params }
           .to change(Payment, :count).by(1)
@@ -207,13 +213,13 @@ RSpec.describe PaymentsController, type: :controller do
       before do
         # Mock credentials
         allow(Rails.application.credentials).to receive(:[]).with(:NELNET_SERVICE).and_return({
-          DEVELOPMENT_KEY: 'dev_key_123',
-          DEVELOPMENT_URL: 'https://test-auth-interstitial.dsc.umich.edu',
-          PRODUCTION_KEY: 'prod_key_456',
-          PRODUCTION_URL: 'https://auth-interstitial.it.umich.edu',
-          ORDERTYPE: 'SALE',
-          SERVICE_SELECTOR: 'QA'
-        })
+                                                                                                DEVELOPMENT_KEY: 'dev_key_123',
+                                                                                                DEVELOPMENT_URL: 'https://test-auth-interstitial.dsc.umich.edu',
+                                                                                                PRODUCTION_KEY: 'prod_key_456',
+                                                                                                PRODUCTION_URL: 'https://auth-interstitial.it.umich.edu',
+                                                                                                ORDERTYPE: 'SALE',
+                                                                                                SERVICE_SELECTOR: 'QA',
+                                                                                              })
       end
 
       context 'in development environment' do
@@ -230,8 +236,8 @@ RSpec.describe PaymentsController, type: :controller do
         it 'includes correct payment parameters' do
           result = controller.send(:generate_hash, user, amount)
           expect(result).to include("amountDue=#{amount * 100}")
-          expect(result).to include("orderType=LSADepartmentofEnglish")
-          expect(result).to include("orderDescription=NELP Application Fees")
+          expect(result).to include('orderType=LSADepartmentofEnglish')
+          expect(result).to include('orderDescription=NELP Application Fees')
         end
 
         it 'includes user account information' do
@@ -250,13 +256,13 @@ RSpec.describe PaymentsController, type: :controller do
         before do
           allow(Rails.env).to receive(:development?).and_return(false)
           allow(Rails.application.credentials).to receive(:[]).with(:NELNET_SERVICE).and_return({
-            DEVELOPMENT_KEY: 'dev_key_123',
-            DEVELOPMENT_URL: 'https://dev.example.com/pay',
-            PRODUCTION_KEY: 'prod_key_456',
-            PRODUCTION_URL: 'https://prod.example.com/pay',
-            ORDERTYPE: 'SALE',
-            SERVICE_SELECTOR: 'PROD'
-          })
+                                                                                                  DEVELOPMENT_KEY: 'dev_key_123',
+                                                                                                  DEVELOPMENT_URL: 'https://dev.example.com/pay',
+                                                                                                  PRODUCTION_KEY: 'prod_key_456',
+                                                                                                  PRODUCTION_URL: 'https://prod.example.com/pay',
+                                                                                                  ORDERTYPE: 'SALE',
+                                                                                                  SERVICE_SELECTOR: 'PROD',
+                                                                                                })
         end
 
         it 'uses production credentials' do
@@ -275,12 +281,12 @@ RSpec.describe PaymentsController, type: :controller do
       context 'with different amounts' do
         it 'handles zero amount' do
           result = controller.send(:generate_hash, user, 0)
-          expect(result).to include("amountDue=0")
+          expect(result).to include('amountDue=0')
         end
 
         it 'handles large amounts' do
-          result = controller.send(:generate_hash, user, 10000)
-          expect(result).to include("amountDue=1000000") # 10000 * 100
+          result = controller.send(:generate_hash, user, 10_000)
+          expect(result).to include('amountDue=1000000') # 10000 * 100
         end
       end
 
@@ -320,7 +326,7 @@ RSpec.describe PaymentsController, type: :controller do
           transactionStatus: '1',
           transactionId: 'TXN123',
           unwanted_param: 'should_be_filtered',
-          authenticity_token: 'csrf_token'
+          authenticity_token: 'csrf_token',
         }
       end
 
@@ -346,7 +352,7 @@ RSpec.describe PaymentsController, type: :controller do
       it 'redirects to root_path with an alert' do
         get :payment_show
         expect(response).to redirect_to(root_path)
-        expect(flash[:alert]).to eq("Program not found. Please contact support.")
+        expect(flash[:alert]).to eq('Program not found. Please contact support.')
       end
     end
 
@@ -363,7 +369,7 @@ RSpec.describe PaymentsController, type: :controller do
         {
           transactionId: 'TXN123',
           transactionTotalAmount: 'invalid_amount',
-          timestamp: 'invalid_timestamp'
+          timestamp: 'invalid_timestamp',
         }
       end
 
@@ -399,7 +405,7 @@ RSpec.describe PaymentsController, type: :controller do
           transactionId: 'TXN789',
           transactionTotalAmount: '150000', # $1500 in cents
           orderNumber: "#{user.email.split('@').first}-#{user.id}",
-          timestamp: Time.current.to_i.to_s
+          timestamp: Time.current.to_i.to_s,
         }
 
         expect do
@@ -424,7 +430,7 @@ RSpec.describe PaymentsController, type: :controller do
         post :payment_receipt, params: {
           transactionId: 'TXN001',
           transactionTotalAmount: '50000', # $500
-          transactionStatus: '1'
+          transactionStatus: '1',
         }
 
         get :payment_show
@@ -434,7 +440,7 @@ RSpec.describe PaymentsController, type: :controller do
         post :payment_receipt, params: {
           transactionId: 'TXN002',
           transactionTotalAmount: '100000', # $1000
-          transactionStatus: '1'
+          transactionStatus: '1',
         }
 
         get :payment_show
