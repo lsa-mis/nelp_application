@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   devise_for :users
   devise_for :admin_users, ActiveAdmin::Devise.config
 
+  # LSA TDX Feedback routes
+  mount LsaTdxFeedback::Engine => '/lsa_tdx_feedback', as: 'lsa_tdx_feedback'
+
   # ActiveAdmin routes
   ActiveAdmin.routes(self)
 
