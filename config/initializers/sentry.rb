@@ -3,19 +3,23 @@
 Sentry.init do |config|
   config.dsn = Rails.application.credentials.dig(:sentry, :dsn)
 
-  # Release tracking with enhanced debugging
+  # Release tracking using Hatchbox's REVISION environment variable
+  revision = ENV['REVISION']
   hatchbox_commit = ENV['HATCHBOX_COMMIT']
   sentry_release = ENV['SENTRY_RELEASE']
   git_commit = `git rev-parse --short HEAD 2>/dev/null`.strip.presence
 
   # Debug logging to understand what values we have
   Rails.logger.info "=== Sentry Release Debug ==="
+  Rails.logger.info "REVISION: #{revision.inspect}"
   Rails.logger.info "HATCHBOX_COMMIT: #{hatchbox_commit.inspect}"
   Rails.logger.info "SENTRY_RELEASE: #{sentry_release.inspect}"
   Rails.logger.info "Git commit: #{git_commit.inspect}"
 
-  # Determine the best release value
-  config.release = if hatchbox_commit.present? && hatchbox_commit != '${HATCHBOX_COMMIT}'
+  # Determine the best release value (REVISION is the Hatchbox standard)
+  config.release = if revision.present?
+                     revision
+                   elsif hatchbox_commit.present? && hatchbox_commit != '${HATCHBOX_COMMIT}'
                      hatchbox_commit
                    elsif sentry_release.present? && sentry_release != '${HATCHBOX_COMMIT}'
                      sentry_release
