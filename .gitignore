@@ -25,8 +25,13 @@
 /public/assets
 .byebug_history
 
-# Ignore master key for decrypting credentials and more.
+# Rails credentials keys (never commit these)
+/config/credentials/*.key
 /config/master.key
+
+# Local backups
+/config/*.backup
+/config/secrets_backup/
 
 /public/packs
 /public/packs-test
