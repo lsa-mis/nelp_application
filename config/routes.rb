@@ -23,9 +23,6 @@ Rails.application.routes.draw do
   get  'make_payment',    to: 'payments#make_payment'
   post 'make_payment',    to: 'payments#make_payment'
 
-  # Test routes (remove after testing)
-  get '/test_sentry', to: 'static_pages#test_sentry' if Rails.env.development? || Rails.env.staging?
-
   # Development-only routes
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 end
