@@ -32,6 +32,16 @@ Sentry.init do |config|
   Rails.logger.info "Final Sentry Release: #{config.release}"
   Rails.logger.info "=== End Sentry Release Debug ==="
 
+  # Send a test event to create the release in Sentry (only in staging/production)
+  if Rails.env.staging? || Rails.env.production?
+    begin
+      Sentry.capture_message("Release #{config.release} deployed", level: :info)
+      Rails.logger.info "Sent test message to Sentry for release: #{config.release}"
+    rescue => e
+      Rails.logger.error "Failed to send test message to Sentry: #{e.message}"
+    end
+  end
+
   config.enabled_environments = %w[production staging]
   config.environment = Rails.env.to_s
 

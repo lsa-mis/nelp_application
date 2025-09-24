@@ -17,4 +17,18 @@ class StaticPagesController < ApplicationController
   def terms
     @terms_message = StaticPage.find_by(location: 'terms').message if StaticPage.find_by(location: 'terms').present?
   end
+
+  # Test endpoint for Sentry release tracking (remove after testing)
+  def test_sentry
+    if Rails.env.development? || Rails.env.staging?
+      Sentry.capture_message("Test message from #{Rails.env} - Release: #{ENV['REVISION'] || 'unknown'}", level: :info)
+      render json: {
+        message: "Test message sent to Sentry",
+        release: ENV['REVISION'] || 'unknown',
+        environment: Rails.env
+      }
+    else
+      render json: { error: "Not available in production" }, status: :forbidden
+    end
+  end
 end
