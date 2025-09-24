@@ -16,6 +16,19 @@ Sentry.init do |config|
   Rails.logger.info "SENTRY_RELEASE: #{sentry_release.inspect}"
   Rails.logger.info "Git commit: #{git_commit.inspect}"
 
+  # Also log to a file for easier debugging
+  begin
+    File.open(Rails.root.join('log', 'sentry_debug.log'), 'a') do |f|
+      f.puts "#{Time.current} - Sentry Release Debug:"
+      f.puts "  REVISION: #{revision.inspect}"
+      f.puts "  HATCHBOX_COMMIT: #{hatchbox_commit.inspect}"
+      f.puts "  SENTRY_RELEASE: #{sentry_release.inspect}"
+      f.puts "  Git commit: #{git_commit.inspect}"
+    end
+  rescue => e
+    Rails.logger.error "Failed to write to sentry_debug.log: #{e.message}"
+  end
+
   # Determine the best release value (REVISION is the Hatchbox standard)
   config.release = if revision.present?
                      revision
