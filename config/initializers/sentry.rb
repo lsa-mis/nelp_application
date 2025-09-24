@@ -142,8 +142,10 @@ Sentry.init do |config|
 
     # Add additional context
     event.tags ||= {}
-    event.tags[:controller] = event.request&.data&.dig(:controller)
-    event.tags[:action] = event.request&.data&.dig(:action)
+    if event.request&.data.is_a?(Hash)
+      event.tags[:controller] = event.request.data[:controller]
+      event.tags[:action] = event.request.data[:action]
+    end
     event.tags[:environment] = Rails.env.to_s
 
     # Remove sensitive headers
