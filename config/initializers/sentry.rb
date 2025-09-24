@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
 Sentry.init do |config|
-  config.dsn = Rails.application.credentials.dig(:sentry, :dsn)
+  # Get Sentry DSN from credentials
+  sentry_credentials = Rails.application.credentials.sentry
+  config.dsn = if sentry_credentials.is_a?(Hash)
+                 sentry_credentials[:dsn]
+               else
+                 sentry_credentials
+               end
 
   # Release tracking using Hatchbox's REVISION environment variable
   revision = ENV['REVISION']

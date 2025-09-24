@@ -34,7 +34,7 @@ class StaticPagesController < ApplicationController
 
       render json: {
         message: "Test message sent to Sentry",
-        sentry_release: Sentry.get_current_scope.release,
+        sentry_release: Sentry.configuration.release,
         environment_variables: env_vars,
         timestamp: Time.current
       }
