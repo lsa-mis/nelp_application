@@ -4,7 +4,8 @@ Sentry.init do |config|
   config.dsn = Rails.application.credentials.dig(:sentry, :dsn)
 
   # Release tracking
-  config.release = ENV['SENTRY_RELEASE'] ||
+  config.release = ENV['HATCHBOX_COMMIT'] ||
+                   ENV['SENTRY_RELEASE'] ||
                    `git rev-parse --short HEAD 2>/dev/null`.strip.presence ||
                    'unknown'
   # Temporary logging to verify (remove after confirmation)
