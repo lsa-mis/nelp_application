@@ -9,11 +9,33 @@ Sentry.init do |config|
                  sentry_credentials
                end
 
-  # Release tracking using Hatchbox's REVISION environment variable
+  # Release tracking - check multiple sources for commit hash
   revision = ENV['REVISION']
   hatchbox_commit = ENV['HATCHBOX_COMMIT']
   sentry_release = ENV['SENTRY_RELEASE']
   git_commit = `git rev-parse --short HEAD 2>/dev/null`.strip.presence
+
+  # Check for other possible Hatchbox environment variables
+  other_env_vars = {
+    'HATCHBOX_REVISION' => ENV['HATCHBOX_REVISION'],
+    'GIT_COMMIT' => ENV['GIT_COMMIT'],
+    'COMMIT_SHA' => ENV['COMMIT_SHA'],
+    'DEPLOY_REVISION' => ENV['DEPLOY_REVISION'],
+    'RELEASE' => ENV['RELEASE']
+  }
+
+  # Try to extract commit from deployment path
+  deployment_path_commit = nil
+  if Rails.root.to_s.include?('/releases/')
+    # Extract from path like /home/deploy/nelp-staging/releases/20250924180023/
+    path_parts = Rails.root.to_s.split('/')
+    if path_parts.include?('releases')
+      release_index = path_parts.index('releases')
+      if release_index && path_parts[release_index + 1]
+        deployment_path_commit = path_parts[release_index + 1]
+      end
+    end
+  end
 
   # Debug logging to understand what values we have
   Rails.logger.info "=== Sentry Release Debug ==="
@@ -21,6 +43,8 @@ Sentry.init do |config|
   Rails.logger.info "HATCHBOX_COMMIT: #{hatchbox_commit.inspect}"
   Rails.logger.info "SENTRY_RELEASE: #{sentry_release.inspect}"
   Rails.logger.info "Git commit: #{git_commit.inspect}"
+  Rails.logger.info "Deployment path commit: #{deployment_path_commit.inspect}"
+  Rails.logger.info "Other env vars: #{other_env_vars.select { |k, v| v.present? }}"
 
   # Also log to a file for easier debugging
   begin
@@ -30,18 +54,25 @@ Sentry.init do |config|
       f.puts "  HATCHBOX_COMMIT: #{hatchbox_commit.inspect}"
       f.puts "  SENTRY_RELEASE: #{sentry_release.inspect}"
       f.puts "  Git commit: #{git_commit.inspect}"
+      f.puts "  Deployment path commit: #{deployment_path_commit.inspect}"
+      f.puts "  Other env vars: #{other_env_vars.select { |k, v| v.present? }}"
+      f.puts "  Rails.root: #{Rails.root}"
     end
   rescue => e
     Rails.logger.error "Failed to write to sentry_debug.log: #{e.message}"
   end
 
-  # Determine the best release value (REVISION is the Hatchbox standard)
+  # Determine the best release value
   config.release = if revision.present?
                      revision
                    elsif hatchbox_commit.present? && hatchbox_commit != '${HATCHBOX_COMMIT}'
                      hatchbox_commit
                    elsif sentry_release.present? && sentry_release != '${HATCHBOX_COMMIT}'
                      sentry_release
+                   elsif other_env_vars.values.any?(&:present?)
+                     other_env_vars.values.find(&:present?)
+                   elsif deployment_path_commit.present?
+                     deployment_path_commit
                    elsif git_commit.present?
                      git_commit
                    else
