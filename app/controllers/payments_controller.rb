@@ -49,7 +49,8 @@ class PaymentsController < ApplicationController
   def generate_hash(current_user, amount = current_program.application_fee.to_i)
     user_account = "#{current_user.email.partition('@').first}-#{current_user.id}"
     amount_to_be_payed = amount.to_i
-    if Rails.env.development? || Rails.env.staging? || Rails.application.credentials.NELNET_SERVICE[:SERVICE_SELECTOR] == 'QA'
+    if Rails.env.development? || Rails.env.staging? ||
+       Rails.application.credentials.NELNET_SERVICE[:SERVICE_SELECTOR] == 'QA'
       key_to_use = 'test_key'
       url_to_use = 'test_URL'
     else
@@ -66,15 +67,18 @@ class PaymentsController < ApplicationController
     redirect_url = connection_hash[url_to_use]
     current_epoch_time = DateTime.now.strftime('%Q').to_i
     initial_hash = {
-      'orderNumber' => user_account,
-      'orderType' => Rails.application.credentials.NELNET_SERVICE[:ORDERTYPE],
-      'orderDescription' => 'NELP Application Fees',
-      'amountDue' => amount_to_be_payed * 100,
-      'redirectUrl' => redirect_url,
-      'redirectUrlParameters' => 'transactionType,transactionStatus,transactionId,transactionTotalAmount,transactionDate,transactionAcountType,transactionResultCode,transactionResultMessage,orderNumber',
-      'retriesAllowed' => 1,
-      'timestamp' => current_epoch_time,
-      'key' => connection_hash[key_to_use],
+      orderNumber: user_account,
+      orderType: Rails.application.credentials.NELNET_SERVICE[:ORDERTYPE],
+      orderDescription: 'NELP Application Fees',
+      amountDue: amount_to_be_payed * 100,
+      redirectUrl: redirect_url,
+      redirectUrlParameters: 'transactionType,transactionStatus,transactionId,' \
+                             'transactionTotalAmount,transactionDate,' \
+                             'transactionAcountType, transactionResultCode,' \
+                             'transactionResultMessage,orderNumber',
+      retriesAllowed: 1,
+      timestamp: current_epoch_time,
+      key: connection_hash[key_to_use],
     }
 
     # Sample Hash Creation
@@ -87,8 +91,10 @@ class PaymentsController < ApplicationController
   end
 
   def url_params
-    params.permit(:amount, :transactionType, :transactionStatus, :transactionId, :transactionTotalAmount,
-                  :transactionDate, :transactionAcountType, :transactionResultCode, :transactionResultMessage, :orderNumber, :timestamp, :hash, :program_year)
+    params.permit(:amount, :transactionType, :transactionStatus, :transactionId,
+                  :transactionTotalAmount, :transactionDate, :transactionAcountType,
+                  :transactionResultCode, :transactionResultMessage, :orderNumber,
+                  :timestamp, :hash, :program_year)
   end
 
   def ensure_current_program
