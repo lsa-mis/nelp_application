@@ -1,0 +1,12 @@
+<% if current_active_admin_user? %>
+  <li class="current_user" id="current_user">
+    <span class="current_user"><%= current_active_admin_user.email %></span>
+  </li>
+  <li class="current_user">
+    <%= link_to "Logout", destroy_admin_user_session_path, method: :delete %>
+  </li>
+<% else %>
+  <li class="current_user">
+    <%= link_to "Login", new_admin_user_session_path %>
+  </li>
+<% end %>
