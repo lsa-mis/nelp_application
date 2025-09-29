@@ -357,7 +357,9 @@ ActiveAdmin.setup do |config|
   # method. It accepts a path to a file and optional media and screen defined in the options hash.
   #
   #  config.register_stylesheet 'my_stylesheet.css', media: :screen
-  config.register_stylesheet 'active_admin.css'
+  # Custom Active Admin stylesheet is handled by dartsass and asset pipeline
+  # The stylesheet is included in the custom layout at app/views/active_admin/base.html.erb
+  # config.register_stylesheet 'active_admin.css'
 
   #
   # ## Custom javascripts
