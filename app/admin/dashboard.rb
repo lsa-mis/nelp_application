@@ -125,6 +125,10 @@ ActiveAdmin.register_page 'Dashboard' do
       end
     end
 
+    # Hard line separator
+      div style: 'width: 100%; height: 4px; background-color: #2d3748; margin: 2rem 0; border: none;' do
+        text_node ''
+      end
     # Static page message
     text_node StaticPage.find_by(location: 'dashboard').message if StaticPage.find_by(location: 'dashboard').present?
   end
