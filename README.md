@@ -1,7 +1,8 @@
 # NELP Application
 
 A Rails-based payment management system for the NELP (New England Literature Program) application process. This application handles user registration, payment processing, and administrative management for program fees and application costs.
-[More info...](https://lsa.umich.edu/nelp)
+
+> [More info...](https://lsa.umich.edu/nelp)
 
 ## 🚀 Features
 
