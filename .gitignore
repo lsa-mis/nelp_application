@@ -54,3 +54,5 @@ coverage/
 /config/credentials/staging.key
 
 /config/credentials/production.key
+
+/config/credentials/test.key
