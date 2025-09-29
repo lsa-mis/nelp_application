@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="<%=I18n.locale%>">
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+  <title><%= [@page_title, ActiveAdmin.application.site_title(self)].compact.join(" | ") %></title>
+
+  <% ActiveAdmin.application.stylesheets.each do |style, options| %>
+    <% if ActiveAdmin.application.use_webpacker %>
+      <%= stylesheet_pack_tag style, **options %>
+    <% else %>
+      <%= stylesheet_link_tag style, **options %>
+    <% end %>
+  <% end %>
+
+  <!-- Include our custom Active Admin stylesheet compiled by dartsass -->
+  <%= stylesheet_link_tag "active_admin", "data-turbo-track": "reload" %>
+
+  <% ActiveAdmin.application.javascripts.each do |path, options| %>
+    <% if ActiveAdmin.application.use_webpacker %>
+      <%= javascript_pack_tag path, **options %>
+    <% else %>
+      <%= javascript_include_tag path, **options %>
+    <% end %>
+  <% end %>
+
+  <%= favicon_link_tag ActiveAdmin.application.favicon if ActiveAdmin.application.favicon %>
+
+  <% ActiveAdmin.application.meta_tags.each do |name, content| %>
+    <%= tag(:meta, name: name, content: content) %>
+  <% end %>
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= content_for(:head) %>
+</head>
+<body class="active_admin logged_in <%= controller.action_name %>">
+<div id="wrapper">
+
+  <div id="header">
+    <h1 class="site_title">
+      <%= link_to ActiveAdmin.application.site_title(self), active_admin_root_path %>
+    </h1>
+    <ul class="header-item tabs" id="tabs">
+      <%= render partial: 'active_admin/shared/header_utility_nav' %>
+    </ul>
+  </div>
+
+  <div id="title_bar">
+    <h2 id="page_title"><%= @page_title %></h2>
+    <div id="titlebar_right">
+      <%= yield :titlebar_right %>
+    </div>
+  </div>
+
+  <div class="flashes">
+    <% flash_messages.each do |type, message| %>
+      <%= content_tag :div, message, class: "flash flash_#{type}" %>
+    <% end %>
+  </div>
+
+  <div id="active_admin_content">
+    <%= yield %>
+  </div>
+
+  <div id="footer">
+    <%= yield :footer %>
+  </div>
+</div>
+</body>
+</html>
