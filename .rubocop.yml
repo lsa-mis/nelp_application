@@ -49,6 +49,11 @@ Rails/HelperInstanceVariable:
 
 Rails/UnknownEnv:
   Enabled: true
+  Environments:
+    - development
+    - test
+    - production
+    - staging
 
 Rails/UnusedIgnoredColumns:
   Enabled: true
