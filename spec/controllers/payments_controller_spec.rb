@@ -217,7 +217,7 @@ RSpec.describe PaymentsController, type: :controller do
                                                                                                 DEVELOPMENT_URL: 'https://test-auth-interstitial.dsc.umich.edu',
                                                                                                 PRODUCTION_KEY: 'prod_key_456',
                                                                                                 PRODUCTION_URL: 'https://auth-interstitial.it.umich.edu',
-                                                                                                ORDERTYPE: 'SALE',
+                                                                                                ORDERTYPE: 'LSADepartmentofEnglish',
                                                                                                 SERVICE_SELECTOR: 'QA',
                                                                                               })
       end
@@ -259,7 +259,7 @@ RSpec.describe PaymentsController, type: :controller do
                                                                                                   DEVELOPMENT_KEY: 'dev_key_123',
                                                                                                   DEVELOPMENT_URL: 'https://dev.example.com/pay',
                                                                                                   PRODUCTION_KEY: 'prod_key_456',
-                                                                                                  PRODUCTION_URL: 'https://prod.example.com/pay',
+                                                                                                  PRODUCTION_URL: 'https://auth-interstitial.it.umich.edu',
                                                                                                   ORDERTYPE: 'SALE',
                                                                                                   SERVICE_SELECTOR: 'PROD',
                                                                                                 })
