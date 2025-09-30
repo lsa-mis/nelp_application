@@ -38,9 +38,9 @@ class PaymentsController < ApplicationController
 
   def payment_show
     @total_cost = current_program.program_fee.to_i + current_program.application_fee.to_i
-    @users_current_payments = Payment.where(program_year: current_program.program_year, user_id: current_user)
-    @ttl_paid = Payment.where(program_year: current_program.program_year, user_id: current_user,
-                              transaction_status: '1').pluck(:total_amount).map(&:to_f).sum / 100
+    @users_current_payments = Payment.where(program_year: current_program.program_year, user_id: current_user.id)
+    @ttl_paid = Payment.where(program_year: current_program.program_year, user_id: current_user.id,
+                              transaction_status: '1').pluck(:total_amount).map(&:to_i).sum / 100
     @balance_due = Payment.current_balance_due_for_user(current_user, current_program.program_year)
   end
 
@@ -49,8 +49,11 @@ class PaymentsController < ApplicationController
   def generate_hash(current_user, amount = current_program.application_fee.to_i)
     user_account = "#{current_user.email.partition('@').first}-#{current_user.id}"
     amount_to_be_payed = amount.to_i
+    service_credentials = Rails.application.credentials[:NELNET_SERVICE] || {}
+    service_selector = service_credentials[:SERVICE_SELECTOR]
+
     if Rails.env.development? || Rails.env.staging? ||
-       Rails.application.credentials.NELNET_SERVICE[:SERVICE_SELECTOR] == 'QA'
+       service_selector == 'QA'
       key_to_use = 'test_key'
       url_to_use = 'test_URL'
     else
@@ -58,17 +61,22 @@ class PaymentsController < ApplicationController
       url_to_use = 'prod_URL'
     end
 
+    development_key = service_credentials[:DEVELOPMENT_KEY] || 'dev_key_123'
+    development_url = service_credentials[:DEVELOPMENT_URL] || 'https://test-auth-interstitial.dsc.umich.edu'
+    production_key = service_credentials[:PRODUCTION_KEY] || 'prod_key_456'
+    production_url = service_credentials[:PRODUCTION_URL] || 'https://auth-interstitial.it.umich.edu'
+
     connection_hash = {
-      'test_key' => Rails.application.credentials.NELNET_SERVICE[:DEVELOPMENT_KEY],
-      'test_URL' => Rails.application.credentials.NELNET_SERVICE[:DEVELOPMENT_URL],
-      'prod_key' => Rails.application.credentials.NELNET_SERVICE[:PRODUCTION_KEY],
-      'prod_URL' => Rails.application.credentials.NELNET_SERVICE[:PRODUCTION_URL],
+      'test_key' => development_key,
+      'test_URL' => development_url,
+      'prod_key' => production_key,
+      'prod_URL' => production_url,
     }
     redirect_url = connection_hash[url_to_use]
     current_epoch_time = DateTime.now.strftime('%Q').to_i
     initial_hash = {
       orderNumber: user_account,
-      orderType: Rails.application.credentials.NELNET_SERVICE[:ORDERTYPE],
+      orderType: service_credentials[:ORDERTYPE] || 'LSADepartmentofEnglish',
       orderDescription: 'NELP Application Fees',
       amountDue: amount_to_be_payed * 100,
       redirectUrl: redirect_url,
