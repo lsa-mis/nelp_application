@@ -1,29 +1,12 @@
-# PostgreSQL. Versions 9.3 and up are supported.
-#
-# Install the pg driver:
-#   gem install pg
-# On macOS with Homebrew:
-#   gem install pg -- --with-pg-config=/usr/local/bin/pg_config
-# On macOS with MacPorts:
-#   gem install pg -- --with-pg-config=/opt/local/lib/postgresql84/bin/pg_config
-# On Windows:
-#   gem install pg
-#       Choose the win32 build.
-#       Install PostgreSQL and put its /bin directory on your path.
-#
-# Configure Using Gemfile
-# gem 'pg'
-#
 default: &default
-  adapter: postgresql
-  encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  timeout: 5000
 
 
 development:
   <<: *default
-  database: nelp_application_development
+  database: db/development.sqlite3
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -57,15 +40,12 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: nelp_application_test
+  database: db/test.sqlite3
 
 # Staging environment configuration
 staging:
   <<: *default
-  database: nelp_application_staging
-  username: <%= Rails.application.credentials.dig(:staging, :database_username) || ENV['DATABASE_USERNAME'] %>
-  password: <%= Rails.application.credentials.dig(:staging, :database_password) || ENV['DATABASE_PASSWORD'] %>
-  host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
+  database: db/staging.sqlite3
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -89,6 +69,4 @@ staging:
 #
 production:
   <<: *default
-  database: nelp_application_production
-  username: <%= Rails.application.credentials.PRODUCTION_DB_USERNAME %>
-  password: <%= Rails.application.credentials.PRODUCTION_DB_PASSWORD %>
+  database: db/production.sqlite3

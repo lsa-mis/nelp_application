@@ -12,7 +12,7 @@ ActiveAdmin.register_page 'Dashboard' do
                           .where(transaction_status: '1') # Only successful payments
                           .joins(:user)
                           .group('users.id', 'users.email')
-                          .sum('payments.total_amount::float / 100')
+                          .sum('CAST(payments.total_amount AS REAL) / 100')
                           .sort_by { |_, amount| -amount } # Sort by amount descending
 
       div class: 'dashboard_section' do

@@ -71,7 +71,7 @@ class Payment < ApplicationRecord
     User.joins(:payments)
         .where(payments: { program_year: program.program_year, transaction_status: '1' })
         .group('users.id')
-        .having('SUM(payments.total_amount::float / 100) >= ?', program.total_cost)
+        .having('SUM(CAST(payments.total_amount AS REAL) / 100) >= ?', program.total_cost)
   end
 
   def self.current_program_payments(program_year = ProgramSetting.active_program.last&.program_year)

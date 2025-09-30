@@ -4,6 +4,12 @@ namespace :db do
   desc 'Check and verify PostgreSQL sequences for integer primary keys'
 
   task check_sequences: :environment do
+    adapter = ActiveRecord::Base.connection.adapter_name.downcase
+    unless adapter.include?('postgres')
+      puts 'Skipping sequence check: not using PostgreSQL adapter.'
+      next
+    end
+
     ActiveRecord::Base.connection.tables.each do |table|
       primary_key = ActiveRecord::Base.connection.primary_key(table)
       next unless primary_key
