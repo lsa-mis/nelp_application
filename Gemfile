@@ -27,9 +27,6 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 
 group :development do
   gem 'annotate'
-  gem 'capistrano', '~> 3.17', require: false
-  gem 'capistrano-asdf', require: false
-  gem 'capistrano-rails', '~> 1.6', '>= 1.6.1', require: false
   gem 'listen', '~> 3.3'
   gem 'pry-byebug'
   gem 'pry-rails'
