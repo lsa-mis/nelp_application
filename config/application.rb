@@ -22,9 +22,11 @@ module NelpApplication
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
-    # config.dartsass.builds = {
-    #   "application.scss" => "application.css",
-    # }
+    # Configure dartsass-rails to build CSS files
+    config.dartsass.builds = {
+      "application.scss" => "application.css",
+      "active_admin.scss" => "active_admin.css"
+    }
     config.dartsass.build_options << " --load-path=#{Gem.loaded_specs['activeadmin'].full_gem_path}/app/assets/stylesheets"
     config.dartsass.source_dir = 'app/assets/stylesheets'
     # Please, add to the `ignore` list any other `lib` subdirectories that do
@@ -48,10 +50,6 @@ module NelpApplication
     # Add trix to dartsass load paths
     if defined?(DartSass)
       config.dartsass.load_paths << "#{Gem.loaded_specs['trix'].full_gem_path}/app/assets/stylesheets"
-      config.dartsass.builds = {
-        'application.scss' => 'application.css',
-        'active_admin.scss' => 'active_admin.css',
-      }
     end
   end
 end
