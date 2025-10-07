@@ -29,6 +29,10 @@ module NelpApplication
     }
     config.dartsass.build_options << " --load-path=#{Gem.loaded_specs['activeadmin'].full_gem_path}/app/assets/stylesheets"
     config.dartsass.source_dir = 'app/assets/stylesheets'
+
+    # Add builds directory to asset paths so Sprockets can find compiled CSS
+    config.assets.paths << Rails.root.join('app/assets/builds')
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
