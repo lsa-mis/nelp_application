@@ -1,5 +1,5 @@
 //= link_tree ../images
-//= link application.css
-//= link active_admin.css
+// Ensure we serve the CSS compiled by dartsass in app/assets/builds
+//= link_tree ../builds
 //= link application.js
 //= link_tree ../../javascript/controllers .js
