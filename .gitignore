@@ -46,8 +46,8 @@ tags
 /working_documents/*
 coverage/
 
-/app/assets/builds/*
-!/app/assets/builds/.keep
+# /app/assets/builds/*
+# !/app/assets/builds/.keep
 
 /config/credentials/development.key
 
