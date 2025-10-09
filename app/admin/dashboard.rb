@@ -7,9 +7,11 @@ ActiveAdmin.register_page 'Dashboard' do
     if ProgramSetting.active_program.exists?
       active_program = ProgramSetting.active_program.last
 
-      # Get sort parameters
+      # Get sort and pagination parameters
       sort_column = params[:sort_column] || 'total_paid'
       sort_order = params[:sort_order] || 'desc'
+      page = (params[:page] || 1).to_i
+      per_page = 20
 
       # User Payment Totals Section
       user_totals = Payment.current_program_payments(active_program.program_year)
@@ -45,6 +47,14 @@ ActiveAdmin.register_page 'Dashboard' do
       # Reverse if descending
       user_data_with_balance.reverse! if sort_order == 'desc'
 
+      # Pagination
+      total_users = user_data_with_balance.count
+      total_pages = (total_users.to_f / per_page).ceil
+      page = [[page, 1].max, total_pages].min if total_pages > 0 # Ensure page is within valid range
+      start_index = (page - 1) * per_page
+      end_index = start_index + per_page - 1
+      paginated_data = user_data_with_balance[start_index..end_index] || []
+
       div class: 'dashboard_section' do
         h2 "User Payment Totals - Program Year #{active_program.program_year}"
 
@@ -54,7 +64,7 @@ ActiveAdmin.register_page 'Dashboard' do
               tr do
                 th do
                   next_order = (sort_column == 'user' && sort_order == 'asc') ? 'desc' : 'asc'
-                  a href: admin_dashboard_path(sort_column: 'user', sort_order: next_order), title: 'Click to sort' do
+                  a href: admin_dashboard_path(sort_column: 'user', sort_order: next_order, page: page), title: 'Click to sort' do
                     text_node 'User '
                     span class: 'sort_indicator' do
                       if sort_column == 'user'
@@ -69,7 +79,7 @@ ActiveAdmin.register_page 'Dashboard' do
                 th 'Program Cost'
                 th do
                   next_order = (sort_column == 'balance_due' && sort_order == 'asc') ? 'desc' : 'asc'
-                  a href: admin_dashboard_path(sort_column: 'balance_due', sort_order: next_order), title: 'Click to sort' do
+                  a href: admin_dashboard_path(sort_column: 'balance_due', sort_order: next_order, page: page), title: 'Click to sort' do
                     text_node 'Balance Due '
                     span class: 'sort_indicator' do
                       if sort_column == 'balance_due'
@@ -84,7 +94,7 @@ ActiveAdmin.register_page 'Dashboard' do
               end
             end
             tbody do
-              user_data_with_balance.each do |data|
+              paginated_data.each do |data|
                 status = data[:balance_due].to_i.zero? ? 'Paid in Full' : 'Outstanding Balance'
                 status_class = data[:balance_due].to_i.zero? ? 'paid_full' : 'outstanding'
 
@@ -100,20 +110,69 @@ ActiveAdmin.register_page 'Dashboard' do
           end
 
           div class: 'pagination_info' do
-            total_users = user_data_with_balance.count
             paid_in_full = user_data_with_balance.count { |data| data[:balance_due].to_i.zero? }
-            text_node "Total Users: #{total_users} | Paid in Full: #{paid_in_full} | Outstanding: #{total_users - paid_in_full}"
+            showing_start = total_users.zero? ? 0 : start_index + 1
+            showing_end = [end_index + 1, total_users].min
+            text_node "Displaying users #{showing_start} - #{showing_end} of #{total_users} | "
+            text_node "Paid in Full: #{paid_in_full} | Outstanding: #{total_users - paid_in_full}"
+          end
+
+          # Pagination controls
+          if total_pages > 1
+            div class: 'pagination', style: 'text-align: center; margin: 20px 0;' do
+              # Previous button
+              if page > 1
+                a href: admin_dashboard_path(sort_column: sort_column, sort_order: sort_order, page: page - 1),
+                  class: 'pagination_link',
+                  style: 'padding: 5px 10px; margin: 0 2px; text-decoration: none;' do
+                  text_node '« Previous'
+                end
+              else
+                span style: 'padding: 5px 10px; margin: 0 2px; color: #ccc;' do
+                  text_node '« Previous'
+                end
+              end
+
+              # Page numbers
+              (1..total_pages).each do |p|
+                if p == page
+                  span class: 'current',
+                       style: 'padding: 5px 10px; margin: 0 2px; background-color: #5E6469; color: white; border-radius: 3px;' do
+                    text_node p.to_s
+                  end
+                else
+                  a href: admin_dashboard_path(sort_column: sort_column, sort_order: sort_order, page: p),
+                    class: 'pagination_link',
+                    style: 'padding: 5px 10px; margin: 0 2px; text-decoration: none;' do
+                    text_node p.to_s
+                  end
+                end
+              end
+
+              # Next button
+              if page < total_pages
+                a href: admin_dashboard_path(sort_column: sort_column, sort_order: sort_order, page: page + 1),
+                  class: 'pagination_link',
+                  style: 'padding: 5px 10px; margin: 0 2px; text-decoration: none;' do
+                  text_node 'Next »'
+                end
+              else
+                span style: 'padding: 5px 10px; margin: 0 2px; color: #ccc;' do
+                  text_node 'Next »'
+                end
+              end
+            end
+          end
+
+          # Section separator with subtle styling
+          div style: 'width: 100%; height: 1px; background-color: #e2e8f0; margin: 3rem 0 2rem 0; border-radius: 1px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);' do
+            text_node ''
           end
         else
           div class: 'blank_slate' do
             text_node 'No successful payments found for the active program.'
           end
         end
-      end
-
-      # Hard line separator
-      div style: 'width: 100%; height: 4px; background-color: #2d3748; margin: 2rem 0; border: none;' do
-        text_node ''
       end
 
       # Recent Payments Section
@@ -156,7 +215,7 @@ ActiveAdmin.register_page 'Dashboard' do
           end
 
           div class: 'pagination_info' do
-            text_node "Showing #{recent_payments.count} of #{Payment.current_program_payments(active_program.program_year).count} payments"
+            text_node "Showing last #{recent_payments.count} of #{Payment.current_program_payments(active_program.program_year).count} payments"
           end
         else
           div class: 'blank_slate' do
@@ -172,10 +231,6 @@ ActiveAdmin.register_page 'Dashboard' do
       end
     end
 
-    # Hard line separator
-      div style: 'width: 100%; height: 4px; background-color: #2d3748; margin: 2rem 0; border: none;' do
-        text_node ''
-      end
     # Static page message
     text_node StaticPage.find_by(location: 'dashboard').message if StaticPage.find_by(location: 'dashboard').present?
   end
