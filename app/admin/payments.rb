@@ -18,7 +18,13 @@ ActiveAdmin.register Payment do
   # end
   actions :index, :show, :new, :create, :update, :edit
 
-  filter :user_id, as: :select, collection: -> { User.all.map { |u| [u.email, u.id] } }
+  controller do
+    def scoped_collection
+      super.includes(:user)
+    end
+  end
+
+  filter :user_id, as: :select, collection: -> { User.order(:email).map { |u| [u.email, u.id] } }
   filter :program_year, as: :select
   filter :account_type, as: :select
   filter :created_at
@@ -46,7 +52,7 @@ ActiveAdmin.register Payment do
   end
 
   index do
-    column :user
+    column :user, sortable: 'users.email'
     column 'Type', &:transaction_type
     column 'Status', &:transaction_status
     column :transaction_id
