@@ -203,7 +203,10 @@ ActiveAdmin.register_page 'Dashboard' do
             tbody do
               recent_payments.each do |payment|
                 tr do
-                  td payment.user.email
+                  td do
+                    link_to payment.user.email, admin_payments_path('q[user_id_eq]' => payment.user_id),
+                            title: "View all payments for #{payment.user.email}"
+                  end
                   td payment.transaction_id
                   td number_to_currency(payment.total_amount.to_f / 100)
                   td payment.transaction_status == '1' ? 'Success' : 'Failed'
@@ -218,7 +221,7 @@ ActiveAdmin.register_page 'Dashboard' do
           end
 
           div class: 'pagination_info' do
-            text_node "Showing last #{recent_payments.count} of #{Payment.current_program_payments(active_program.program_year).count} payments"
+            text_node "Showing most recent #{recent_payments.count} payments"
           end
         else
           div class: 'blank_slate' do
