@@ -99,7 +99,10 @@ ActiveAdmin.register_page 'Dashboard' do
                 status_class = data[:balance_due].to_i.zero? ? 'paid_full' : 'outstanding'
 
                 tr class: status_class do
-                  td data[:user_email]
+                  td do
+                    link_to data[:user_email], admin_payments_path('q[user_id_eq]' => data[:user_id]),
+                            title: "View all payments for #{data[:user_email]}"
+                  end
                   td number_to_currency(data[:total_paid])
                   td number_to_currency(active_program.total_cost)
                   td number_to_currency(data[:balance_due])
