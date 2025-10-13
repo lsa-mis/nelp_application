@@ -1,6 +1,6 @@
 <%= @home_message %>
 
-  <h2 class="p-2 bg-yellow-50 shadow-md">
+  <h4>
     <% if current_program %>
       <% if current_program_open? %>
         <%= simple_format(current_program.open_instructions) %>
@@ -10,4 +10,4 @@
     <% else %>
       There are no active programs
     <% end %>
-  </h2>
+  </h4>
