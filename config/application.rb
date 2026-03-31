@@ -1,4 +1,5 @@
 require_relative 'boot'
+require_relative '../lib/header_encoding_sanitizer_middleware'
 
 require 'rails'
 # Pick the frameworks you want:
@@ -55,5 +56,8 @@ module NelpApplication
     if defined?(DartSass)
       config.dartsass.load_paths << "#{Gem.loaded_specs['trix'].full_gem_path}/app/assets/stylesheets"
     end
+
+    # Normalize malformed request header encodings before they reach app code.
+    config.middleware.use HeaderEncodingSanitizerMiddleware
   end
 end

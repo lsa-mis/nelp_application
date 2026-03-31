@@ -8,4 +8,12 @@ module ApplicationHelper
       "#{page_title} | #{base_title}"
     end
   end
+
+  def sentry_trace_propagation_meta
+    return ''.html_safe unless defined?(Sentry)
+
+    Sentry.get_trace_propagation_meta.html_safe
+  rescue Encoding::CompatibilityError, ArgumentError
+    ''.html_safe
+  end
 end
