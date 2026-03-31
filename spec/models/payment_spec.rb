@@ -110,6 +110,16 @@ RSpec.describe Payment, type: :model do
 
   # Test scopes
   describe 'scopes' do
+    describe '.for_program_year' do
+      let!(:payment_2024) { create(:payment, program_year: 2024) }
+      let!(:payment_2025) { create(:payment, program_year: 2025) }
+
+      it 'returns payments for the specified program year' do
+        expect(described_class.for_program_year(2024)).to contain_exactly(payment_2024)
+        expect(described_class.for_program_year(2025)).to contain_exactly(payment_2025)
+      end
+    end
+
     describe '.current_program_payments' do
       let!(:current_program) { create(:program_setting, :active, program_year: 2024) }
       let!(:old_program) { create(:program_setting, program_year: 2023) }

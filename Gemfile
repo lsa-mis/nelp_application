@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.4.4'
-gem 'rails', '~> 7.2.2', '>= 7.2.2.1'
+ruby '3.4.9'
+gem 'rails', '~> 7.2.3', '>= 7.2.3'
 
 gem 'activeadmin'
 gem 'base64'
@@ -13,7 +13,7 @@ gem 'devise'
 gem 'drb'
 gem 'importmap-rails'
 gem 'jbuilder', '~> 2.7'
-gem 'lsa_tdx_feedback', '~> 1.0.1'
+gem 'lsa_tdx_feedback', '~> 1.0', '>= 1.0.4'
 gem 'pg'
 gem 'puma', '~> 6.0'
 gem 'sd_notify'
