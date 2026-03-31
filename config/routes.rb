@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   root to: 'static_pages#home'
 
   # Devise routes
-  devise_for :users
+  devise_for :users, controllers: { sessions: 'users/sessions' }
   devise_for :admin_users, ActiveAdmin::Devise.config
 
   # LSA TDX Feedback routes
