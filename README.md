@@ -94,15 +94,19 @@ The application will be available at `http://localhost:3000`
 Configure your Nelnet payment gateway credentials in Rails credentials:
 
 ```ruby
-# config/credentials.yml.enc
+# config/credentials/<environment>.yml.enc
 NELNET_SERVICE:
   DEVELOPMENT_KEY: your_dev_key
-  DEVELOPMENT_URL: your_dev_url
+  DEVELOPMENT_URL: https://auth-interstitial-qa-authorize.auth.it.umich.edu/nelnetApi/payment/
+  DEVELOPMENT_REDIRECT_URL: https://auth-interstitial-qa-authorize.auth.it.umich.edu/nelnetApi/redirect/
   PRODUCTION_KEY: your_prod_key
-  PRODUCTION_URL: your_prod_url
+  PRODUCTION_URL: https://auth-interstitial-authorize.auth.it.umich.edu/nelnetApi/payment/
+  PRODUCTION_REDIRECT_URL: https://auth-interstitial-authorize.auth.it.umich.edu/nelnetApi/redirect/
   ORDERTYPE: your_order_type
   SERVICE_SELECTOR: QA # or PROD
 ```
+
+Development and staging use the QA payment/redirect URLs. Production uses the production URLs.
 
 ### Admin Access
 
