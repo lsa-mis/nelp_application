@@ -214,9 +214,11 @@ RSpec.describe PaymentsController, type: :controller do
         # Mock credentials
         allow(Rails.application.credentials).to receive(:[]).with(:NELNET_SERVICE).and_return({
                                                                                                 DEVELOPMENT_KEY: 'dev_key_123',
-                                                                                                DEVELOPMENT_URL: 'https://test-auth-interstitial.dsc.umich.edu',
+                                                                                                DEVELOPMENT_URL: 'https://auth-interstitial-qa-authorize.auth.it.umich.edu/nelnetApi/payment/',
+                                                                                                DEVELOPMENT_REDIRECT_URL: 'https://auth-interstitial-qa-authorize.auth.it.umich.edu/nelnetApi/redirect/',
                                                                                                 PRODUCTION_KEY: 'prod_key_456',
-                                                                                                PRODUCTION_URL: 'https://auth-interstitial.it.umich.edu',
+                                                                                                PRODUCTION_URL: 'https://auth-interstitial-authorize.auth.it.umich.edu/nelnetApi/payment/',
+                                                                                                PRODUCTION_REDIRECT_URL: 'https://auth-interstitial-authorize.auth.it.umich.edu/nelnetApi/redirect/',
                                                                                                 ORDERTYPE: 'LSADepartmentofEnglish',
                                                                                                 SERVICE_SELECTOR: 'QA',
                                                                                               })
@@ -229,8 +231,13 @@ RSpec.describe PaymentsController, type: :controller do
 
         it 'uses development credentials' do
           result = controller.send(:generate_hash, user, amount)
-          expect(result).to include('https://test-auth-interstitial.dsc.umich.edu')
+          expect(result).to start_with('https://auth-interstitial-qa-authorize.auth.it.umich.edu/nelnetApi/payment/')
           expect(result).to include('hash=')
+        end
+
+        it 'uses the QA redirect URL in order parameters' do
+          result = controller.send(:generate_hash, user, amount)
+          expect(result).to include('redirectUrl=https://auth-interstitial-qa-authorize.auth.it.umich.edu/nelnetApi/redirect/')
         end
 
         it 'includes correct payment parameters' do
@@ -250,6 +257,12 @@ RSpec.describe PaymentsController, type: :controller do
           result = controller.send(:generate_hash, user, amount)
           expect(result).to match(/hash=[a-f0-9]{64}$/) # SHA256 produces 64-char hex string
         end
+
+        it 'does not include the secret key in the payment URL' do
+          result = controller.send(:generate_hash, user, amount)
+          expect(result).not_to include('key=')
+          expect(result).not_to include('dev_key_123')
+        end
       end
 
       context 'in production environment' do
@@ -258,8 +271,10 @@ RSpec.describe PaymentsController, type: :controller do
           allow(Rails.application.credentials).to receive(:[]).with(:NELNET_SERVICE).and_return({
                                                                                                   DEVELOPMENT_KEY: 'dev_key_123',
                                                                                                   DEVELOPMENT_URL: 'https://dev.example.com/pay',
+                                                                                                  DEVELOPMENT_REDIRECT_URL: 'https://dev.example.com/redirect',
                                                                                                   PRODUCTION_KEY: 'prod_key_456',
-                                                                                                  PRODUCTION_URL: 'https://auth-interstitial.it.umich.edu',
+                                                                                                  PRODUCTION_URL: 'https://auth-interstitial-authorize.auth.it.umich.edu/nelnetApi/payment/',
+                                                                                                  PRODUCTION_REDIRECT_URL: 'https://auth-interstitial-authorize.auth.it.umich.edu/nelnetApi/redirect/',
                                                                                                   ORDERTYPE: 'SALE',
                                                                                                   SERVICE_SELECTOR: 'PROD',
                                                                                                 })
@@ -267,7 +282,12 @@ RSpec.describe PaymentsController, type: :controller do
 
         it 'uses production credentials' do
           result = controller.send(:generate_hash, user, amount)
-          expect(result).to include('https://auth-interstitial.it.umich.edu')
+          expect(result).to start_with('https://auth-interstitial-authorize.auth.it.umich.edu/nelnetApi/payment/')
+        end
+
+        it 'uses the production redirect URL in order parameters' do
+          result = controller.send(:generate_hash, user, amount)
+          expect(result).to include('redirectUrl=https://auth-interstitial-authorize.auth.it.umich.edu/nelnetApi/redirect/')
         end
       end
 

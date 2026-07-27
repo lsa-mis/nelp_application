@@ -22,13 +22,12 @@ Bundler.require(*Rails.groups)
 module NelpApplication
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.2
+    config.load_defaults 8.1
     # Configure dartsass-rails to build CSS files
     config.dartsass.builds = {
       "application.scss" => "application.css",
-      "active_admin.scss" => "active_admin.css"
+      "admin.scss" => "admin.css"
     }
-    config.dartsass.build_options << " --load-path=#{Gem.loaded_specs['activeadmin'].full_gem_path}/app/assets/stylesheets"
     config.dartsass.source_dir = 'app/assets/stylesheets'
 
     # Add builds directory to asset paths so Sprockets can find compiled CSS

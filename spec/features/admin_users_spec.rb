@@ -50,7 +50,7 @@ RSpec.describe 'Admin::Users', type: :feature do
   end
 
   it 'redirects non-admin users from admin users page' do
-    click_link 'Logout'
+    click_button 'Logout'
     visit admin_users_path
     expect(page).to have_content('You need to sign in or sign up before continuing')
   end

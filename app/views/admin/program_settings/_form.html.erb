@@ -1,0 +1,21 @@
+<%= simple_form_for [:admin, program_setting] do |f| %>
+  <%= f.error_notification %>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :program_year %>
+      <%= f.input :application_fee %>
+      <%= f.input :program_fee %>
+      <%= f.input :active, as: :boolean %>
+      <%= f.input :allow_payments, as: :boolean %>
+      <%= f.input :program_open, as: :datetime %>
+      <%= f.input :program_close, as: :datetime %>
+      <%= f.input :open_instructions, as: :text %>
+      <%= f.input :close_instructions, as: :text %>
+      <%= f.input :payment_instructions, as: :text %>
+    </div>
+  </div>
+  <div class="mt-3">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+    <%= link_to 'Cancel', admin_program_settings_path, class: 'btn btn-link' %>
+  </div>
+<% end %>

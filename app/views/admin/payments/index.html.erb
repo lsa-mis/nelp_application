@@ -1,0 +1,70 @@
+<% content_for :page_title, 'Payments' %>
+<% content_for :page_actions do %>
+  <%= link_to 'New Payment', new_admin_payment_path, class: 'btn btn-primary btn-sm' %>
+<% end %>
+
+<%= form_with url: admin_payments_path, method: :get, local: true, class: 'row g-2 align-items-end mb-3' do |f| %>
+  <div class="col-md-3">
+    <%= label_tag :user_id, 'User', class: 'form-label' %>
+    <%= select_tag :user_id,
+                   options_from_collection_for_select(@users, :id, :email, params[:user_id]),
+                   include_blank: 'Any',
+                   class: 'form-select' %>
+  </div>
+  <div class="col-md-2">
+    <%= label_tag :program_year, 'Program year', class: 'form-label' %>
+    <%= select_tag :program_year,
+                   options_for_select(@program_years, params[:program_year]),
+                   include_blank: 'Any',
+                   class: 'form-select' %>
+  </div>
+  <div class="col-md-2">
+    <%= label_tag :account_type, 'Account type', class: 'form-label' %>
+    <%= select_tag :account_type,
+                   options_for_select(@account_types, params[:account_type]),
+                   include_blank: 'Any',
+                   class: 'form-select' %>
+  </div>
+  <div class="col-md-2">
+    <%= submit_tag 'Filter', class: 'btn btn-secondary' %>
+    <%= link_to 'Clear', admin_payments_path, class: 'btn btn-link' %>
+  </div>
+<% end %>
+
+<div class="table-responsive">
+  <table class="table table-striped table-sm admin-table">
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Transaction ID</th>
+        <th>Total Amount</th>
+        <th>Transaction Date</th>
+        <th>Account Type</th>
+        <th>Program Year</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @payments.each do |payment| %>
+        <tr>
+          <td><%= payment.user.email %></td>
+          <td><%= payment.transaction_type %></td>
+          <td><%= payment.transaction_status %></td>
+          <td><%= payment.transaction_id %></td>
+          <td><%= number_to_currency(payment.total_amount.to_f / 100) %></td>
+          <td><%= payment.transaction_date %></td>
+          <td><%= payment.account_type %></td>
+          <td><%= payment.program_year %></td>
+          <td>
+            <%= link_to 'View', admin_payment_path(payment), class: 'me-2' %>
+            <%= link_to 'Edit', edit_admin_payment_path(payment) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= render 'admin/shared/pagination', pagy: @pagy %>

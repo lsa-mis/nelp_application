@@ -67,11 +67,10 @@ Rails.application.configure do
   # want to log everything, set the level to "debug".
   config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info')
 
-  # Use a different cache store in staging.
-  # config.cache_store = :mem_cache_store
-
-  # Use a real queuing backend for Active Job (and separate queues per environment).
-  # config.active_job.queue_adapter = :resque
+  # Use Solid Cache / Solid Queue on the primary database.
+  config.cache_store = :solid_cache_store
+  config.active_job.queue_adapter = :solid_queue
+  config.solid_queue.silence_polling = true
   # config.active_job.queue_name_prefix = "nelp_application_staging"
 
   # Disable caching for Action Mailer templates even if Action Controller

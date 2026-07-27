@@ -52,7 +52,7 @@ RSpec.describe 'Admin::Payments', type: :feature do
       expect(page).to have_field('Transaction date', with: DateTime.now.strftime('%Y%m%d%H%M'))
       fill_in 'Total amount', with: 5000
       select user.email, from: 'User'
-      fill_in 'Transaction', with: 'TX123'
+      fill_in 'Transaction ID', with: 'TX123'
       fill_in 'Account type', with: 'Checking'
       fill_in 'Result message', with: 'Success'
       fill_in 'Program year', with: Date.current.year
@@ -75,7 +75,7 @@ RSpec.describe 'Admin::Payments', type: :feature do
 
   describe 'authorization' do
     it 'redirects non-admin users' do
-      click_link 'Logout'
+      click_button 'Logout'
       visit admin_payments_path
       expect(page).to have_content('You need to sign in or sign up before continuing')
     end

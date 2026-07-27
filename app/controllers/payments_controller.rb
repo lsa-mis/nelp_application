@@ -62,17 +62,26 @@ class PaymentsController < ApplicationController
     end
 
     development_key = service_credentials[:DEVELOPMENT_KEY] || 'dev_key_123'
-    development_url = service_credentials[:DEVELOPMENT_URL] || 'https://test-auth-interstitial.dsc.umich.edu'
+    development_url = service_credentials[:DEVELOPMENT_URL] ||
+                      'https://auth-interstitial-qa-authorize.auth.it.umich.edu/nelnetApi/payment/'
+    development_redirect_url = service_credentials[:DEVELOPMENT_REDIRECT_URL] ||
+                               'https://auth-interstitial-qa-authorize.auth.it.umich.edu/nelnetApi/redirect/'
     production_key = service_credentials[:PRODUCTION_KEY] || 'prod_key_456'
-    production_url = service_credentials[:PRODUCTION_URL] || 'https://auth-interstitial.it.umich.edu'
+    production_url = service_credentials[:PRODUCTION_URL] ||
+                     'https://auth-interstitial-authorize.auth.it.umich.edu/nelnetApi/payment/'
+    production_redirect_url = service_credentials[:PRODUCTION_REDIRECT_URL] ||
+                              'https://auth-interstitial-authorize.auth.it.umich.edu/nelnetApi/redirect/'
 
     connection_hash = {
       'test_key' => development_key,
       'test_URL' => development_url,
+      'test_redirect_URL' => development_redirect_url,
       'prod_key' => production_key,
       'prod_URL' => production_url,
+      'prod_redirect_URL' => production_redirect_url,
     }
-    redirect_url = connection_hash[url_to_use]
+    payment_url = connection_hash[url_to_use]
+    redirect_url = connection_hash[url_to_use == 'test_URL' ? 'test_redirect_URL' : 'prod_redirect_URL']
     current_epoch_time = DateTime.now.strftime('%Q').to_i
     initial_hash = {
       orderNumber: user_account,
@@ -93,9 +102,9 @@ class PaymentsController < ApplicationController
     hash_to_be_encoded = initial_hash.values.map(&:to_s).join
     encoded_hash =  Digest::SHA256.hexdigest hash_to_be_encoded
 
-    # Final URL
-    url_for_payment = initial_hash.map { |k, v| "#{k}=#{v}&" unless k == 'key' }.join
-    "#{connection_hash[url_to_use]}?#{url_for_payment}hash=#{encoded_hash}"
+    # Final URL — omit the secret key from the query string (symbols, not strings)
+    url_for_payment = initial_hash.filter_map { |k, v| "#{k}=#{v}&" unless k == :key }.join
+    "#{payment_url}?#{url_for_payment}hash=#{encoded_hash}"
   end
 
   def url_params

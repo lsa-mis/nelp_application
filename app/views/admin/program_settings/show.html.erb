@@ -1,0 +1,12 @@
+<% content_for :page_title, "Program Setting #{@program_setting.program_year}" %>
+<% content_for :page_actions do %>
+  <%= link_to 'Edit', edit_admin_program_setting_path(@program_setting), class: 'btn btn-primary btn-sm' %>
+  <%= link_to 'Back', admin_program_settings_path, class: 'btn btn-outline-secondary btn-sm' %>
+<% end %>
+
+<dl class="row">
+  <% %i[program_year application_fee program_fee active program_open program_close open_instructions close_instructions payment_instructions allow_payments].each do |attr| %>
+    <dt class="col-sm-3"><%= attr.to_s.humanize %></dt>
+    <dd class="col-sm-9"><%= @program_setting.public_send(attr) %></dd>
+  <% end %>
+</dl>

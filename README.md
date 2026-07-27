@@ -16,7 +16,7 @@ A Rails-based payment management system for the NELP (New England Literature Pro
 
 ### Administrative Features
 
-- **ActiveAdmin Interface** - Comprehensive admin dashboard
+- **Custom Admin Interface** - Bootstrap admin dashboard (replaces ActiveAdmin)
 - **User Management** - View and manage user accounts
 - **Payment Administration** - Monitor and manage all payments
 - **Program Settings** - Configure program years, fees, and schedules
@@ -24,19 +24,20 @@ A Rails-based payment management system for the NELP (New England Literature Pro
 
 ## 🛠 Technology Stack
 
-- **Ruby**: 3.4.4
-- **Rails**: 7.2.2.1
-- **Database**: PostgreSQL
+- **Ruby**: 4.0.6
+- **Rails**: 8.1.3
+- **Database**: PostgreSQL (primary DB also hosts Solid Queue / Cache / Cable)
 - **Authentication**: Devise
-- **Admin Interface**: ActiveAdmin
+- **Admin Interface**: Custom `Admin::` MVC
 - **Payment Gateway**: Nelnet
 - **Asset Pipeline**: dartsass-rails (SCSS compilation)
 - **Frontend**: Stimulus, Turbo, Importmap
+- **Background jobs / cache / cable**: Solid Queue, Solid Cache, Solid Cable
 - **Testing**: RSpec, FactoryBot, Capybara
 
 ## 📋 Prerequisites
 
-- Ruby 3.4.4
+- Ruby 4.0.6
 - PostgreSQL
 - Node.js (for asset compilation)
 - Git
@@ -93,15 +94,19 @@ The application will be available at `http://localhost:3000`
 Configure your Nelnet payment gateway credentials in Rails credentials:
 
 ```ruby
-# config/credentials.yml.enc
+# config/credentials/<environment>.yml.enc
 NELNET_SERVICE:
   DEVELOPMENT_KEY: your_dev_key
-  DEVELOPMENT_URL: your_dev_url
+  DEVELOPMENT_URL: https://auth-interstitial-qa-authorize.auth.it.umich.edu/nelnetApi/payment/
+  DEVELOPMENT_REDIRECT_URL: https://auth-interstitial-qa-authorize.auth.it.umich.edu/nelnetApi/redirect/
   PRODUCTION_KEY: your_prod_key
-  PRODUCTION_URL: your_prod_url
+  PRODUCTION_URL: https://auth-interstitial-authorize.auth.it.umich.edu/nelnetApi/payment/
+  PRODUCTION_REDIRECT_URL: https://auth-interstitial-authorize.auth.it.umich.edu/nelnetApi/redirect/
   ORDERTYPE: your_order_type
   SERVICE_SELECTOR: QA # or PROD
 ```
+
+Development and staging use the QA payment/redirect URLs. Production uses the production URLs.
 
 ### Admin Access
 
@@ -135,10 +140,12 @@ bundle exec rspec spec/features/
 
 ```
 app/
-├── admin/                 # ActiveAdmin configurations
-├── controllers/           # Application controllers
+├── controllers/
+│   └── admin/            # Custom admin MVC controllers
+├── queries/              # Query objects (e.g. admin dashboard)
 ├── models/               # ActiveRecord models
-├── views/                # ERB templates
+├── views/
+│   └── admin/            # Admin ERB templates
 ├── assets/               # SCSS stylesheets and images
 └── javascript/           # Stimulus controllers
 

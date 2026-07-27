@@ -1,0 +1,14 @@
+<%= simple_form_for [:admin, admin_user] do |f| %>
+  <%= f.error_notification %>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :email %>
+      <%= f.input :password, hint: (admin_user.persisted? ? 'Leave blank to keep the current password' : nil) %>
+      <%= f.input :password_confirmation, label: 'Password confirmation' %>
+    </div>
+  </div>
+  <div class="mt-3">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+    <%= link_to 'Cancel', admin_admin_users_path, class: 'btn btn-link' %>
+  </div>
+<% end %>
