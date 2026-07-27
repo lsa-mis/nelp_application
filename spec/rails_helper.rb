@@ -14,6 +14,7 @@ SimpleCov.start 'rails' do
   add_filter '/channels/'
   add_filter '/jobs/'
   add_filter '/mailers/'
+  add_filter 'sentry_test_helper'
   add_group 'Models', 'app/models'
   add_group 'Controllers', 'app/controllers'
   add_group 'Helpers', 'app/helpers'
@@ -22,6 +23,9 @@ SimpleCov.start 'rails' do
 
   minimum_coverage 85
 end
+
+# Bootsnap ISeq compile cache is incompatible with coverage on Ruby 4+.
+ENV['DISABLE_BOOTSNAP'] = '1'
 
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
@@ -56,6 +60,9 @@ begin
 rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
+
+# Rails 8 lazy-loads routes; Devise mappings are empty until routes are drawn.
+Rails.application.reload_routes_unless_loaded
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

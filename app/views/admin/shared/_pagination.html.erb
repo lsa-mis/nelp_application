@@ -1,0 +1,29 @@
+<%#
+  locals:
+    pagy: Pagy object
+    extra_params: Hash of params to preserve (optional)
+%>
+<% extra_params ||= {} %>
+<% if pagy.pages > 1 %>
+  <nav aria-label="Pagination" class="pagination">
+    <% if pagy.prev %>
+      <%= link_to '« Previous', url_for(extra_params.merge(page: pagy.prev)), class: 'pagination_link me-2' %>
+    <% else %>
+      <span class="text-muted me-2">« Previous</span>
+    <% end %>
+
+    <% (1..pagy.pages).each do |page_number| %>
+      <% if page_number == pagy.page %>
+        <span class="badge bg-secondary me-1"><%= page_number %></span>
+      <% else %>
+        <%= link_to page_number, url_for(extra_params.merge(page: page_number)), class: 'pagination_link me-1' %>
+      <% end %>
+    <% end %>
+
+    <% if pagy.next %>
+      <%= link_to 'Next »', url_for(extra_params.merge(page: pagy.next)), class: 'pagination_link ms-2' %>
+    <% else %>
+      <span class="text-muted ms-2">Next »</span>
+    <% end %>
+  </nav>
+<% end %>

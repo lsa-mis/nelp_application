@@ -1,0 +1,40 @@
+<% content_for :page_title, @user.email %>
+<% content_for :page_actions do %>
+  <%= link_to 'Back', admin_users_path, class: 'btn btn-outline-secondary btn-sm' %>
+<% end %>
+
+<dl class="row mb-4">
+  <dt class="col-sm-3">Email</dt>
+  <dd class="col-sm-9"><%= @user.email %></dd>
+  <dt class="col-sm-3">Balance Due</dt>
+  <dd class="col-sm-9"><%= number_to_currency(@user.current_balance_due) %></dd>
+  <dt class="col-sm-3">Sign In Count</dt>
+  <dd class="col-sm-9"><%= @user.sign_in_count %></dd>
+</dl>
+
+<h2 class="h5">Payments</h2>
+<div class="table-responsive">
+  <table class="table table-sm table-striped">
+    <thead>
+      <tr>
+        <th>Transaction ID</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Program Year</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @payments.each do |payment| %>
+        <tr>
+          <td><%= payment.transaction_id %></td>
+          <td><%= number_to_currency(payment.total_amount.to_f / 100) %></td>
+          <td><%= payment.transaction_status %></td>
+          <td><%= payment.program_year %></td>
+          <td><%= link_to 'View', admin_payment_path(payment) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<%= render 'admin/shared/pagination', pagy: @pagy %>

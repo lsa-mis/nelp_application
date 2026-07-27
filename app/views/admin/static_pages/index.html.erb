@@ -1,0 +1,22 @@
+<% content_for :page_title, 'Manage messages on static pages' %>
+
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th>Location</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @static_pages.each do |static_page| %>
+        <tr>
+          <td><%= static_page.location %></td>
+          <td><%= link_to 'Edit', edit_admin_static_page_path(static_page) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= render 'admin/shared/pagination', pagy: @pagy %>

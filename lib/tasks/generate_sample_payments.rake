@@ -110,7 +110,7 @@ namespace :sample_data do
     puts "✓ Successfully created #{target_count} users"
     puts "✓ Successfully created #{created_count} payments"
     puts "✓ All records are associated with program year 2024"
-    puts "\nYou can now view them in ActiveAdmin at /admin/payments"
+    puts "\nYou can now view them in the admin at /admin/payments"
   end
 
   desc "Clean up sample payment data"

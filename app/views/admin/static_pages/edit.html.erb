@@ -1,0 +1,15 @@
+<% content_for :page_title, "Edit #{@static_page.location}" %>
+<% content_for :action_text, true %>
+
+<%= simple_form_for [:admin, @static_page] do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :location %>
+  <div class="mb-3">
+    <%= f.label :message %>
+    <%= f.rich_text_area :message %>
+  </div>
+  <div class="mt-3">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+    <%= link_to 'Cancel', admin_static_pages_path, class: 'btn btn-link' %>
+  </div>
+<% end %>

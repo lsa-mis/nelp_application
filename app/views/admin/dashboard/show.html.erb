@@ -1,0 +1,107 @@
+<% if content_for?(:title) == false %>
+  <% content_for :page_title, 'Dashboard' %>
+<% end %>
+
+<% if @dashboard_message.present? %>
+  <div class="mb-4">
+    <%= @dashboard_message %>
+  </div>
+<% end %>
+
+<% if @active_program.nil? %>
+  <div class="alert alert-warning">
+    No active program found. Please configure a program setting first.
+  </div>
+<% else %>
+  <section class="mb-5">
+    <h2 class="h4 mb-3">User Payment Totals - Program Year <%= @active_program.program_year %></h2>
+
+    <% if @user_rows.any? || (@pagy && @pagy.count.positive?) %>
+      <div class="table-responsive">
+        <table class="table table-bordered table-sm admin-table">
+          <thead class="table-light">
+            <tr>
+              <th><%= admin_sort_link('User', 'user', current_column: @sort_column, current_order: @sort_order, page: @pagy&.page) %></th>
+              <th>Total Paid</th>
+              <th>Program Cost</th>
+              <th><%= admin_sort_link('Balance Due', 'balance_due', current_column: @sort_column, current_order: @sort_order, page: @pagy&.page) %></th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @user_rows.each do |data| %>
+              <% status = data[:balance_due].to_i.zero? ? 'Paid in Full' : 'Outstanding Balance' %>
+              <% status_class = data[:balance_due].to_i.zero? ? 'paid_full' : 'outstanding' %>
+              <tr class="<%= status_class %>">
+                <td>
+                  <%= link_to data[:user_email], admin_payments_path(user_id: data[:user_id]),
+                              title: "View all payments for #{data[:user_email]}" %>
+                </td>
+                <td><%= number_to_currency(data[:total_paid]) %></td>
+                <td><%= number_to_currency(@active_program.total_cost) %></td>
+                <td><%= number_to_currency(data[:balance_due]) %></td>
+                <td><%= status %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="text-muted">
+        <% if @pagy %>
+          Displaying users <%= @pagy.from %> - <%= @pagy.to %> of <%= @pagy.count %> |
+        <% end %>
+        Paid in Full: <%= @paid_in_full_count %> | Outstanding: <%= @outstanding_count %>
+      </p>
+
+      <% if @pagy && @pagy.pages > 1 %>
+        <%= render 'admin/shared/pagination',
+                   pagy: @pagy,
+                   extra_params: { sort_column: @sort_column, sort_order: @sort_order } %>
+      <% end %>
+    <% else %>
+      <div class="alert alert-secondary">No successful payments found for the active program.</div>
+    <% end %>
+  </section>
+
+  <section>
+    <h2 class="h4 mb-3">Recent Payments - Program Year <%= @active_program.program_year %></h2>
+
+    <% if @recent_payments.any? %>
+      <div class="table-responsive">
+        <table class="table table-bordered table-sm admin-table">
+          <thead class="table-light">
+            <tr>
+              <th>User</th>
+              <th>Transaction ID</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Account Type</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @recent_payments.each do |payment| %>
+              <tr>
+                <td>
+                  <%= link_to payment.user.email, admin_payments_path(user_id: payment.user_id),
+                              title: "View all payments for #{payment.user.email}" %>
+                </td>
+                <td><%= payment.transaction_id %></td>
+                <td><%= number_to_currency(payment.total_amount.to_f / 100) %></td>
+                <td><%= payment.transaction_status == '1' ? 'Success' : 'Failed' %></td>
+                <td><%= payment.account_type %></td>
+                <td><%= payment.created_at.strftime('%Y-%m-%d %H:%M') %></td>
+                <td><%= link_to 'View', admin_payment_path(payment) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-muted">Showing most recent <%= @recent_payments.count %> payments</p>
+    <% else %>
+      <div class="alert alert-secondary">No payments found for the active program.</div>
+    <% end %>
+  </section>
+<% end %>

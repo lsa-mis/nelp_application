@@ -16,7 +16,7 @@ A Rails-based payment management system for the NELP (New England Literature Pro
 
 ### Administrative Features
 
-- **ActiveAdmin Interface** - Comprehensive admin dashboard
+- **Custom Admin Interface** - Bootstrap admin dashboard (replaces ActiveAdmin)
 - **User Management** - View and manage user accounts
 - **Payment Administration** - Monitor and manage all payments
 - **Program Settings** - Configure program years, fees, and schedules
@@ -24,19 +24,20 @@ A Rails-based payment management system for the NELP (New England Literature Pro
 
 ## 🛠 Technology Stack
 
-- **Ruby**: 3.4.4
-- **Rails**: 7.2.2.1
-- **Database**: PostgreSQL
+- **Ruby**: 4.0.6
+- **Rails**: 8.1.3
+- **Database**: PostgreSQL (primary DB also hosts Solid Queue / Cache / Cable)
 - **Authentication**: Devise
-- **Admin Interface**: ActiveAdmin
+- **Admin Interface**: Custom `Admin::` MVC
 - **Payment Gateway**: Nelnet
 - **Asset Pipeline**: dartsass-rails (SCSS compilation)
 - **Frontend**: Stimulus, Turbo, Importmap
+- **Background jobs / cache / cable**: Solid Queue, Solid Cache, Solid Cable
 - **Testing**: RSpec, FactoryBot, Capybara
 
 ## 📋 Prerequisites
 
-- Ruby 3.4.4
+- Ruby 4.0.6
 - PostgreSQL
 - Node.js (for asset compilation)
 - Git
@@ -135,10 +136,12 @@ bundle exec rspec spec/features/
 
 ```
 app/
-├── admin/                 # ActiveAdmin configurations
-├── controllers/           # Application controllers
+├── controllers/
+│   └── admin/            # Custom admin MVC controllers
+├── queries/              # Query objects (e.g. admin dashboard)
 ├── models/               # ActiveRecord models
-├── views/                # ERB templates
+├── views/
+│   └── admin/            # Admin ERB templates
 ├── assets/               # SCSS stylesheets and images
 └── javascript/           # Stimulus controllers
 

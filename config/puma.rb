@@ -32,6 +32,9 @@ environment ENV.fetch('RACK_ENV', 'development')
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
 
+# Run the Solid Queue supervisor inside Puma in production/staging.
+plugin :solid_queue if ENV['SOLID_QUEUE_IN_PUMA'] == 'true'
+
 # Workers configuration for production
 workers ENV.fetch('WEB_CONCURRENCY', 2) if ENV.fetch('RACK_ENV', 'development') == 'production'
 

@@ -1,0 +1,12 @@
+<% content_for :page_title, @admin_user.email %>
+<% content_for :page_actions do %>
+  <%= link_to 'Edit', edit_admin_admin_user_path(@admin_user), class: 'btn btn-primary btn-sm' %>
+  <%= link_to 'Back', admin_admin_users_path, class: 'btn btn-outline-secondary btn-sm' %>
+<% end %>
+
+<dl class="row">
+  <dt class="col-sm-3">Email</dt>
+  <dd class="col-sm-9"><%= @admin_user.email %></dd>
+  <dt class="col-sm-3">Created at</dt>
+  <dd class="col-sm-9"><%= @admin_user.created_at %></dd>
+</dl>

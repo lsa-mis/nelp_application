@@ -1,0 +1,37 @@
+<% content_for :page_title, 'Payment Details' %>
+<% content_for :page_actions do %>
+  <%= link_to 'Edit', edit_admin_payment_path(@payment), class: 'btn btn-primary btn-sm' %>
+  <%= link_to 'Back', admin_payments_path, class: 'btn btn-outline-secondary btn-sm' %>
+<% end %>
+
+<dl class="row">
+  <dt class="col-sm-3">User</dt>
+  <dd class="col-sm-9"><%= @payment.user.email %></dd>
+
+  <dt class="col-sm-3">Transaction type</dt>
+  <dd class="col-sm-9"><%= @payment.transaction_type %></dd>
+
+  <dt class="col-sm-3">Transaction status</dt>
+  <dd class="col-sm-9"><%= @payment.transaction_status %></dd>
+
+  <dt class="col-sm-3">Transaction ID</dt>
+  <dd class="col-sm-9"><%= @payment.transaction_id %></dd>
+
+  <dt class="col-sm-3">Total amount</dt>
+  <dd class="col-sm-9"><%= @payment.total_amount %> (<%= number_to_currency(@payment.total_amount.to_f / 100) %>)</dd>
+
+  <dt class="col-sm-3">Transaction date</dt>
+  <dd class="col-sm-9"><%= @payment.transaction_date %></dd>
+
+  <dt class="col-sm-3">Account type</dt>
+  <dd class="col-sm-9"><%= @payment.account_type %></dd>
+
+  <dt class="col-sm-3">Result code</dt>
+  <dd class="col-sm-9"><%= @payment.result_code %></dd>
+
+  <dt class="col-sm-3">Result message</dt>
+  <dd class="col-sm-9"><%= @payment.result_message %></dd>
+
+  <dt class="col-sm-3">Program year</dt>
+  <dd class="col-sm-9"><%= @payment.program_year %></dd>
+</dl>

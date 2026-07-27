@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.4.9'
-gem 'rails', '~> 7.2.3', '>= 7.2.3'
+ruby '4.0.6'
+gem 'rails', '~> 8.0'
+gem 'cgi'
 
-gem 'activeadmin'
 gem 'base64'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'csv'
@@ -14,12 +14,16 @@ gem 'drb'
 gem 'importmap-rails'
 gem 'jbuilder', '~> 2.7'
 gem 'lsa_tdx_feedback', '~> 1.0', '>= 1.0.4'
+gem 'pagy', '~> 9.3'
 gem 'pg'
 gem 'puma', '~> 6.0'
 gem 'sd_notify'
 gem 'sentry-rails'
 gem 'sentry-ruby'
 gem 'simple_form'
+gem 'solid_cable'
+gem 'solid_cache'
+gem 'solid_queue'
 gem 'sprockets-rails', '~> 3.4'
 gem 'stimulus-rails'
 gem 'turbo-rails'
@@ -27,8 +31,8 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 
 group :development do
   gem 'annotate'
+  gem 'debug', platforms: %i[mri windows]
   gem 'listen', '~> 3.3'
-  gem 'pry-byebug'
   gem 'pry-rails'
   gem 'spring', '~> 4.0'
   gem 'web-console', '>= 4.1.0'
