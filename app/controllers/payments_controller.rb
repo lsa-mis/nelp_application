@@ -102,8 +102,8 @@ class PaymentsController < ApplicationController
     hash_to_be_encoded = initial_hash.values.map(&:to_s).join
     encoded_hash =  Digest::SHA256.hexdigest hash_to_be_encoded
 
-    # Final URL
-    url_for_payment = initial_hash.map { |k, v| "#{k}=#{v}&" unless k == 'key' }.join
+    # Final URL — omit the secret key from the query string (symbols, not strings)
+    url_for_payment = initial_hash.filter_map { |k, v| "#{k}=#{v}&" unless k == :key }.join
     "#{payment_url}?#{url_for_payment}hash=#{encoded_hash}"
   end
 

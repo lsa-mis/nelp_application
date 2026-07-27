@@ -15,7 +15,10 @@
     QuikPAY is a registered trademark of Nelnet Business Solutions, Inc. No
     credit card information is stored on our servers.
 
-    <%= button_to "Pay application fee", make_payment_path, params: {amount: current_program.application_fee.to_i }, class: 'btn btn-sm btn-success' %>
+    <%= button_to "Pay application fee", make_payment_path,
+                  params: { amount: current_program.application_fee.to_i },
+                  form: { data: { turbo: false } },
+                  class: 'btn btn-sm btn-success' %>
   </p>
 <% else %>
   <h1 class="text-center">Your Payment Receipts</h1>
@@ -48,7 +51,7 @@
 
     <% if current_program.allow_payments && @balance_due.to_i > 0 %>
       <div class="p-4">
-        <%= form_with url: make_payment_path, local: true do |f| %>
+        <%= form_with url: make_payment_path, data: { turbo: false } do |f| %>
         <div>
           <span class="text-gray-700">You have a balance of <%= number_to_currency(@balance_due) %></span>
           <%= f.number_field :amount, in: 1..@balance_due, required: true %>

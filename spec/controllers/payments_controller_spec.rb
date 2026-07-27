@@ -257,6 +257,12 @@ RSpec.describe PaymentsController, type: :controller do
           result = controller.send(:generate_hash, user, amount)
           expect(result).to match(/hash=[a-f0-9]{64}$/) # SHA256 produces 64-char hex string
         end
+
+        it 'does not include the secret key in the payment URL' do
+          result = controller.send(:generate_hash, user, amount)
+          expect(result).not_to include('key=')
+          expect(result).not_to include('dev_key_123')
+        end
       end
 
       context 'in production environment' do
