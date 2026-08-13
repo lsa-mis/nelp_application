@@ -23,6 +23,11 @@ RSpec.describe 'Payments', type: :request do
         expect(response).to have_http_status(:success)
       end
 
+      it 'disables Turbo on payment forms so gateway redirects are not intercepted' do
+        get all_payments_path
+        expect(response.body).to include('data-turbo="false"')
+      end
+
       it 'displays payment information' do
         get all_payments_path
         expect(response.body).to include('$500') # Application Fee
