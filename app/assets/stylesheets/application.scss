@@ -76,8 +76,11 @@ header a {
 a {
   color: darkblue;
 
-  &:hover {
-    color: gold;
+  &:hover,
+  &:focus,
+  &:focus-visible,
+  &:active {
+    color: $michigan_summer_blue; // #005499 ≈7:1 on white (WCAG AA)
   }
 }
 
@@ -152,8 +155,14 @@ a {
   border-color: #1e40af;
 }
 
-/* Ensure visited links keep button color */
-.avatar-login:visited {
+/* header a:hover { color: gold } is more specific than .avatar-login alone and
+   washes navy text out on maize. Keep button label navy in every state. */
+header a.avatar-login,
+header a.avatar-login:visited,
+header a.avatar-login:hover,
+header a.avatar-login:focus,
+header a.avatar-login:focus-visible,
+header a.avatar-login:active {
   color: #00274C;
 }
 
