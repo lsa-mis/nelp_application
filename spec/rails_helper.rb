@@ -107,13 +107,23 @@ RSpec.configure do |config|
   # WebMock configuration
   WebMock.disable_net_connect!(allow_localhost: true)
 
-  # Clean database between tests
+  # Clean database between tests.
+  # System specs drive a real browser against a Puma thread, so rows created
+  # inside a transaction are invisible. Truncate for system examples only.
+  # Feature and request specs stay on transactions.
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
   end
 
   config.around do |example|
+    if example.metadata[:type] == :system
+      self.use_transactional_tests = false
+      DatabaseCleaner.strategy = :truncation
+    else
+      DatabaseCleaner.strategy = :transaction
+    end
+
     DatabaseCleaner.cleaning do
       example.run
     end

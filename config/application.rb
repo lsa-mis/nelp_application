@@ -26,12 +26,14 @@ module NelpApplication
     # Configure dartsass-rails to build CSS files
     config.dartsass.builds = {
       "application.scss" => "application.css",
-      "admin.scss" => "admin.css"
+      "admin.scss" => "admin.css",
+      "actiontext.scss" => "actiontext.css"
     }
     config.dartsass.source_dir = 'app/assets/stylesheets'
 
-    # Add builds directory to asset paths so Sprockets can find compiled CSS
-    config.assets.paths << Rails.root.join('app/assets/builds')
+    # Prepend so Sprockets serves dartsass output instead of compiling
+    # app/assets/stylesheets/*.scss with sassc (which this app does not load).
+    config.assets.paths.unshift Rails.root.join('app/assets/builds')
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.

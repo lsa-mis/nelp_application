@@ -37,15 +37,18 @@
       Account Summary
     </h5>
     <div class="p-4">
-      <div class="font-bold text-xs mb-2">
-        <%= "#{'total_cost'.humanize.ljust(24, '.')} #{number_to_currency(@total_cost).rjust(12,'.')}" %>
+      <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2 mb-2 fw-bold">
+        <span><%= 'total_cost'.humanize %></span>
+        <span><%= number_to_currency(@total_cost) %></span>
       </div>
-      <div class="font-bold text-xs mb-2">
-        <%= "#{'amount_paid'.humanize.ljust(20, '.')} #{number_to_currency(@ttl_paid).rjust(12,'.')}" %>
+      <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2 mb-2 fw-bold">
+        <span><%= 'amount_paid'.humanize %></span>
+        <span><%= number_to_currency(@ttl_paid) %></span>
       </div>
       <hr class="w-75">
-      <div class="font-bold text-xs mb-2">
-        <%= "#{'balance_due'.humanize.ljust(22, '.')} #{number_to_currency(@balance_due).rjust(12,'.')}" %>
+      <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2 mb-2 fw-bold">
+        <span><%= 'balance_due'.humanize %></span>
+        <span><%= number_to_currency(@balance_due) %></span>
       </div>
     </div>
 
@@ -62,7 +65,7 @@
     <% end %>
   </div>
 
-  <hr class="w-75 m-4 "/>
+  <hr class="w-75 my-4"/>
 
   <div class="max-w-sm rounded overflow-hidden shadow-lg">
     <h5 class="max-w-sm rounded-t text-green-700 bg-green-700 px-2">Your transactions:</h5>

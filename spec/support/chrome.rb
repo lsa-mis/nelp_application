@@ -18,5 +18,15 @@ Capybara.javascript_driver = driver
 RSpec.configure do |config|
   config.before(:each, type: :system) do
     driven_by driver
+    # Rails wraps examples in a transaction before `before` hooks run.
+    # The around hook in rails_helper also clears this, before `before_setup`.
+    self.use_transactional_tests = false
+  end
+
+  # Must run outside Rails' fixture transaction. This around hook is registered
+  # before the DatabaseCleaner around hook and stays outside `before_setup`.
+  config.around(:each, type: :system) do |example|
+    self.use_transactional_tests = false
+    example.run
   end
 end
