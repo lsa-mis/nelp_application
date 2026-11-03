@@ -19,6 +19,14 @@ module ApplicationHelper
     ''.html_safe
   end
 
+  # Action Text CMS HTML may include <h1>s. Demote them to <h2> so the page
+  # template owns the sole document h1 (a11y heading outline).
+  def demote_action_text_h1(rich_text)
+    return ''.html_safe if rich_text.blank?
+
+    rich_text.to_s.gsub(/<(\/?)h1(\b[^>]*)?>/i, '<\1h2\2>').html_safe
+  end
+
   def admin_sort_link(label, column, current_column:, current_order:, **options)
     next_order = current_column == column && current_order == 'asc' ? 'desc' : 'asc'
     indicator = if current_column == column
