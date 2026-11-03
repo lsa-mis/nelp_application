@@ -76,74 +76,20 @@ header a {
 a {
   color: darkblue;
 
-  &:hover {
-    color: gold;
+  &:hover,
+  &:focus,
+  &:focus-visible,
+  &:active {
+    color: $michigan_summer_blue; // #005499 ≈7:1 on white (WCAG AA)
   }
 }
 
-// Header Layout
-// =============================================================================
-
-.header {
-  // Add your header styles here
-  background: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.header-main {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 16px 82px;
-  background: #00274C;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.header-right {
-  margin-left: auto;
-}
-
-.lsa-logo {
-  height: 48px;
-  width: auto;
-}
-
-.divider {
-  width: 2px;
-  height: 40px;
-  background: #fff;
-  margin: 0 16px;
-}
-
-.lsa-text {
-  color: #fff;
-  font-size: 2rem;
-  font-family: 'Oswald', Arial, sans-serif;
-  letter-spacing: 0.1em;
-}
-
-.title {
-  color: #fff;
-  font-family: Noto Sans;
-  font-weight: 300;
-  font-style: normal;
-  font-size: 48px;
-  line-height: 100%;
-  letter-spacing: 0%;
-  text-transform: uppercase;
-}
+// Header layout rules live only in layout/_header.scss (imported above).
 
 .header-avatar-dropdown {
   position: relative;
-  display: inline-block;
-
+  max-width: 100%;
+  min-width: 0;
 }
 
 .avatar-btn {
@@ -163,6 +109,20 @@ a {
   text-decoration: none;
   cursor: pointer;
   transition: background-color 120ms, border-color 120ms, box-shadow 120ms, transform 50ms;
+  max-width: 100%;
+  height: auto;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.avatar-btn .avatar-circle {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .avatar-btn:hover,
@@ -195,8 +155,14 @@ a {
   border-color: #1e40af;
 }
 
-/* Ensure visited links keep button color */
-.avatar-login:visited {
+/* header a:hover { color: gold } is more specific than .avatar-login alone and
+   washes navy text out on maize. Keep button label navy in every state. */
+header a.avatar-login,
+header a.avatar-login:visited,
+header a.avatar-login:hover,
+header a.avatar-login:focus,
+header a.avatar-login:focus-visible,
+header a.avatar-login:active {
   color: #00274C;
 }
 
@@ -204,13 +170,15 @@ a {
   display: none;
   position: absolute;
   right: 0;
-  top: 48px;
+  top: calc(100% + 4px);
   background: #fff;
   min-width: 160px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 6px;
   overflow: hidden;
+  max-width: calc(100vw - 2rem);
+  overflow-wrap: anywhere;
 }
 
 .dropdown-item {
@@ -283,5 +251,99 @@ tr.outstanding {
   td:last-child {
     color: #c05621;
     font-weight: 600;
+  }
+}
+
+// Reflow (WCAG 1.4.10)
+// Keep content inside the viewport. Do not set overflow-x hidden/clip on html or body.
+// =============================================================================
+
+body {
+  overflow-wrap: anywhere;
+}
+
+img,
+svg,
+video,
+canvas,
+iframe,
+embed,
+object {
+  max-width: 100%;
+  height: auto;
+}
+
+main,
+header,
+footer,
+.container {
+  min-width: 0;
+  max-width: 100%;
+}
+
+// This file loads after the Bootstrap CDN, so the max-width above would replace
+// Bootstrap 5.3's centered container caps. Put those caps back for large screens.
+@media (min-width: 576px) {
+  .container { max-width: 540px; }
+}
+
+@media (min-width: 768px) {
+  .container { max-width: 720px; }
+}
+
+@media (min-width: 992px) {
+  .container { max-width: 960px; }
+}
+
+@media (min-width: 1200px) {
+  .container { max-width: 1140px; }
+}
+
+@media (min-width: 1400px) {
+  .container { max-width: 1320px; }
+}
+
+p,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+dd,
+dt,
+label,
+button,
+.btn,
+td,
+th {
+  overflow-wrap: anywhere;
+}
+
+pre,
+code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
+.btn,
+button,
+input,
+select,
+textarea,
+form {
+  max-width: 100%;
+}
+
+.page-main {
+  min-width: 0;
+  max-width: 100%;
+  padding: 1rem;
+
+  @media (min-width: 768px) {
+    padding: 2rem;
   }
 }

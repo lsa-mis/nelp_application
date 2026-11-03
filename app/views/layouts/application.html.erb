@@ -1,5 +1,5 @@
 <!DOCTYPE html class='h-full'>
-<html>
+<html lang="en">
   <head>
     <title>NELP Payment</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -21,7 +21,7 @@
 
   <body class='flex flex-col h-full'>
     <%= render '/layouts/header' %>
-    <main class="flex-1 mx-auto p-8">
+    <main class="page-main">
       <%= render 'layouts/notifications' %>
       <div class="container mx-auto px-4">
         <%= yield %>
@@ -30,7 +30,7 @@
     <%= lsa_tdx_feedback_modal %>
     <%= lsa_tdx_feedback_js %>
     <%= render '/layouts/footer' %>
-    <div role="debugging" class="w-full h-auto">
+    <div  class="w-full h-auto">
       <%= debug(params) if Rails.env.development? %>
     </div>
   </body>

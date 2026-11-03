@@ -2,11 +2,13 @@
 
 <% if @users_current_payments.count < 1 %>
 
-  <h2> Please pay your <%= number_to_currency(current_program.application_fee) %> application fee.
-    <br>
-    <%= simple_format(current_program.payment_instructions) unless nil %> 
-  </h2>
-  <h6>Pay by Credit Card (Visa, Mastercard, Discover, AMEX)</h6>
+  <h1 class="h2">Please pay your <%= number_to_currency(current_program.application_fee) %> application fee.</h1>
+  <% if current_program.payment_instructions.present? %>
+    <div class="h2">
+      <%= simple_format(current_program.payment_instructions) %>
+    </div>
+  <% end %>
+  <h2 class="h6">Pay by Credit Card (Visa, Mastercard, Discover, AMEX)</h2>
   <p class="my-2">
     You will be redirected to
     our credit card processing page where you will be asked to make your
@@ -33,19 +35,22 @@
   </p>
 
   <div class="max-w-sm rounded overflow-hidden shadow-lg">
-    <h5 class="bg-green-700 px-4 text-white">
+    <h2 class="h5 bg-green-700 px-4 text-white">
       Account Summary
-    </h5>
+    </h2>
     <div class="p-4">
-      <div class="font-bold text-xs mb-2">
-        <%= "#{'total_cost'.humanize.ljust(24, '.')} #{number_to_currency(@total_cost).rjust(12,'.')}" %>
+      <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2 mb-2 fw-bold">
+        <span><%= 'total_cost'.humanize %></span>
+        <span><%= number_to_currency(@total_cost) %></span>
       </div>
-      <div class="font-bold text-xs mb-2">
-        <%= "#{'amount_paid'.humanize.ljust(20, '.')} #{number_to_currency(@ttl_paid).rjust(12,'.')}" %>
+      <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2 mb-2 fw-bold">
+        <span><%= 'amount_paid'.humanize %></span>
+        <span><%= number_to_currency(@ttl_paid) %></span>
       </div>
       <hr class="w-75">
-      <div class="font-bold text-xs mb-2">
-        <%= "#{'balance_due'.humanize.ljust(22, '.')} #{number_to_currency(@balance_due).rjust(12,'.')}" %>
+      <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2 mb-2 fw-bold">
+        <span><%= 'balance_due'.humanize %></span>
+        <span><%= number_to_currency(@balance_due) %></span>
       </div>
     </div>
 
@@ -62,16 +67,16 @@
     <% end %>
   </div>
 
-  <hr class="w-75 m-4 "/>
+  <hr class="w-75 my-4"/>
 
   <div class="max-w-sm rounded overflow-hidden shadow-lg">
-    <h5 class="max-w-sm rounded-t text-green-700 bg-green-700 px-2">Your transactions:</h5>
+    <h2 class="h5 max-w-sm rounded-t text-green-700 bg-green-700 px-2">Your transactions:</h2>
     <div class="card-deck px-4 py-2">
       <% @users_current_payments.each do |payment| %>
         <div class="max-w-sm rounded overflow-hidden shadow">
-          <h6 class="text-green-700 px-2 py-2">
+          <h3 class="h6 text-green-700 px-2 py-2">
             <%= "Transaction ID: #{payment.transaction_id}" %>
-          </h6>
+          </h3>
           <div class="p-4 text-gray-700">
             <p>
               <%= "Credit Card: #{payment.account_type}" %>

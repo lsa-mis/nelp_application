@@ -1,35 +1,74 @@
 // Header Layout
+// Single source of truth. Do not copy these rules into application.scss;
+// a later unscoped copy would override the small-screen padding.
 // =============================================================================
 
 .header {
-  // Add your header styles here
   background: white;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .header-main {
+  box-sizing: border-box;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
-  padding: 16px 82px;
+  gap: 0.75rem 1rem;
+  padding: 0.75rem 1rem;
   background: #00274C;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+
+  @media (min-width: 992px) {
+    flex-wrap: nowrap;
+    padding: 16px 82px;
+  }
 }
 
 .header-left {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 16px;
+  gap: 0.5rem 1rem;
+  min-width: 0;
+  max-width: 100%;
+  flex: 1 1 auto;
+
+  @media (min-width: 992px) {
+    flex-wrap: nowrap;
+    gap: 16px;
+  }
 }
 
 .header-right {
+  min-width: 0;
+  max-width: 100%;
   margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .lsa-logo {
-  height: 48px;
+  display: block;
   width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 48px;
+  min-width: 0;
+  flex: 0 1 auto;
+  object-fit: contain;
+
+  @media (min-width: 992px) {
+    height: 48px;
+    width: auto;
+    max-height: 48px;
+  }
 }
 
 .divider {
@@ -37,6 +76,7 @@
   height: 40px;
   background: #fff;
   margin: 0 16px;
+  flex: 0 0 auto;
 }
 
 .lsa-text {
@@ -44,15 +84,27 @@
   font-size: 2rem;
   font-family: 'Oswald', Arial, sans-serif;
   letter-spacing: 0.1em;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .title {
   color: #fff;
-  font-family: Noto Sans;
+  font-family: "Noto Sans", sans-serif;
   font-weight: 300;
   font-style: normal;
-  font-size: 48px;
-  line-height: 100%;
+  font-size: clamp(1.05rem, 4.5vw, 48px);
+  line-height: 1.15;
   letter-spacing: 0%;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
+  min-width: 0;
+  max-width: 100%;
+  flex: 1 1 auto;
+
+  @media (min-width: 992px) {
+    font-size: 48px;
+    line-height: 100%;
+    flex: 0 1 auto;
+  }
 }

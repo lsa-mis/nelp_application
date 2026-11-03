@@ -8,7 +8,10 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <%= stylesheet_link_tag "admin", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "actiontext", "data-turbo-track": "reload" if content_for?(:action_text) || controller_name == 'static_pages' %>
+    <%# trix.css is plain CSS from the action_text-trix gem. Dart Sass does not
+        process the //= require in actiontext.scss, so link Trix first and the
+        compiled overrides second. %>
+    <%= stylesheet_link_tag "trix", "actiontext", "data-turbo-track": "reload" if content_for?(:action_text) || controller_name == 'static_pages' %>
     <%= javascript_importmap_tags %>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </head>
@@ -20,9 +23,9 @@
     <main class="container-fluid py-4 px-4">
       <%= render 'layouts/admin_flashes' %>
       <% if content_for?(:page_title) %>
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
           <h1 class="h3 mb-0"><%= yield :page_title %></h1>
-          <div><%= yield :page_actions %></div>
+          <div class="d-flex flex-wrap gap-2"><%= yield :page_actions %></div>
         </div>
       <% end %>
       <%= yield %>

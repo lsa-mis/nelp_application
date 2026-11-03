@@ -83,6 +83,8 @@ RSpec.describe 'Admin dashboard', type: :request do
     get "/admin/static_pages/#{static_page.id}/edit"
 
     expect(response).to have_http_status(:success)
-    expect(response.body).to include('trix')
+    expect(response.body).to include('trix-editor')
+    expect(response.body).to match(/href="[^"]*\/trix(?:-[a-f0-9]+)?\.css"/)
+    expect(response.body).to match(/href="[^"]*\/actiontext(?:-[a-f0-9]+)?\.css"/)
   end
 end
