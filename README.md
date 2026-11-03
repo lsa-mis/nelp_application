@@ -24,7 +24,7 @@ A Rails-based payment management system for the NELP (New England Literature Pro
 
 ## 🛠 Technology Stack
 
-- **Ruby**: 4.0.6
+- **Ruby**: 4.0.9
 - **Rails**: 8.1.3
 - **Database**: PostgreSQL (primary DB also hosts Solid Queue / Cache / Cable)
 - **Authentication**: Devise
@@ -37,7 +37,7 @@ A Rails-based payment management system for the NELP (New England Literature Pro
 
 ## 📋 Prerequisites
 
-- Ruby 4.0.6
+- Ruby 4.0.9
 - PostgreSQL
 - Node.js (for asset compilation)
 - Git
